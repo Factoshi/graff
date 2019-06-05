@@ -2,13 +2,13 @@
 #   ---- CUSTOM SCALARS ----    #
 # ***************************** #
 
-"Sha256 Hash."
+"Sha256 hash."
 scalar Hash
 
-"Public Factoid Address."
+"Public factoid address."
 scalar PublicFactoidAddress
 
-"Public Entry Credit Address."
+"Public entry credit address."
 scalar PublicEntryCreditAddress
 
 # *************************************** #
@@ -89,6 +89,21 @@ type Query {
     properties: Properties!
     "Get the EC-FCT exchange rate."
     entryCreditRate: Int!
+}
+
+type Subscribe {
+    "Subscribe to each new directory block."
+    newDirectoryBlock: DirectoryBlock!
+    "Subscribe to each new admin block."
+    newAdminBlock: AdminBlock!
+    "Subscribe to each new factoid block."
+    newFactoidBlock: FactoidBlock!
+    "Subscribe to each new entry credit block."
+    newEntryCreditBlock: EntryCreditBlock!
+    "Subscribe to each new entry block for a specified chain."
+    newEntryBlock(chain: Hash!): EntryBlock!
+    "Subscribe to newly created chains."
+    newChainsCreated: [PaginatedEntryBlock!]!
 }
 
 ##########
