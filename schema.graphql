@@ -91,7 +91,7 @@ type Query {
     entryCreditRate: Int!
 }
 
-type Subscribe {
+type Subscription {
     "Subscribe to each new directory block."
     newDirectoryBlock: DirectoryBlock!
     "Subscribe to each new admin block."
@@ -103,10 +103,10 @@ type Subscribe {
     "Subscribe to each new entry block for a specified chain."
     newEntryBlock(chain: Hash!): EntryBlock!
     "Subscribe to newly created chains."
-    newChainsCreated: [PaginatedEntryBlock!]!
+    newChainsCreated: [PaginatedEntryBlocks!]!
 }
 
-type Mutate {
+type Mutation {
     "Send a Chain Commit Message to factomd to create a new Chain."
     commitChain: CommitRevealTransfer!
     "Send an Entry Commit Message to factom to create a new Entry."
