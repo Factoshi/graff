@@ -108,15 +108,15 @@ type Subscription {
 
 type Mutation {
     "Send a Chain Commit Message to factomd to create a new Chain."
-    commitChain: CommitRevealTransfer!
+    commitChain: CommitRevealSend!
     "Send an Entry Commit Message to factom to create a new Entry."
-    commitEntry: CommitRevealTransfer!
+    commitEntry: CommitRevealSend!
     "Reveal the First Entry in a Chain to factomd after the Commit to complete the Chain creation."
-    revealChain: CommitRevealTransfer!
+    revealChain: CommitRevealSend!
     "Reveal an Entry to factomd after the Commit to complete the Entry creation."
-    revealEntry: CommitRevealTransfer!
+    revealEntry: CommitRevealSend!
     "Submit a factoid transaction."
-    transferFactoids: CommitRevealTransfer!
+    sendFactoids: CommitRevealSend!
 }
 
 ##########
@@ -416,7 +416,7 @@ type MerkleNode {
 }
 
 "Response following a chain or entry commmit or reveal, or a factoid transaction."
-type CommitRevealTransfer {
+type CommitRevealSend {
     "The hash of the entry that was committed or revealed. Always null for factoid transactions."
     entryHash: Hash
     "The transaction hash. Always null for reveals."
