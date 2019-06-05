@@ -106,6 +106,19 @@ type Subscribe {
     newChainsCreated: [PaginatedEntryBlock!]!
 }
 
+type Mutate {
+    "Send a Chain Commit Message to factomd to create a new Chain."
+    commitChain: CommitRevealTransfer!
+    "Send an Entry Commit Message to factom to create a new Entry."
+    commitEntry: CommitRevealTransfer!
+    "Reveal the First Entry in a Chain to factomd after the Commit to complete the Chain creation."
+    revealChain: CommitRevealTransfer!
+    "Reveal an Entry to factomd after the Commit to complete the Entry creation."
+    revealEntry: CommitRevealTransfer!
+    "Submit a factoid transaction."
+    transferFactoids: CommitRevealTransfer!
+}
+
 ##########
 # Blocks #
 ##########
@@ -400,6 +413,16 @@ type MerkleNode {
     right: Hash!
     "Hash of top node."
     top: Hash!
+}
+
+"Response following a chain or entry commmit or reveal, or a factoid transaction."
+type CommitRevealTransfer {
+    "The hash of the entry that was committed or revealed. Always null for factoid transactions."
+    entryHash: Hash
+    "The transaction hash. Always null for reveals."
+    transactionHash: Hash
+    "The chain that was committed to. Always null for entry commits and factoid transactions."
+    chain: Hash
 }
 
 #################
@@ -750,15 +773,3 @@ type PaginatedPendingTransactions implements Paginated {
     "An array of pending transactions."
     pendingTransactions: [PendingTransaction!]!
 }
-
-# ************************* #
-#   ---- MUTATIONS ----     #
-# ************************* #
-
-# type Mutation {
-#     commitChain
-#     commitEntry
-#     revealChain
-#     revealEntry
-#     transferFactoids
-# }
