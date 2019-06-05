@@ -374,7 +374,7 @@ type Receipt {
     "The bitcoin block where the anchored transaction was included."
     bitcoinBlockHash: Hash!
     "The merkle proof to connect the entry to the bitcoin transaction."
-    merkleBranch: [MerkleLeaf!]!
+    merkleBranch: [MerkleNode!]!
 }
 
 "A node in a merkle tree."
