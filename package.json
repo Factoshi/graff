@@ -48,6 +48,8 @@
         "@graphql-codegen/cli": "^1.2.0",
         "@graphql-codegen/typescript": "1.2.0",
         "@graphql-codegen/typescript-resolvers": "1.2.0",
+        "@types/chai": "^4.1.7",
+        "@types/mocha": "^5.2.7",
         "chai": "^4.2.0",
         "mocha": "^6.1.4",
         "nyc": "^14.1.1",
@@ -57,8 +59,10 @@
     },
     "dependencies": {
         "@types/graphql": "^14.2.0",
+        "apollo-server": "^2.6.2",
+        "dataloader": "^1.4.0",
         "factom": "^1.2.3",
         "graphql": "^14.3.1",
-        "graphql-yoga": "^1.17.4"
+        "graphql-import": "^0.7.1"
     }
 }

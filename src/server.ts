@@ -1,17 +1,29 @@
-import { GraphQLServer } from 'graphql-yoga';
+import { ApolloServer, gql } from 'apollo-server';
+import { importSchema } from 'graphql-import';
 import { resolvers } from './resolvers/resolvers';
+import { FactomdDataLoader } from './data_loader';
+import { cli } from './factom';
+import { Context } from './types/server';
 
-// Create server.
-const server = new GraphQLServer({
-    typeDefs: './src/schema.graphql',
-    resolvers
-});
+// Create typeDefs
+const schema = importSchema('./schema.graphql');
+const typeDefs = gql`
+    ${schema}
+`;
 
-// Define server options.
-const options = {
-    port: 4000,
-    bodyParserOptions: { type: 'application/json' }
+// Make context type declaration explicit to ensure compiler enforces consistency
+// between the server and the generated type file.
+const context: Context = {
+    // Batches factomd requests.
+    factomd: new FactomdDataLoader(cli)
 };
 
-// Start server.
-server.start(options, () => console.log(`Server up on port ${options.port}`));
+// Create server.
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context
+});
+
+// Launch server
+server.listen().then(({ url }) => console.log(`🚀  Server ready at ${url}`));
