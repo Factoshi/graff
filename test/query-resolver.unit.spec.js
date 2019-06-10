@@ -100,10 +100,23 @@ describe('Query Resolvers', () => {
         const directoryBlock = await Query.directoryBlockHead(undefined, undefined, {
             factomd
         });
-
         assert.hasAllKeys(directoryBlock, ['height', 'hash', 'timestamp']);
         assert.isNumber(directoryBlock.height);
         assert.isString(directoryBlock.hash);
         assert.isNumber(directoryBlock.timestamp);
+    });
+
+    it('should get the leaves of Entry from the entry resolver', async () => {
+        const hash = 'ef67f1a08b849ae188ae71fe0cdbdd3d6bd0c2d4df661c890d339787cbc5ee6b';
+        const entry = await Query.entry(undefined, { hash }, { factomd });
+        assert.strictEqual(entry.hash, hash);
+        assert.strictEqual(
+            entry.chain,
+            '3298ab1c248eae58ee557948d89062b18f81ebcf6cc386233470ef5e4beee12a'
+        );
+        assert.strictEqual(entry.timestamp, 1560183960000);
+        assert.isString(entry.content);
+        assert.isArray(entry.externalIds);
+        entry.externalIds.forEach(id => assert.isString(id));
     });
 });

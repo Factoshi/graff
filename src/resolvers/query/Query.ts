@@ -60,5 +60,16 @@ export const Query: QueryResolvers = {
             height
         } = await factomd.directoryBlockHead.load();
         return { timestamp, height, hash };
+    },
+
+    entry: async (root, { hash }, { factomd }) => {
+        const { chainIdHex, timestamp, extIds, content } = await factomd.entry.load(hash);
+        return {
+            hash,
+            chain: chainIdHex,
+            timestamp,
+            externalIds: extIds.map(id => id.toString('base64')),
+            content: content.toString('base64')
+        };
     }
 };

@@ -29,6 +29,10 @@ export class FactomdDataLoader {
         load: () => this.cli.getDirectoryBlockHead()
     };
 
+    entry = new DataLoader((hashes: string[]) => {
+        return Promise.all(hashes.map(hash => this.cli.getEntryWithBlockContext(hash)));
+    });
+
     entryBlock = new DataLoader((hashes: string[]) => {
         return Promise.all(hashes.map(hash => this.cli.getEntryBlock(hash)));
     });
