@@ -328,11 +328,15 @@ export type DirectoryBlockSignature = AdminEntry & {
 /** Entry included in the blockchain. */
 export type Entry = {
   __typename?: "Entry";
+  /** The hash of the entry */
+  hash: Scalars["Hash"];
   /** The chain the entry belongs to. */
   chain: Scalars["Hash"];
-  /** List of external IDs associated with the entry. */
+  /** The timestamp of the entry. */
+  timestamp: Scalars["Int"];
+  /** List of external IDs associated with the entry as base64. */
   externalIds: Array<Scalars["String"]>;
-  /** The content of the entry. */
+  /** The content of the entry as base64. */
   content: Scalars["String"];
   /** The parent entry block of the entry. */
   block: EntryBlock;
@@ -1256,7 +1260,9 @@ export type EntryResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["Entry"]
 > = ResolversObject<{
+  hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   chain?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   externalIds?: Resolver<
     Array<ResolversTypes["String"]>,
     ParentType,
