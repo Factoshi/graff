@@ -26,16 +26,45 @@ describe('Query Resolvers', () => {
 
     it('Should get the leaves of AdminBlock from the adminBlockHead resolver', async () => {
         const adminBlock = await Query.adminBlockHead(undefined, undefined, { factomd });
-        assert.containsAllKeys(adminBlock, ['hash']);
+        assert.hasAllKeys(adminBlock, ['hash']);
         assert.isString(adminBlock.hash);
     });
 
     it('should get the leaves of EntryBlock from the chainHead resolver', async () => {
         const chain = 'b47b83b04ba3b09305e7e02618c457c3fd82531a4ab81b16e73d780dfc2f3b18';
         const chainHead = await Query.chainHead(undefined, { chain }, { factomd });
-        assert.containsAllKeys(chainHead, ['hash', 'chain', 'height']);
+        assert.hasAllKeys(chainHead, ['hash', 'chain', 'height']);
         assert.isString(chainHead.hash);
         assert.isString(chainHead.chain);
         assert.isNumber(chainHead.height);
+    });
+
+    it('should get the leaves of CurrentMinute from the currentMinute resolver', async () => {
+        const currentMinute = await Query.currentMinute(undefined, undefined, {
+            factomd
+        });
+
+        assert.hasAllKeys(currentMinute, {
+            leaderHeight: 196395,
+            directoryBlockHeight: 196395,
+            minute: 4,
+            currentBlockStartTime: 1560186493561410300,
+            currentMinuteStartTime: 1560186733528967200,
+            currentTime: 1560186765763706000,
+            directoryBlockInSeconds: 600,
+            stallDetected: false,
+            faultTimeout: 120,
+            roundTimeout: 30
+        });
+        assert.isNumber(currentMinute.leaderHeight);
+        assert.isNumber(currentMinute.directoryBlockHeight);
+        assert.isNumber(currentMinute.minute);
+        assert.isNumber(currentMinute.currentBlockStartTime);
+        assert.isNumber(currentMinute.currentMinuteStartTime);
+        assert.isNumber(currentMinute.currentTime);
+        assert.isNumber(currentMinute.directoryBlockInSeconds);
+        assert.isBoolean(currentMinute.stallDetected);
+        assert.isNumber(currentMinute.faultTimeout);
+        assert.isNumber(currentMinute.roundTimeout);
     });
 });

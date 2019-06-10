@@ -15,12 +15,16 @@ export class FactomdDataLoader {
         return Promise.all(chains.map(chain => this.cli.getChainHead(chain)));
     });
 
+    // current-minute does not take a key and therefore cannot use Dataloader.
+    // The load method on this object creates a consistent API with the DataLoader instances.
+    currentMinute = {
+        load: () => this.cli.factomdApi('current-minute')
+    };
+
     directoryBlock = new DataLoader((hashes: (string | number)[]) => {
         return Promise.all(hashes.map(hash => this.cli.getDirectoryBlock(hash)));
     });
 
-    // getDirectoryBlockHead does not take a key and therefore cannot use Dataloader.
-    // The load method on this object creates a consistent API with the DataLoader instances.
     directoryBlockHead = {
         load: () => this.cli.getDirectoryBlockHead()
     };
