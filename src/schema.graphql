@@ -18,20 +18,20 @@ scalar PublicEntryCreditAddress
 type Query {
     "Get an admin block by the specified block hash."
     adminBlock(hash: Hash!): AdminBlock
-    "Get the admin block at the tip of the admin chain."
-    adminBlockHead: AdminBlock
     "Get an admin block by the specified block height."
     adminBlockByHeight(height: Int!): AdminBlock
+    "Get the admin block at the tip of the admin chain."
+    adminBlockHead: AdminBlock
     "Get the entry block at the tip of the specified chain."
     chainHead(chain: Hash!): EntryBlock
     "Get protocol time state."
     currentMinute: CurrentMinute!
     "Get a directory block by the specified block hash."
     directoryBlock(hash: Hash!): DirectoryBlock
-    "Get the directory block at the tip of the directory chain."
-    directoryBlockHead: DirectoryBlock
     "Get a directory block by the specified block height."
     directoryBlockByHeight(height: Int!): DirectoryBlock
+    "Get the directory block at the tip of the directory chain."
+    directoryBlockHead: DirectoryBlock
     "Get an entry by its hash."
     entry(hash: Hash!): Entry
     "Get an entry block by the specified block hash."
@@ -47,20 +47,20 @@ type Query {
     entryCreditBalance(address: PublicEntryCreditAddress!): EntryCreditAddress!
     "Get an entry credit block by the specified block hash."
     entryCreditBlock(hash: Hash!): EntryCreditBlock
-    "Get the entry credit block at the tip of the entry credit chain."
-    entryCreditBlockHead: EntryCreditBlock
     "Get an entry credit block by the specified block height."
     entryCreditBlockByHeight(height: Int!): EntryCreditBlock
+    "Get the entry credit block at the tip of the entry credit chain."
+    entryCreditBlockHead: EntryCreditBlock
     "Get the EC-FCT exchange rate."
     entryCreditRate: Int!
     "Get the balance of a public factoid address."
     factoidBalance(address: PublicFactoidAddress!): FactoidAddress!
     "Get a factoid block by the specified block hash."
     factoidBlock(hash: Hash!): FactoidBlock
-    "Get the factoid block at the tip of the factoid chain."
-    factoidBlockHead: FactoidBlock
     "Get a factoid block by the specified block height."
     factoidBlockByHeight(height: Int!): FactoidBlock
+    "Get the factoid block at the tip of the factoid chain."
+    factoidBlockHead: FactoidBlock
     "Factoid transaction status."
     factoidTransactionAck(
         "Factoid transaction hash, otherwise known as transaction ID"
@@ -111,7 +111,6 @@ type Mutation {
 ##########
 # Blocks #
 ##########
-
 
 "Admin Block"
 type AdminBlock implements Block {
