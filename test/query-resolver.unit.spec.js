@@ -95,4 +95,15 @@ describe('Query Resolvers', () => {
             timestamp: 1560187680
         });
     });
+
+    it('should get the leaves of DirectoryBlock from the directoryBlockHead resolver', async () => {
+        const directoryBlock = await Query.directoryBlockHead(undefined, undefined, {
+            factomd
+        });
+
+        assert.hasAllKeys(directoryBlock, ['height', 'hash', 'timestamp']);
+        assert.isNumber(directoryBlock.height);
+        assert.isString(directoryBlock.hash);
+        assert.isNumber(directoryBlock.timestamp);
+    });
 });

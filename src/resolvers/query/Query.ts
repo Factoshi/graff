@@ -52,5 +52,13 @@ export const Query: QueryResolvers = {
         const { timestamp, keyMR: hash } = await factomd.directoryBlock.load(height);
         return { timestamp, height, hash };
     },
+
+    directoryBlockHead: async (root, args, { factomd }) => {
+        const {
+            timestamp,
+            keyMR: hash,
+            height
+        } = await factomd.directoryBlockHead.load();
+        return { timestamp, height, hash };
     }
 };
