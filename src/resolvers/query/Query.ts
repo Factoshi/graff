@@ -41,5 +41,10 @@ export const Query: QueryResolvers = {
             faultTimeout: currentMinute.faulttimeout,
             roundTimeout: currentMinute.roundtimeout
         };
+    },
+
+    directoryBlock: async (root, { hash }, { factomd }) => {
+        const { timestamp, height } = await factomd.directoryBlock.load(hash);
+        return { timestamp, height, hash };
     }
 };

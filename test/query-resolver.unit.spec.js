@@ -44,18 +44,18 @@ describe('Query Resolvers', () => {
             factomd
         });
 
-        assert.hasAllKeys(currentMinute, {
-            leaderHeight: 196395,
-            directoryBlockHeight: 196395,
-            minute: 4,
-            currentBlockStartTime: 1560186493561410300,
-            currentMinuteStartTime: 1560186733528967200,
-            currentTime: 1560186765763706000,
-            directoryBlockInSeconds: 600,
-            stallDetected: false,
-            faultTimeout: 120,
-            roundTimeout: 30
-        });
+        assert.hasAllKeys(currentMinute, [
+            'leaderHeight',
+            'directoryBlockHeight',
+            'minute',
+            'currentBlockStartTime',
+            'currentMinuteStartTime',
+            'currentTime',
+            'directoryBlockInSeconds',
+            'stallDetected',
+            'faultTimeout',
+            'roundTimeout'
+        ]);
         assert.isNumber(currentMinute.leaderHeight);
         assert.isNumber(currentMinute.directoryBlockHeight);
         assert.isNumber(currentMinute.minute);
@@ -66,5 +66,19 @@ describe('Query Resolvers', () => {
         assert.isBoolean(currentMinute.stallDetected);
         assert.isNumber(currentMinute.faultTimeout);
         assert.isNumber(currentMinute.roundTimeout);
+    });
+
+    it('should get the leaves of DirectoryBlock from the directoryBlock resolver', async () => {
+        const hash = '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5';
+        const directoryBlock = await Query.directoryBlock(
+            undefined,
+            { hash },
+            { factomd }
+        );
+        assert.deepStrictEqual(directoryBlock, {
+            hash,
+            height: 196398,
+            timestamp: 1560187680
+        });
     });
 });
