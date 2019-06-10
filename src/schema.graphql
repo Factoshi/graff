@@ -16,57 +16,26 @@ scalar PublicEntryCreditAddress
 # *************************************** #
 
 type Query {
-    # Blocks
-    "Get the directory block at the tip of the directory chain."
-    directoryBlockHead: DirectoryBlock
-    "Get a directory block by the specified block hash."
-    directoryBlock(hash: Hash!): DirectoryBlock
-    "Get a directory block by the specified block height."
-    directoryBlockByHeight(height: Int!): DirectoryBlock
-
-    "Get the admin block at the tip of the admin chain."
-    adminBlockHead: AdminBlock
     "Get an admin block by the specified block hash."
     adminBlock(hash: Hash!): AdminBlock
+    "Get the admin block at the tip of the admin chain."
+    adminBlockHead: AdminBlock
     "Get an admin block by the specified block height."
     adminBlockByHeight(height: Int!): AdminBlock
-
-    "Get the entry credit block at the tip of the entry credit chain."
-    entryCreditBlockHead: EntryCreditBlock
-    "Get an entry credit block by the specified block hash."
-    entryCreditBlock(hash: Hash!): EntryCreditBlock
-    "Get an entry credit block by the specified block height."
-    entryCreditBlockByHeight(height: Int!): EntryCreditBlock
-
-    "Get the factoid block at the tip of the factoid chain."
-    factoidBlockHead: FactoidBlock
-    "Get a factoid block by the specified block hash."
-    factoidBlock(hash: Hash!): FactoidBlock
-    "Get a factoid block by the specified block height."
-    factoidBlockByHeight(height: Int!): FactoidBlock
-
     "Get the entry block at the tip of the specified chain."
-    getChainHead(chain: Hash!): EntryBlock
-    "Get an entry block by the specified block hash."
-    entryBlock(hash: Hash!): EntryBlock
-
-    # Balances
-    "Get the balance of a public entry credit address."
-    entryCreditBalance(address: PublicEntryCreditAddress!): EntryCreditAddress!
-    "Get the balance of a public factoid address."
-    factoidBalance(address: PublicFactoidAddress!): FactoidAddress!
-
-    # Ledger Entries
+    chainHead(chain: Hash!): EntryBlock
+    "Get protocol time state."
+    currentMinute: CurrentMinute!
+    "Get a directory block by the specified block hash."
+    directoryBlock(hash: Hash!): DirectoryBlock
+    "Get the directory block at the tip of the directory chain."
+    directoryBlockHead: DirectoryBlock
+    "Get a directory block by the specified block height."
+    directoryBlockByHeight(height: Int!): DirectoryBlock
     "Get an entry by its hash."
     entry(hash: Hash!): Entry
-    "Get a transaction by its hash."
-    transaction(hash: Hash!): Transaction
-    "Get paginated pending entries."
-    pendingEntries: PaginatedPendingEntries!
-    "Get paginated pending entries."
-    pendingTransactions: PaginatedPendingTransactions!
-    "Get an entry receipt"
-    receipt(hash: Hash!): Receipt
+    "Get an entry block by the specified block hash."
+    entryBlock(hash: Hash!): EntryBlock
     "Entry or commit status."
     entryCommitAck(
         "Entry hash."
@@ -74,36 +43,56 @@ type Query {
         "The chain where the entry was revealed. Leave blank for a commit ack."
         chain: Hash
     ): EntryCommitAck!
+    "Get the balance of a public entry credit address."
+    entryCreditBalance(address: PublicEntryCreditAddress!): EntryCreditAddress!
+    "Get an entry credit block by the specified block hash."
+    entryCreditBlock(hash: Hash!): EntryCreditBlock
+    "Get the entry credit block at the tip of the entry credit chain."
+    entryCreditBlockHead: EntryCreditBlock
+    "Get an entry credit block by the specified block height."
+    entryCreditBlockByHeight(height: Int!): EntryCreditBlock
+    "Get the EC-FCT exchange rate."
+    entryCreditRate: Int!
+    "Get the balance of a public factoid address."
+    factoidBalance(address: PublicFactoidAddress!): FactoidAddress!
+    "Get a factoid block by the specified block hash."
+    factoidBlock(hash: Hash!): FactoidBlock
+    "Get the factoid block at the tip of the factoid chain."
+    factoidBlockHead: FactoidBlock
+    "Get a factoid block by the specified block height."
+    factoidBlockByHeight(height: Int!): FactoidBlock
     "Factoid transaction status."
     factoidTransactionAck(
         "Factoid transaction hash, otherwise known as transaction ID"
         hash: Hash!
     ): FactoidTransactionAck!
-
-    # Metadata
-    "Get protocol time state."
-    currentMinute: CurrentMinute!
     "Get blockchain heights."
     heights: Heights!
+    "Get paginated pending entries."
+    pendingEntries: PaginatedPendingEntries!
+    "Get paginated pending entries."
+    pendingTransactions: PaginatedPendingTransactions!
     "Get properties of factomd and the APIs."
     properties: Properties!
-    "Get the EC-FCT exchange rate."
-    entryCreditRate: Int!
+    "Get an entry receipt"
+    receipt(hash: Hash!): Receipt
+    "Get a transaction by its hash."
+    transaction(hash: Hash!): Transaction
 }
 
 type Subscription {
-    "Subscribe to each new directory block."
-    newDirectoryBlock: DirectoryBlock!
     "Subscribe to each new admin block."
     newAdminBlock: AdminBlock!
-    "Subscribe to each new factoid block."
-    newFactoidBlock: FactoidBlock!
-    "Subscribe to each new entry credit block."
-    newEntryCreditBlock: EntryCreditBlock!
-    "Subscribe to each new entry block for a specified chain."
-    newEntryBlock(chain: Hash!): EntryBlock!
     "Subscribe to newly created chains."
     newChainsCreated: [PaginatedEntryBlocks!]!
+    "Subscribe to each new directory block."
+    newDirectoryBlock: DirectoryBlock!
+    "Subscribe to each new entry block for a specified chain."
+    newEntryBlock(chain: Hash!): EntryBlock!
+    "Subscribe to each new entry credit block."
+    newEntryCreditBlock: EntryCreditBlock!
+    "Subscribe to each new factoid block."
+    newFactoidBlock: FactoidBlock!
 }
 
 type Mutation {
@@ -122,6 +111,21 @@ type Mutation {
 ##########
 # Blocks #
 ##########
+
+
+"Admin Block"
+type AdminBlock implements Block {
+    "The hash of the current block."
+    hash: Hash!
+    "The previous block."
+    prevBlock: AdminBlock
+    "The next block."
+    nextBlock: AdminBlock
+    "Array of admin entries contained within this admin block."
+    entries: [AdminEntry!]!
+    "Parent directory block."
+    directoryBlock: DirectoryBlock!
+}
 
 "Defines the fields shared by all blocks."
 interface Block {
@@ -154,20 +158,6 @@ type DirectoryBlock implements Block {
     entryCreditBlock: EntryCreditBlock!
     "The factoid block referenced by this directory block."
     factoidBlock: FactoidBlock!
-}
-
-"Admin Block"
-type AdminBlock implements Block {
-    "The hash of the current block."
-    hash: Hash!
-    "The previous block."
-    prevBlock: AdminBlock
-    "The next block."
-    nextBlock: AdminBlock
-    "Array of admin entries contained within this admin block."
-    entries: [AdminEntry!]!
-    "Parent directory block."
-    directoryBlock: DirectoryBlock!
 }
 
 "Entry Block"
