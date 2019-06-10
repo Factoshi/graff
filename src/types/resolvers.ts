@@ -3,6 +3,7 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig
 } from "graphql";
+import { Context } from "./server";
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
@@ -645,20 +646,20 @@ export type Query = {
   __typename?: "Query";
   /** Get an admin block by the specified block hash. */
   adminBlock?: Maybe<AdminBlock>;
-  /** Get the admin block at the tip of the admin chain. */
-  adminBlockHead?: Maybe<AdminBlock>;
   /** Get an admin block by the specified block height. */
   adminBlockByHeight?: Maybe<AdminBlock>;
+  /** Get the admin block at the tip of the admin chain. */
+  adminBlockHead?: Maybe<AdminBlock>;
   /** Get the entry block at the tip of the specified chain. */
   chainHead?: Maybe<EntryBlock>;
   /** Get protocol time state. */
   currentMinute: CurrentMinute;
   /** Get a directory block by the specified block hash. */
   directoryBlock?: Maybe<DirectoryBlock>;
-  /** Get the directory block at the tip of the directory chain. */
-  directoryBlockHead?: Maybe<DirectoryBlock>;
   /** Get a directory block by the specified block height. */
   directoryBlockByHeight?: Maybe<DirectoryBlock>;
+  /** Get the directory block at the tip of the directory chain. */
+  directoryBlockHead?: Maybe<DirectoryBlock>;
   /** Get an entry by its hash. */
   entry?: Maybe<Entry>;
   /** Get an entry block by the specified block hash. */
@@ -669,20 +670,20 @@ export type Query = {
   entryCreditBalance: EntryCreditAddress;
   /** Get an entry credit block by the specified block hash. */
   entryCreditBlock?: Maybe<EntryCreditBlock>;
-  /** Get the entry credit block at the tip of the entry credit chain. */
-  entryCreditBlockHead?: Maybe<EntryCreditBlock>;
   /** Get an entry credit block by the specified block height. */
   entryCreditBlockByHeight?: Maybe<EntryCreditBlock>;
+  /** Get the entry credit block at the tip of the entry credit chain. */
+  entryCreditBlockHead?: Maybe<EntryCreditBlock>;
   /** Get the EC-FCT exchange rate. */
   entryCreditRate: Scalars["Int"];
   /** Get the balance of a public factoid address. */
   factoidBalance: FactoidAddress;
   /** Get a factoid block by the specified block hash. */
   factoidBlock?: Maybe<FactoidBlock>;
-  /** Get the factoid block at the tip of the factoid chain. */
-  factoidBlockHead?: Maybe<FactoidBlock>;
   /** Get a factoid block by the specified block height. */
   factoidBlockByHeight?: Maybe<FactoidBlock>;
+  /** Get the factoid block at the tip of the factoid chain. */
+  factoidBlockHead?: Maybe<FactoidBlock>;
   /** Factoid transaction status. */
   factoidTransactionAck: FactoidTransactionAck;
   /** Get blockchain heights. */
@@ -972,7 +973,7 @@ export type ResolversTypes = ResolversObject<{
 }>;
 
 export type AddAuthorityEfficiencyResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["AddAuthorityEfficiency"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -982,7 +983,7 @@ export type AddAuthorityEfficiencyResolvers<
 }>;
 
 export type AddAuthorityFactoidAddressResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["AddAuthorityFactoidAddress"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -997,7 +998,7 @@ export type AddAuthorityFactoidAddressResolvers<
 }>;
 
 export type AddFederatedServerBitcoinAnchorKeyResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["AddFederatedServerBitcoinAnchorKey"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1009,7 +1010,7 @@ export type AddFederatedServerBitcoinAnchorKeyResolvers<
 }>;
 
 export type AddFederatedServerSigningKeyResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["AddFederatedServerSigningKey"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1025,7 +1026,7 @@ export type AddFederatedServerSigningKeyResolvers<
 }>;
 
 export type AddRemoveServerResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["AddRemoveServer"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1039,7 +1040,7 @@ export type AddRemoveServerResolvers<
 }>;
 
 export type AdminBlockResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["AdminBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1066,7 +1067,7 @@ export type AdminBlockResolvers<
 }>;
 
 export type AdminEntryResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["AdminEntry"]
 > = ResolversObject<{
   __resolveType: TypeResolveFn<
@@ -1089,7 +1090,7 @@ export type AdminEntryResolvers<
 }>;
 
 export type BlockResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Block"]
 > = ResolversObject<{
   __resolveType: TypeResolveFn<
@@ -1105,7 +1106,7 @@ export type BlockResolvers<
 }>;
 
 export type CoinbaseDescriptorResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["CoinbaseDescriptor"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1118,7 +1119,7 @@ export type CoinbaseDescriptorResolvers<
 }>;
 
 export type CoinbaseDescriptorCancelResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["CoinbaseDescriptorCancel"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1128,7 +1129,7 @@ export type CoinbaseDescriptorCancelResolvers<
 }>;
 
 export type CoinbaseDescriptorOutputResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["CoinbaseDescriptorOutput"]
 > = ResolversObject<{
   address?: Resolver<
@@ -1141,7 +1142,7 @@ export type CoinbaseDescriptorOutputResolvers<
 }>;
 
 export type CommitResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Commit"]
 > = ResolversObject<{
   timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1157,7 +1158,7 @@ export type CommitResolvers<
 }>;
 
 export type CommitRevealSendResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["CommitRevealSend"]
 > = ResolversObject<{
   entryHash?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
@@ -1170,7 +1171,7 @@ export type CommitRevealSendResolvers<
 }>;
 
 export type CurrentMinuteResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["CurrentMinute"]
 > = ResolversObject<{
   leaderHeight?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1202,7 +1203,7 @@ export type CurrentMinuteResolvers<
 }>;
 
 export type DirectoryBlockResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["DirectoryBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1238,7 +1239,7 @@ export type DirectoryBlockResolvers<
 }>;
 
 export type DirectoryBlockSignatureResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["DirectoryBlockSignature"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1252,7 +1253,7 @@ export type DirectoryBlockSignatureResolvers<
 }>;
 
 export type EntryResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Entry"]
 > = ResolversObject<{
   chain?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1266,7 +1267,7 @@ export type EntryResolvers<
 }>;
 
 export type EntryBlockResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["EntryBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1296,7 +1297,7 @@ export type EntryBlockResolvers<
 }>;
 
 export type EntryCommitAckResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["EntryCommitAck"]
 > = ResolversObject<{
   commitHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1306,7 +1307,7 @@ export type EntryCommitAckResolvers<
 }>;
 
 export type EntryCreditAddressResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["EntryCreditAddress"]
 > = ResolversObject<{
   amount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1319,7 +1320,7 @@ export type EntryCreditAddressResolvers<
 }>;
 
 export type EntryCreditBlockResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["EntryCreditBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1347,7 +1348,7 @@ export type EntryCreditBlockResolvers<
 }>;
 
 export type FactoidAddressResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["FactoidAddress"]
 > = ResolversObject<{
   amount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1360,7 +1361,7 @@ export type FactoidAddressResolvers<
 }>;
 
 export type FactoidBlockResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["FactoidBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1389,7 +1390,7 @@ export type FactoidBlockResolvers<
 }>;
 
 export type FactoidTransactionAckResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["FactoidTransactionAck"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1410,7 +1411,7 @@ export interface HashScalarConfig
 }
 
 export type HeightsResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Heights"]
 > = ResolversObject<{
   leaderHeight?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1424,7 +1425,7 @@ export type HeightsResolvers<
 }>;
 
 export type IncreaseServerCountResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["IncreaseServerCount"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1433,7 +1434,7 @@ export type IncreaseServerCountResolvers<
 }>;
 
 export type MatryoshkaHashResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["MatryoshkaHash"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1443,7 +1444,7 @@ export type MatryoshkaHashResolvers<
 }>;
 
 export type MerkleNodeResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["MerkleNode"]
 > = ResolversObject<{
   left?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1452,7 +1453,7 @@ export type MerkleNodeResolvers<
 }>;
 
 export type MutationResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Mutation"]
 > = ResolversObject<{
   commitChain?: Resolver<
@@ -1483,7 +1484,7 @@ export type MutationResolvers<
 }>;
 
 export type PaginatedResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Paginated"]
 > = ResolversObject<{
   __resolveType: TypeResolveFn<
@@ -1500,7 +1501,7 @@ export type PaginatedResolvers<
 }>;
 
 export type PaginatedCommitsResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["PaginatedCommits"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1508,7 +1509,7 @@ export type PaginatedCommitsResolvers<
 }>;
 
 export type PaginatedEntriesResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["PaginatedEntries"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1516,7 +1517,7 @@ export type PaginatedEntriesResolvers<
 }>;
 
 export type PaginatedEntryBlocksResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["PaginatedEntryBlocks"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1528,7 +1529,7 @@ export type PaginatedEntryBlocksResolvers<
 }>;
 
 export type PaginatedPendingEntriesResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["PaginatedPendingEntries"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1540,7 +1541,7 @@ export type PaginatedPendingEntriesResolvers<
 }>;
 
 export type PaginatedPendingTransactionsResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["PaginatedPendingTransactions"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1552,7 +1553,7 @@ export type PaginatedPendingTransactionsResolvers<
 }>;
 
 export type PaginatedTransactionsResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["PaginatedTransactions"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1564,7 +1565,7 @@ export type PaginatedTransactionsResolvers<
 }>;
 
 export type PendingEntryResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["PendingEntry"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1573,7 +1574,7 @@ export type PendingEntryResolvers<
 }>;
 
 export type PendingTransactionResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["PendingTransaction"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1608,7 +1609,7 @@ export type PendingTransactionResolvers<
 }>;
 
 export type PreviousDirectoryBlockSignatureResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["PreviousDirectoryBlockSignature"]
 > = ResolversObject<{
   publicKey?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -1616,7 +1617,7 @@ export type PreviousDirectoryBlockSignatureResolvers<
 }>;
 
 export type PropertiesResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Properties"]
 > = ResolversObject<{
   factomdVersion?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -1646,7 +1647,7 @@ export interface PublicFactoidAddressScalarConfig
 }
 
 export type QueryResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Query"]
 > = ResolversObject<{
   adminBlock?: Resolver<
@@ -1655,16 +1656,16 @@ export type QueryResolvers<
     ContextType,
     QueryAdminBlockArgs
   >;
-  adminBlockHead?: Resolver<
-    Maybe<ResolversTypes["AdminBlock"]>,
-    ParentType,
-    ContextType
-  >;
   adminBlockByHeight?: Resolver<
     Maybe<ResolversTypes["AdminBlock"]>,
     ParentType,
     ContextType,
     QueryAdminBlockByHeightArgs
+  >;
+  adminBlockHead?: Resolver<
+    Maybe<ResolversTypes["AdminBlock"]>,
+    ParentType,
+    ContextType
   >;
   chainHead?: Resolver<
     Maybe<ResolversTypes["EntryBlock"]>,
@@ -1683,16 +1684,16 @@ export type QueryResolvers<
     ContextType,
     QueryDirectoryBlockArgs
   >;
-  directoryBlockHead?: Resolver<
-    Maybe<ResolversTypes["DirectoryBlock"]>,
-    ParentType,
-    ContextType
-  >;
   directoryBlockByHeight?: Resolver<
     Maybe<ResolversTypes["DirectoryBlock"]>,
     ParentType,
     ContextType,
     QueryDirectoryBlockByHeightArgs
+  >;
+  directoryBlockHead?: Resolver<
+    Maybe<ResolversTypes["DirectoryBlock"]>,
+    ParentType,
+    ContextType
   >;
   entry?: Resolver<
     Maybe<ResolversTypes["Entry"]>,
@@ -1724,16 +1725,16 @@ export type QueryResolvers<
     ContextType,
     QueryEntryCreditBlockArgs
   >;
-  entryCreditBlockHead?: Resolver<
-    Maybe<ResolversTypes["EntryCreditBlock"]>,
-    ParentType,
-    ContextType
-  >;
   entryCreditBlockByHeight?: Resolver<
     Maybe<ResolversTypes["EntryCreditBlock"]>,
     ParentType,
     ContextType,
     QueryEntryCreditBlockByHeightArgs
+  >;
+  entryCreditBlockHead?: Resolver<
+    Maybe<ResolversTypes["EntryCreditBlock"]>,
+    ParentType,
+    ContextType
   >;
   entryCreditRate?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   factoidBalance?: Resolver<
@@ -1748,16 +1749,16 @@ export type QueryResolvers<
     ContextType,
     QueryFactoidBlockArgs
   >;
-  factoidBlockHead?: Resolver<
-    Maybe<ResolversTypes["FactoidBlock"]>,
-    ParentType,
-    ContextType
-  >;
   factoidBlockByHeight?: Resolver<
     Maybe<ResolversTypes["FactoidBlock"]>,
     ParentType,
     ContextType,
     QueryFactoidBlockByHeightArgs
+  >;
+  factoidBlockHead?: Resolver<
+    Maybe<ResolversTypes["FactoidBlock"]>,
+    ParentType,
+    ContextType
   >;
   factoidTransactionAck?: Resolver<
     ResolversTypes["FactoidTransactionAck"],
@@ -1792,7 +1793,7 @@ export type QueryResolvers<
 }>;
 
 export type ReceiptResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Receipt"]
 > = ResolversObject<{
   entry?: Resolver<ResolversTypes["Entry"], ParentType, ContextType>;
@@ -1816,7 +1817,7 @@ export type ReceiptResolvers<
 }>;
 
 export type ServerFaultHandoffResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["ServerFaultHandoff"]
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -1824,7 +1825,7 @@ export type ServerFaultHandoffResolvers<
 }>;
 
 export type SubscriptionResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Subscription"]
 > = ResolversObject<{
   newAdminBlock?: SubscriptionResolver<
@@ -1861,7 +1862,7 @@ export type SubscriptionResolvers<
 }>;
 
 export type TransactionResolvers<
-  ContextType = any,
+  ContextType = Context,
   ParentType = ResolversTypes["Transaction"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -1896,7 +1897,7 @@ export type TransactionResolvers<
   block?: Resolver<ResolversTypes["FactoidBlock"], ParentType, ContextType>;
 }>;
 
-export type Resolvers<ContextType = any> = ResolversObject<{
+export type Resolvers<ContextType = Context> = ResolversObject<{
   AddAuthorityEfficiency?: AddAuthorityEfficiencyResolvers<ContextType>;
   AddAuthorityFactoidAddress?: AddAuthorityFactoidAddressResolvers<ContextType>;
   AddFederatedServerBitcoinAnchorKey?: AddFederatedServerBitcoinAnchorKeyResolvers<
@@ -1959,4 +1960,4 @@ export type Resolvers<ContextType = any> = ResolversObject<{
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
-export type IResolvers<ContextType = any> = Resolvers<ContextType>;
+export type IResolvers<ContextType = Context> = Resolvers<ContextType>;
