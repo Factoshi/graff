@@ -1,16 +1,16 @@
 overwrite: true
-schema: "./src/schema.graphql"
+schema: './src/schema.graphql'
 documents: null
 generates:
-  ./src/types/resolvers.ts:
-    plugins:
-      - "typescript"
-      - "typescript-resolvers"
-    config:
-      scalars:
-        Hash: string
-        PublicFactoidAddress: string
-        PublicEntryCreditAddress: string
-      defaultMapper: Partial<{T}>
-      useIndexSignature: true
-
+    ./src/types/resolvers.ts:
+        plugins:
+            - 'typescript'
+            - 'typescript-resolvers'
+        config:
+            scalars:
+                Hash: string
+                PublicFactoidAddress: string
+                PublicEntryCreditAddress: string
+            defaultMapper: Partial<{T}>
+            useIndexSignature: true
+            contextType: ./server#Context
