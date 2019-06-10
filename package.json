@@ -1,0 +1,64 @@
+{
+    "name": "factom-graph",
+    "version": "0.1.0",
+    "description": "GraphQL translation layer for the factomd RPC API.",
+    "main": "index.js",
+    "scripts": {
+        "test": "mocha -r ts-node/register test/**/*.spec.js",
+        "test-watch": "mocha -r ts-node/register test/**/*.spec.js --watch",
+        "generate": "graphql-codegen --config codegen.yml",
+        "generate-init": "graphql-codegen init"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Factoshi/factom-graph.git"
+    },
+    "keywords": [
+        "factom",
+        "api",
+        "graphql"
+    ],
+    "author": "Alex Carrithers (Factoshi Ltd)",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Factoshi/factom-graph/issues"
+    },
+    "homepage": "https://github.com/Factoshi/factom-graph#readme",
+    "nyc": {
+        "include": [
+            "src/**/*.ts",
+            "src/**/*.tsx"
+        ],
+        "exclude": [],
+        "extension": [
+            ".ts",
+            ".js"
+        ],
+        "require": [
+            "ts-node/register"
+        ],
+        "reporter": [
+            "text",
+            "html"
+        ],
+        "sourceMap": true,
+        "instrument": true
+    },
+    "devDependencies": {
+        "@graphql-codegen/cli": "^1.2.0",
+        "@graphql-codegen/typescript": "1.2.0",
+        "@graphql-codegen/typescript-resolvers": "1.2.0",
+        "chai": "^4.2.0",
+        "mocha": "^6.1.4",
+        "nyc": "^14.1.1",
+        "source-map-support": "^0.5.12",
+        "ts-node": "^8.2.0",
+        "typescript": "^3.5.1"
+    },
+    "dependencies": {
+        "@types/graphql": "^14.2.0",
+        "factom": "^1.2.3",
+        "graphql": "^14.3.1",
+        "graphql-yoga": "^1.17.4"
+    }
+}
