@@ -81,4 +81,18 @@ describe('Query Resolvers', () => {
             timestamp: 1560187680
         });
     });
+
+    it('should get the leaves of DirectoryBlock from the directoryBlock resolver', async () => {
+        const height = 196398;
+        const directoryBlock = await Query.directoryBlockByHeight(
+            undefined,
+            { height },
+            { factomd }
+        );
+        assert.deepStrictEqual(directoryBlock, {
+            hash: '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5',
+            height,
+            timestamp: 1560187680
+        });
+    });
 });
