@@ -119,4 +119,16 @@ describe('Query Resolvers', () => {
         assert.isArray(entry.externalIds);
         entry.externalIds.forEach(id => assert.isString(id));
     });
+
+    it('should get the leaves of EntryBlock from the entryBlock resolver', async () => {
+        const hash = '4dd4d88ab67c272817f78672768f5bac546743546c7755949f9c20a4583a0c9c';
+        const entryBlock = await Query.entryBlock(undefined, { hash }, { factomd });
+        assert.strictEqual(entryBlock.hash, hash);
+        assert.strictEqual(
+            entryBlock.chain,
+            '4a35522c834022a4153c4ac92f61f22fad640647f91a21a65cf632f738717966'
+        );
+        assert.strictEqual(entryBlock.height, 1381);
+        assert.strictEqual(entryBlock.timestamp, 1560238680000);
+    });
 });

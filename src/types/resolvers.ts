@@ -355,6 +355,8 @@ export type EntryBlock = Block & {
   chain: Scalars["Hash"];
   /** Height of entry block. Also known as sequence number. */
   height: Scalars["Int"];
+  /** Milliseconds since Unix epoch. Marks the start of the block. */
+  timestamp: Scalars["Int"];
   /** Paginated entries contained within this entry block */
   entries: PaginatedEntries;
   /** Parent directory block. */
@@ -1289,6 +1291,7 @@ export type EntryBlockResolvers<
   >;
   chain?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   entries?: Resolver<
     ResolversTypes["PaginatedEntries"],
     ParentType,

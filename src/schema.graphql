@@ -171,6 +171,8 @@ type EntryBlock implements Block {
     chain: Hash!
     "Height of entry block. Also known as sequence number."
     height: Int!
+    "Milliseconds since Unix epoch. Marks the start of the block."
+    timestamp: Int!
     "Paginated entries contained within this entry block"
     entries(
         "Number of entries to return. Defaults to infinity."

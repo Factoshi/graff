@@ -71,5 +71,20 @@ export const Query: QueryResolvers = {
             externalIds: extIds.map(id => id.toString('base64')),
             content: content.toString('base64')
         };
+    },
+
+    entryBlock: async (root, { hash }, { factomd }) => {
+        const {
+            chainId: chain,
+            timestamp,
+            sequenceNumber: height
+        } = await factomd.entryBlock.load(hash);
+        return {
+            hash,
+            // convert to milliseconds
+            timestamp: timestamp * 1000,
+            chain,
+            height
+        };
     }
 };
