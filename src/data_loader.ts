@@ -1,47 +1,55 @@
 import DataLoader from 'dataloader';
-import factom from 'factom';
+import Factom from 'factom';
 
 /**
  * Class holds dataloader instances to batch requests to factomd.
  */
 export class FactomdDataLoader {
-    constructor(private cli: factom.FactomCli) {}
+    constructor(private cli: Factom.FactomCli) {}
 
-    adminBlock = new DataLoader((hashes: (string | number)[]) => {
-        return Promise.all(hashes.map(hash => this.cli.getAdminBlock(hash)));
-    });
+    private createDataloader<K, V>(fetch: Function) {
+        return new DataLoader<K, V>(keys => Promise.all(keys.map(key => fetch(key))));
+    }
 
-    chainHead = new DataLoader((chains: string[]) => {
-        return Promise.all(chains.map(chain => this.cli.getChainHead(chain)));
-    });
-
-    // current-minute does not take a key and therefore cannot use Dataloader.
+    // Some methods do not take a key and therefore cannot use Dataloader.
     // The load method on this object creates a consistent API with the DataLoader instances.
-    currentMinute = {
-        load: () => this.cli.factomdApi('current-minute')
-    };
+    private createMockDataLoader<T>(fetch: () => Promise<T>) {
+        return { load: () => fetch() };
+    }
 
-    directoryBlock = new DataLoader((hashes: (string | number)[]) => {
-        return Promise.all(hashes.map(hash => this.cli.getDirectoryBlock(hash)));
-    });
+    adminBlock = this.createDataloader<string | number, Factom.AdminBlock>(
+        this.cli.getAdminBlock.bind(this.cli)
+    );
 
-    directoryBlockHead = {
-        load: () => this.cli.getDirectoryBlockHead()
-    };
+    chainHead = this.createDataloader<string, Factom.EntryBlock>(
+        this.cli.getChainHead.bind(this.cli)
+    );
 
-    entry = new DataLoader((hashes: string[]) => {
-        return Promise.all(hashes.map(hash => this.cli.getEntryWithBlockContext(hash)));
-    });
+    currentMinute = this.createMockDataLoader(() =>
+        this.cli.factomdApi('current-minute')
+    );
 
-    entryBlock = new DataLoader((hashes: string[]) => {
-        return Promise.all(hashes.map(hash => this.cli.getEntryBlock(hash)));
-    });
+    directoryBlock = this.createDataloader<string | number, Factom.DirectoryBlock>(
+        this.cli.getDirectoryBlock.bind(this.cli)
+    );
 
-    entryCreditBlock = new DataLoader((hashes: (string | number)[]) => {
-        return Promise.all(hashes.map(hash => this.cli.getEntryCreditBlock(hash)));
-    });
+    directoryBlockHead = this.createMockDataLoader(
+        this.cli.getDirectoryBlockHead.bind(this.cli)
+    );
 
-    factoidBlock = new DataLoader((hashes: (string | number)[]) => {
-        return Promise.all(hashes.map(hash => this.cli.getFactoidBlock(hash)));
-    });
+    entry = this.createDataloader<string, Factom.Entry>(
+        this.cli.getEntryWithBlockContext.bind(this.cli)
+    );
+
+    entryBlock = this.createDataloader<string, Factom.EntryBlock>(
+        this.cli.getEntryBlock.bind(this.cli)
+    );
+
+    entryCreditBlock = this.createDataloader<string | number, Factom.EntryCreditBlock>(
+        this.cli.getEntryCreditBlock.bind(this.cli)
+    );
+
+    factoidBlock = this.createDataloader<string | number, Factom.FactoidBlock>(
+        this.cli.getFactoidBlock.bind(this.cli)
+    );
 }
