@@ -30,6 +30,22 @@ describe('Query Resolvers', () => {
         assert.isString(adminBlock.hash);
     });
 
+    it('should get an array of the leaves of Address from the balances resolver', async () => {
+        ecAddress = 'EC3QVDcZ88chcKxHnatyigwq4nSZbsY56B6Q7HuyL9yUEFSoSf6Q';
+        fctAddress = 'FA2MZs5wASMo9cCiKezdiQKCd8KA6Zbg2xKXKGmYEZBqon9J3ZKv';
+        const balances = await Query.balances(
+            undefined,
+            { addresses: [ecAddress, fctAddress] },
+            { factomd }
+        );
+        assert.isArray(balances);
+        balances.forEach(
+            balance => assert.hasAllKeys[(balance, ('publicAddress', 'amount'))]
+        );
+        balances.forEach(balance => assert.isString(balance.publicAddress));
+        balances.forEach(balance => assert.isNumber(balance.amount));
+    });
+
     it('should get the leaves of EntryBlock from the chainHead resolver', async () => {
         const chain = 'b47b83b04ba3b09305e7e02618c457c3fd82531a4ab81b16e73d780dfc2f3b18';
         const chainHead = await Query.chainHead(undefined, { chain }, { factomd });

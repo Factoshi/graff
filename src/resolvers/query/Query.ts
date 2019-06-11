@@ -16,6 +16,14 @@ export const Query: QueryResolvers = {
         return { hash: adminBlock.lookupHash };
     },
 
+    balances: async (root, { addresses }, { factomd }) => {
+        const balances = await factomd.balance.loadMany(addresses);
+        return balances.map((balance, i) => ({
+            amount: balance,
+            publicAddress: addresses[i]
+        }));
+    },
+
     chainHead: async (root, { chain }, { factomd }) => {
         const chainHead = await factomd.chainHead.load(chain);
         const entryBlock = await factomd.entryBlock.load(chainHead.keyMR);

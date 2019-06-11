@@ -130,6 +130,15 @@ export type AddRemoveServer = AdminEntry & {
   directoryBlockHeight: Scalars["Int"];
 };
 
+/** Public address and associated amount. */
+export type Address = {
+  __typename?: "Address";
+  /** Amount may be balance or output value, depending on the context. */
+  amount: Scalars["Int"];
+  /** Public address. */
+  publicAddress: PublicAddress;
+};
+
 /** Admin Block */
 export type AdminBlock = Block & {
   __typename?: "AdminBlock";
@@ -389,17 +398,6 @@ export type EntryCommitAck = {
   entryStatus?: Maybe<AckStatus>;
 };
 
-/** Entry credit address and associated amount. */
-export type EntryCreditAddress = {
-  __typename?: "EntryCreditAddress";
-  /** Amount may be balance or output value, depending on the context. */
-  amount: Scalars["Int"];
-  /** Public entry credit address. */
-  publicAddress: Scalars["PublicEntryCreditAddress"];
-  /** Address as RCD Hash */
-  address?: Maybe<Scalars["Hash"]>;
-};
-
 /** Entry Credit Block */
 export type EntryCreditBlock = Block & {
   __typename?: "EntryCreditBlock";
@@ -419,17 +417,6 @@ export type EntryCreditBlock = Block & {
 export type EntryCreditBlockCommitsArgs = {
   first?: Maybe<Scalars["Int"]>;
   offset?: Maybe<Scalars["Int"]>;
-};
-
-/** Factoid address and associated amount. */
-export type FactoidAddress = {
-  __typename?: "FactoidAddress";
-  /** Amount may be balance or input/output value, depending on the context. */
-  amount: Scalars["Int"];
-  /** Public factoid address. */
-  publicAddress: Scalars["PublicFactoidAddress"];
-  /** Address as RCD Hash */
-  address?: Maybe<Scalars["Hash"]>;
 };
 
 /** Factoid Block */
@@ -620,11 +607,11 @@ export type PendingTransaction = {
   /** The status of the commit. */
   status: Ack;
   /** An array of factoid inputs. */
-  inputs: Array<FactoidAddress>;
+  inputs: Array<PublicAddress>;
   /** An array of factoid outputs */
-  factoidOutputs: Array<FactoidAddress>;
+  factoidOutputs: Array<PublicAddress>;
   /** An array of entry credit outputs. */
-  entryCreditOutputs: Array<EntryCreditAddress>;
+  entryCreditOutputs: Array<PublicAddress>;
   /** The total value of all inputs. Denominated in factoshis. */
   totalInputs: Scalars["Int"];
   /** The total value of all factoid outputs. Denominated in factoshis. */
@@ -655,6 +642,10 @@ export type Properties = {
   graphQLApiVersion: Scalars["String"];
 };
 
+export type PublicAddress =
+  | Scalars["PublicFactoidAddress"]
+  | Scalars["PublicEntryCreditAddress"];
+
 export type Query = {
   __typename?: "Query";
   /** Get an admin block by the specified block hash. */
@@ -663,6 +654,8 @@ export type Query = {
   adminBlockByHeight?: Maybe<AdminBlock>;
   /** Get the admin block at the tip of the admin chain. */
   adminBlockHead?: Maybe<AdminBlock>;
+  /** Get the balance of public entry credit or factoid addresses. */
+  balances: Array<Address>;
   /** Entry status. */
   commitAck: EntryCommitAck;
   /** Get the entry block at the tip of the specified chain. */
@@ -681,8 +674,6 @@ export type Query = {
   entryBlock?: Maybe<EntryBlock>;
   /** Entry status. */
   entryAck: EntryCommitAck;
-  /** Get the balance of a public entry credit address. */
-  entryCreditBalance: EntryCreditAddress;
   /** Get an entry credit block by the specified block hash. */
   entryCreditBlock?: Maybe<EntryCreditBlock>;
   /** Get an entry credit block by the specified block height. */
@@ -691,8 +682,6 @@ export type Query = {
   entryCreditBlockHead?: Maybe<EntryCreditBlock>;
   /** Get the EC-FCT exchange rate. */
   entryCreditRate: Scalars["Int"];
-  /** Get the balance of a public factoid address. */
-  factoidBalance: FactoidAddress;
   /** Get a factoid block by the specified block hash. */
   factoidBlock?: Maybe<FactoidBlock>;
   /** Get a factoid block by the specified block height. */
@@ -721,6 +710,10 @@ export type QueryAdminBlockArgs = {
 
 export type QueryAdminBlockByHeightArgs = {
   height: Scalars["Int"];
+};
+
+export type QueryBalancesArgs = {
+  addresses: Array<PublicAddress>;
 };
 
 export type QueryCommitAckArgs = {
@@ -752,20 +745,12 @@ export type QueryEntryAckArgs = {
   chain: Scalars["Hash"];
 };
 
-export type QueryEntryCreditBalanceArgs = {
-  address: Scalars["PublicEntryCreditAddress"];
-};
-
 export type QueryEntryCreditBlockArgs = {
   hash: Scalars["Hash"];
 };
 
 export type QueryEntryCreditBlockByHeightArgs = {
   height: Scalars["Int"];
-};
-
-export type QueryFactoidBalanceArgs = {
-  address: Scalars["PublicFactoidAddress"];
 };
 
 export type QueryFactoidBlockArgs = {
@@ -846,11 +831,11 @@ export type Transaction = {
   /** Milliseconds since Unix epoch. */
   timestamp: Scalars["Int"];
   /** An array of factoid inputs. */
-  inputs: Array<FactoidAddress>;
+  inputs: Array<PublicAddress>;
   /** An array of factoid outputs */
-  factoidOutputs: Array<FactoidAddress>;
+  factoidOutputs: Array<PublicAddress>;
   /** An array of entry credit outputs. */
-  entryCreditOutputs: Array<EntryCreditAddress>;
+  entryCreditOutputs: Array<PublicAddress>;
   /** The total value of all inputs. Denominated in factoshis. */
   totalInputs: Scalars["Int"];
   /** The total value of all factoid outputs. Denominated in factoshis. */
@@ -954,10 +939,23 @@ export type ResolversTypes = ResolversObject<{
   PublicEntryCreditAddress: Partial<Scalars["PublicEntryCreditAddress"]>;
   FactoidBlock: Partial<FactoidBlock>;
   PaginatedTransactions: Partial<PaginatedTransactions>;
-  Transaction: Partial<Transaction>;
-  FactoidAddress: Partial<FactoidAddress>;
+  Transaction: Partial<
+    Omit<Transaction, "inputs" | "factoidOutputs" | "entryCreditOutputs"> & {
+      inputs: Array<ResolversTypes["PublicAddress"]>;
+      factoidOutputs: Array<ResolversTypes["PublicAddress"]>;
+      entryCreditOutputs: Array<ResolversTypes["PublicAddress"]>;
+    }
+  >;
+  PublicAddress: Partial<
+    | ResolversTypes["PublicFactoidAddress"]
+    | ResolversTypes["PublicEntryCreditAddress"]
+  >;
   PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
-  EntryCreditAddress: Partial<EntryCreditAddress>;
+  Address: Partial<
+    Omit<Address, "publicAddress"> & {
+      publicAddress: ResolversTypes["PublicAddress"];
+    }
+  >;
   EntryCommitAck: Partial<EntryCommitAck>;
   AckStatus: Partial<AckStatus>;
   Ack: Partial<Ack>;
@@ -968,7 +966,16 @@ export type ResolversTypes = ResolversObject<{
   PaginatedPendingEntries: Partial<PaginatedPendingEntries>;
   PendingEntry: Partial<PendingEntry>;
   PaginatedPendingTransactions: Partial<PaginatedPendingTransactions>;
-  PendingTransaction: Partial<PendingTransaction>;
+  PendingTransaction: Partial<
+    Omit<
+      PendingTransaction,
+      "inputs" | "factoidOutputs" | "entryCreditOutputs"
+    > & {
+      inputs: Array<ResolversTypes["PublicAddress"]>;
+      factoidOutputs: Array<ResolversTypes["PublicAddress"]>;
+      entryCreditOutputs: Array<ResolversTypes["PublicAddress"]>;
+    }
+  >;
   Properties: Partial<Properties>;
   Receipt: Partial<Receipt>;
   MerkleNode: Partial<MerkleNode>;
@@ -1063,6 +1070,18 @@ export type AddRemoveServerResolvers<
   identityChainId?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   directoryBlockHeight?: Resolver<
     ResolversTypes["Int"],
+    ParentType,
+    ContextType
+  >;
+}>;
+
+export type AddressResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["Address"]
+> = ResolversObject<{
+  amount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  publicAddress?: Resolver<
+    ResolversTypes["PublicAddress"],
     ParentType,
     ContextType
   >;
@@ -1346,19 +1365,6 @@ export type EntryCommitAckResolvers<
   >;
 }>;
 
-export type EntryCreditAddressResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["EntryCreditAddress"]
-> = ResolversObject<{
-  amount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  publicAddress?: Resolver<
-    ResolversTypes["PublicEntryCreditAddress"],
-    ParentType,
-    ContextType
-  >;
-  address?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
-}>;
-
 export type EntryCreditBlockResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["EntryCreditBlock"]
@@ -1385,19 +1391,6 @@ export type EntryCreditBlockResolvers<
     ParentType,
     ContextType
   >;
-}>;
-
-export type FactoidAddressResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["FactoidAddress"]
-> = ResolversObject<{
-  amount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  publicAddress?: Resolver<
-    ResolversTypes["PublicFactoidAddress"],
-    ParentType,
-    ContextType
-  >;
-  address?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
 }>;
 
 export type FactoidBlockResolvers<
@@ -1620,17 +1613,17 @@ export type PendingTransactionResolvers<
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Ack"], ParentType, ContextType>;
   inputs?: Resolver<
-    Array<ResolversTypes["FactoidAddress"]>,
+    Array<ResolversTypes["PublicAddress"]>,
     ParentType,
     ContextType
   >;
   factoidOutputs?: Resolver<
-    Array<ResolversTypes["FactoidAddress"]>,
+    Array<ResolversTypes["PublicAddress"]>,
     ParentType,
     ContextType
   >;
   entryCreditOutputs?: Resolver<
-    Array<ResolversTypes["EntryCreditAddress"]>,
+    Array<ResolversTypes["PublicAddress"]>,
     ParentType,
     ContextType
   >;
@@ -1673,6 +1666,17 @@ export type PropertiesResolvers<
   >;
 }>;
 
+export type PublicAddressResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["PublicAddress"]
+> = ResolversObject<{
+  __resolveType: TypeResolveFn<
+    "PublicFactoidAddress" | "PublicEntryCreditAddress",
+    ParentType,
+    ContextType
+  >;
+}>;
+
 export interface PublicEntryCreditAddressScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes["PublicEntryCreditAddress"],
@@ -1706,6 +1710,12 @@ export type QueryResolvers<
     Maybe<ResolversTypes["AdminBlock"]>,
     ParentType,
     ContextType
+  >;
+  balances?: Resolver<
+    Array<ResolversTypes["Address"]>,
+    ParentType,
+    ContextType,
+    QueryBalancesArgs
   >;
   commitAck?: Resolver<
     ResolversTypes["EntryCommitAck"],
@@ -1759,12 +1769,6 @@ export type QueryResolvers<
     ContextType,
     QueryEntryAckArgs
   >;
-  entryCreditBalance?: Resolver<
-    ResolversTypes["EntryCreditAddress"],
-    ParentType,
-    ContextType,
-    QueryEntryCreditBalanceArgs
-  >;
   entryCreditBlock?: Resolver<
     Maybe<ResolversTypes["EntryCreditBlock"]>,
     ParentType,
@@ -1783,12 +1787,6 @@ export type QueryResolvers<
     ContextType
   >;
   entryCreditRate?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  factoidBalance?: Resolver<
-    ResolversTypes["FactoidAddress"],
-    ParentType,
-    ContextType,
-    QueryFactoidBalanceArgs
-  >;
   factoidBlock?: Resolver<
     Maybe<ResolversTypes["FactoidBlock"]>,
     ParentType,
@@ -1914,17 +1912,17 @@ export type TransactionResolvers<
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   inputs?: Resolver<
-    Array<ResolversTypes["FactoidAddress"]>,
+    Array<ResolversTypes["PublicAddress"]>,
     ParentType,
     ContextType
   >;
   factoidOutputs?: Resolver<
-    Array<ResolversTypes["FactoidAddress"]>,
+    Array<ResolversTypes["PublicAddress"]>,
     ParentType,
     ContextType
   >;
   entryCreditOutputs?: Resolver<
-    Array<ResolversTypes["EntryCreditAddress"]>,
+    Array<ResolversTypes["PublicAddress"]>,
     ParentType,
     ContextType
   >;
@@ -1954,6 +1952,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
     ContextType
   >;
   AddRemoveServer?: AddRemoveServerResolvers<ContextType>;
+  Address?: AddressResolvers<ContextType>;
   AdminBlock?: AdminBlockResolvers<ContextType>;
   AdminEntry?: AdminEntryResolvers;
   Block?: BlockResolvers;
@@ -1968,9 +1967,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Entry?: EntryResolvers<ContextType>;
   EntryBlock?: EntryBlockResolvers<ContextType>;
   EntryCommitAck?: EntryCommitAckResolvers<ContextType>;
-  EntryCreditAddress?: EntryCreditAddressResolvers<ContextType>;
   EntryCreditBlock?: EntryCreditBlockResolvers<ContextType>;
-  FactoidAddress?: FactoidAddressResolvers<ContextType>;
   FactoidBlock?: FactoidBlockResolvers<ContextType>;
   FactoidTransactionAck?: FactoidTransactionAckResolvers<ContextType>;
   Hash?: GraphQLScalarType;
@@ -1994,6 +1991,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
     ContextType
   >;
   Properties?: PropertiesResolvers<ContextType>;
+  PublicAddress?: PublicAddressResolvers;
   PublicEntryCreditAddress?: GraphQLScalarType;
   PublicFactoidAddress?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;

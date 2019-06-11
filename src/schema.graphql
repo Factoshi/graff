@@ -11,6 +11,8 @@ scalar PublicFactoidAddress
 "Public entry credit address."
 scalar PublicEntryCreditAddress
 
+union PublicAddress = PublicFactoidAddress | PublicEntryCreditAddress
+
 # *************************************** #
 #   ---- QUERIES AND SUBSCRIPTIONS ----   #
 # *************************************** #
@@ -22,6 +24,8 @@ type Query {
     adminBlockByHeight(height: Int!): AdminBlock
     "Get the admin block at the tip of the admin chain."
     adminBlockHead: AdminBlock
+    "Get the balance of public entry credit or factoid addresses."
+    balances(addresses: [PublicAddress!]!): [Address!]!
     "Entry status."
     commitAck(hash: Hash!): EntryCommitAck!
     "Get the entry block at the tip of the specified chain."
@@ -45,8 +49,6 @@ type Query {
         "The chain where the entry was revealed."
         chain: Hash!
     ): EntryCommitAck!
-    "Get the balance of a public entry credit address."
-    entryCreditBalance(address: PublicEntryCreditAddress!): EntryCreditAddress!
     "Get an entry credit block by the specified block hash."
     entryCreditBlock(hash: Hash!): EntryCreditBlock
     "Get an entry credit block by the specified block height."
@@ -55,8 +57,6 @@ type Query {
     entryCreditBlockHead: EntryCreditBlock
     "Get the EC-FCT exchange rate."
     entryCreditRate: Int!
-    "Get the balance of a public factoid address."
-    factoidBalance(address: PublicFactoidAddress!): FactoidAddress!
     "Get a factoid block by the specified block hash."
     factoidBlock(hash: Hash!): FactoidBlock
     "Get a factoid block by the specified block height."
@@ -230,24 +230,12 @@ type FactoidBlock implements Block {
 # Address #
 ###########
 
-"Entry credit address and associated amount."
-type EntryCreditAddress {
+"Public address and associated amount."
+type Address {
     "Amount may be balance or output value, depending on the context."
     amount: Int!
-    "Public entry credit address."
-    publicAddress: PublicEntryCreditAddress!
-    "Address as RCD Hash"
-    address: Hash
-}
-
-"Factoid address and associated amount."
-type FactoidAddress {
-    "Amount may be balance or input/output value, depending on the context."
-    amount: Int!
-    "Public factoid address."
-    publicAddress: PublicFactoidAddress!
-    "Address as RCD Hash"
-    address: Hash
+    "Public address."
+    publicAddress: PublicAddress!
 }
 
 ########
@@ -343,11 +331,11 @@ type Transaction {
     "Milliseconds since Unix epoch."
     timestamp: Int!
     "An array of factoid inputs."
-    inputs: [FactoidAddress!]!
+    inputs: [PublicAddress!]!
     "An array of factoid outputs"
-    factoidOutputs: [FactoidAddress!]!
+    factoidOutputs: [PublicAddress!]!
     "An array of entry credit outputs."
-    entryCreditOutputs: [EntryCreditAddress!]!
+    entryCreditOutputs: [PublicAddress!]!
     "The total value of all inputs. Denominated in factoshis."
     totalInputs: Int!
     "The total value of all factoid outputs. Denominated in factoshis."
@@ -367,11 +355,11 @@ type PendingTransaction {
     "The status of the commit."
     status: Ack!
     "An array of factoid inputs."
-    inputs: [FactoidAddress!]!
+    inputs: [PublicAddress!]!
     "An array of factoid outputs"
-    factoidOutputs: [FactoidAddress!]!
+    factoidOutputs: [PublicAddress!]!
     "An array of entry credit outputs."
-    entryCreditOutputs: [EntryCreditAddress!]!
+    entryCreditOutputs: [PublicAddress!]!
     "The total value of all inputs. Denominated in factoshis."
     totalInputs: Int!
     "The total value of all factoid outputs. Denominated in factoshis."

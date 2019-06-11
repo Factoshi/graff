@@ -19,6 +19,8 @@ export class FactomdDataLoader {
 
     adminBlock = this.createDataLoader(this.cli.getAdminBlock.bind(this.cli));
 
+    balance = this.createDataLoader(this.cli.getBalance.bind(this.cli));
+
     chainHead = this.createDataLoader(this.cli.getChainHead.bind(this.cli));
 
     commitAck = this.createDataLoader((hash: string) =>
