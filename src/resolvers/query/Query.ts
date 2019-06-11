@@ -26,6 +26,11 @@ export const Query: QueryResolvers = {
         };
     },
 
+    commitAck: async (root, { hash }, { factomd }) => {
+        const ack = await factomd.commitAck.load(hash);
+        return { commitHash: ack.committxid, entryHash: ack.entryhash };
+    },
+
     currentMinute: async (root, args, { factomd }) => {
         const currentMinute = await factomd.currentMinute.load();
         // All keys must be in camel case.

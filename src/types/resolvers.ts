@@ -33,6 +33,13 @@ export enum Ack {
   Unknown = "UNKNOWN"
 }
 
+export type AckStatus = {
+  __typename?: "AckStatus";
+  timestamp?: Maybe<Scalars["Int"]>;
+  date?: Maybe<Scalars["String"]>;
+  status: Ack;
+};
+
 /** Sets what percentage of the Factoid rewards for the specified server are yeilded to the Grant Pool.
  * AdminIDs: [14]
  * AdminCodes: [ADD_AUTHORITY_EFFICIENCY]
@@ -374,12 +381,12 @@ export type EntryCommitAck = {
   __typename?: "EntryCommitAck";
   /** The hash of the commit. */
   commitHash: Scalars["Hash"];
-  /** The status of the commit. */
-  commitStatus: Ack;
   /** The hash of the entry. May be null if the commit has not yet been revealed. */
   entryHash?: Maybe<Scalars["Hash"]>;
+  /** The status of the commit. */
+  commitStatus?: Maybe<AckStatus>;
   /** The status of the entry. */
-  entryStatus: Ack;
+  entryStatus?: Maybe<AckStatus>;
 };
 
 /** Entry credit address and associated amount. */
@@ -656,6 +663,8 @@ export type Query = {
   adminBlockByHeight?: Maybe<AdminBlock>;
   /** Get the admin block at the tip of the admin chain. */
   adminBlockHead?: Maybe<AdminBlock>;
+  /** Entry status. */
+  commitAck: EntryCommitAck;
   /** Get the entry block at the tip of the specified chain. */
   chainHead?: Maybe<EntryBlock>;
   /** Get protocol time state. */
@@ -670,8 +679,8 @@ export type Query = {
   entry?: Maybe<Entry>;
   /** Get an entry block by the specified block hash. */
   entryBlock?: Maybe<EntryBlock>;
-  /** Entry or commit status. */
-  entryCommitAck: EntryCommitAck;
+  /** Entry status. */
+  entryAck: EntryCommitAck;
   /** Get the balance of a public entry credit address. */
   entryCreditBalance: EntryCreditAddress;
   /** Get an entry credit block by the specified block hash. */
@@ -714,6 +723,10 @@ export type QueryAdminBlockByHeightArgs = {
   height: Scalars["Int"];
 };
 
+export type QueryCommitAckArgs = {
+  hash: Scalars["Hash"];
+};
+
 export type QueryChainHeadArgs = {
   chain: Scalars["Hash"];
 };
@@ -734,9 +747,9 @@ export type QueryEntryBlockArgs = {
   hash: Scalars["Hash"];
 };
 
-export type QueryEntryCommitAckArgs = {
+export type QueryEntryAckArgs = {
   hash: Scalars["Hash"];
-  chain?: Maybe<Scalars["Hash"]>;
+  chain: Scalars["Hash"];
 };
 
 export type QueryEntryCreditBalanceArgs = {
@@ -945,10 +958,11 @@ export type ResolversTypes = ResolversObject<{
   FactoidAddress: Partial<FactoidAddress>;
   PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
   EntryCreditAddress: Partial<EntryCreditAddress>;
+  EntryCommitAck: Partial<EntryCommitAck>;
+  AckStatus: Partial<AckStatus>;
+  Ack: Partial<Ack>;
   CurrentMinute: Partial<CurrentMinute>;
   Boolean: Partial<Scalars["Boolean"]>;
-  EntryCommitAck: Partial<EntryCommitAck>;
-  Ack: Partial<Ack>;
   FactoidTransactionAck: Partial<FactoidTransactionAck>;
   Heights: Partial<Heights>;
   PaginatedPendingEntries: Partial<PaginatedPendingEntries>;
@@ -976,6 +990,15 @@ export type ResolversTypes = ResolversObject<{
   CoinbaseDescriptorCancel: Partial<CoinbaseDescriptorCancel>;
   AddAuthorityFactoidAddress: Partial<AddAuthorityFactoidAddress>;
   AddAuthorityEfficiency: Partial<AddAuthorityEfficiency>;
+}>;
+
+export type AckStatusResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["AckStatus"]
+> = ResolversObject<{
+  timestamp?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes["Ack"], ParentType, ContextType>;
 }>;
 
 export type AddAuthorityEfficiencyResolvers<
@@ -1310,9 +1333,17 @@ export type EntryCommitAckResolvers<
   ParentType = ResolversTypes["EntryCommitAck"]
 > = ResolversObject<{
   commitHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  commitStatus?: Resolver<ResolversTypes["Ack"], ParentType, ContextType>;
   entryHash?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
-  entryStatus?: Resolver<ResolversTypes["Ack"], ParentType, ContextType>;
+  commitStatus?: Resolver<
+    Maybe<ResolversTypes["AckStatus"]>,
+    ParentType,
+    ContextType
+  >;
+  entryStatus?: Resolver<
+    Maybe<ResolversTypes["AckStatus"]>,
+    ParentType,
+    ContextType
+  >;
 }>;
 
 export type EntryCreditAddressResolvers<
@@ -1676,6 +1707,12 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
+  commitAck?: Resolver<
+    ResolversTypes["EntryCommitAck"],
+    ParentType,
+    ContextType,
+    QueryCommitAckArgs
+  >;
   chainHead?: Resolver<
     Maybe<ResolversTypes["EntryBlock"]>,
     ParentType,
@@ -1716,11 +1753,11 @@ export type QueryResolvers<
     ContextType,
     QueryEntryBlockArgs
   >;
-  entryCommitAck?: Resolver<
+  entryAck?: Resolver<
     ResolversTypes["EntryCommitAck"],
     ParentType,
     ContextType,
-    QueryEntryCommitAckArgs
+    QueryEntryAckArgs
   >;
   entryCreditBalance?: Resolver<
     ResolversTypes["EntryCreditAddress"],
@@ -1907,6 +1944,7 @@ export type TransactionResolvers<
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  AckStatus?: AckStatusResolvers<ContextType>;
   AddAuthorityEfficiency?: AddAuthorityEfficiencyResolvers<ContextType>;
   AddAuthorityFactoidAddress?: AddAuthorityFactoidAddressResolvers<ContextType>;
   AddFederatedServerBitcoinAnchorKey?: AddFederatedServerBitcoinAnchorKeyResolvers<

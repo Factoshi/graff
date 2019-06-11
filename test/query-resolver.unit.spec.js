@@ -39,6 +39,15 @@ describe('Query Resolvers', () => {
         assert.isNumber(chainHead.height);
     });
 
+    it('should get the leaves of EntryCommitAck from the commitAck resolver', async () => {
+        const hash = '5f3599d372e9dfe9dd7fe5f2a72743496e99209b0a5776c1e34622fcb3c78e0b';
+        const ack = await Query.commitAck(undefined, { hash }, { factomd });
+        assert.deepStrictEqual(ack, {
+            entryHash: '6501bcfb818c5d24130c9ecd520071163a8692942f7fc11d48ea44e340c14904',
+            commitHash: '5f3599d372e9dfe9dd7fe5f2a72743496e99209b0a5776c1e34622fcb3c78e0b'
+        });
+    });
+
     it('should get the leaves of CurrentMinute from the currentMinute resolver', async () => {
         const currentMinute = await Query.currentMinute(undefined, undefined, {
             factomd

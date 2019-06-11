@@ -8,7 +8,7 @@ export class FactomdDataLoader {
     constructor(private cli: Factom.FactomCli) {}
 
     private createDataLoader<K, V>(fetch: (key: K) => Promise<V>) {
-        return new DataLoader<K, V>(keys => Promise.all(keys.map(key => fetch(key))));
+        return new DataLoader<K, V>(keys => Promise.all(keys.map(fetch)));
     }
 
     // Some methods do not take a key and therefore cannot use Dataloader.
@@ -20,6 +20,10 @@ export class FactomdDataLoader {
     adminBlock = this.createDataLoader(this.cli.getAdminBlock.bind(this.cli));
 
     chainHead = this.createDataLoader(this.cli.getChainHead.bind(this.cli));
+
+    commitAck = this.createDataLoader((hash: string) =>
+        this.cli.factomdApi('ack', { hash, chainid: 'c' })
+    );
 
     currentMinute = this.createMockDataLoader(() =>
         this.cli.factomdApi('current-minute')
