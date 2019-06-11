@@ -91,5 +91,10 @@ export const Query: QueryResolvers = {
             chain,
             height
         };
+    },
+
+    entryAck: async (root, { hash, chain }, { factomd }) => {
+        const ack = await factomd.entryAck.load({ hash, chainid: chain });
+        return { commitHash: ack.committxid, entryHash: ack.entryhash };
     }
 };

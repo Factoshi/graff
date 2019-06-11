@@ -37,6 +37,10 @@ export class FactomdDataLoader {
 
     entry = this.createDataLoader(this.cli.getEntryWithBlockContext.bind(this.cli));
 
+    entryAck = this.createDataLoader((key: { hash: string; chainid: string }) =>
+        this.cli.factomdApi('ack', key)
+    );
+
     entryBlock = this.createDataLoader(this.cli.getEntryBlock.bind(this.cli));
 
     entryCreditBlock = this.createDataLoader(this.cli.getEntryCreditBlock.bind(this.cli));
