@@ -109,5 +109,16 @@ export const Query: QueryResolvers = {
             height: entryCreditBlock.directoryBlockHeight
         };
     },
+
+    entryCreditBlockHead: async (root, args, { factomd }) => {
+        const directoryBlockHead = await factomd.directoryBlockHead.load();
+        const entryCreditBlockHead = await factomd.entryCreditBlock.load(
+            directoryBlockHead.entryCreditBlockRef
+        );
+        return {
+            hash: entryCreditBlockHead.headerHash,
+            height: entryCreditBlockHead.directoryBlockHeight
+        };
+    },
     }
 };

@@ -190,6 +190,14 @@ describe('Query Resolvers', () => {
         assert.deepStrictEqual(entryCreditBlock, { hash, height });
     });
 
+    it('Should get the leaves of EntryCreditBlock from the entryCreditBlockHead resolver', async () => {
+        const entryCreditBlock = await Query.entryCreditBlockHead(undefined, undefined, {
+            factomd
         });
+        assert.hasAllKeys(entryCreditBlock, ['hash', 'height']);
+        assert.isString(entryCreditBlock.hash);
+        assert.isNumber(entryCreditBlock.height);
+    });
+
     });
 });
