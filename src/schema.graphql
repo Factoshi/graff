@@ -40,8 +40,6 @@ type Query {
     directoryBlockHead: DirectoryBlock
     "Get an entry by its hash."
     entry(hash: Hash!): Entry
-    "Get an entry block by the specified block hash."
-    entryBlock(hash: Hash!): EntryBlock
     "Entry status."
     entryAck(
         "Entry hash."
@@ -49,6 +47,8 @@ type Query {
         "The chain where the entry was revealed."
         chain: Hash!
     ): EntryCommitAck!
+    "Get an entry block by the specified block hash."
+    entryBlock(hash: Hash!): EntryBlock
     "Get an entry credit block by the specified block hash."
     entryCreditBlock(hash: Hash!): EntryCreditBlock
     "Get an entry credit block by the specified block height."
