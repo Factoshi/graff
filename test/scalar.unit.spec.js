@@ -1,7 +1,6 @@
 const { assert } = require('chai');
 const {
     sha256Test,
-    createStringTest,
     publicFactoidAddressTest,
     publicEntryCreditAddressTest,
     heightTest
