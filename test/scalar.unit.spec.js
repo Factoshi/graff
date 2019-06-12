@@ -6,7 +6,7 @@ const {
     heightTest
 } = require('../src/resolvers/scalar');
 
-describe('Test Scalars', () => {
+describe('Custom Scalars', () => {
     it('should test a valid sha256 hash', () => {
         const hash = 'c8e39e953fbc18c6aee20194edbc241961d15941fffa3023045d63cd90dd89a1';
         const sha256 = sha256Test(hash);
