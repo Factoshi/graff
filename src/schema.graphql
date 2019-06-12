@@ -121,6 +121,8 @@ type Mutation {
 type AdminBlock implements Block {
     "The hash of the current block."
     hash: Hash!
+    "Block height."
+    height: Int!
     "The previous block."
     prevBlock: AdminBlock
     "The next block."
@@ -135,6 +137,8 @@ type AdminBlock implements Block {
 interface Block {
     "The hash of the current block."
     hash: Hash!
+    "Block height."
+    height: Int!
 }
 
 "Directory Block"
@@ -193,6 +197,8 @@ type EntryBlock implements Block {
 type EntryCreditBlock implements Block {
     "The hash of the current block."
     hash: Hash!
+    "Block height."
+    height: Int!
     "The previous block."
     prevBlock: EntryCreditBlock
     "The next block."
@@ -212,6 +218,8 @@ type EntryCreditBlock implements Block {
 type FactoidBlock implements Block {
     "The hash of the current block."
     hash: Hash!
+    "Block height."
+    height: Int!
     "The previous block."
     prevBlock: FactoidBlock
     "The next block."
