@@ -47,5 +47,9 @@ export class FactomdDataLoader {
 
     entryCreditBlock = this.createDataLoader(this.cli.getEntryCreditBlock.bind(this.cli));
 
+    entryCreditRate = this.createMockDataLoader(() =>
+        this.cli.factomdApi('entry-credit-rate')
+    );
+
     factoidBlock = this.createDataLoader(this.cli.getFactoidBlock.bind(this.cli));
 }

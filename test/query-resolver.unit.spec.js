@@ -199,5 +199,8 @@ describe('Query Resolvers', () => {
         assert.isNumber(entryCreditBlock.height);
     });
 
+    it('should get the entry credit rate', async () => {
+        const ecRate = await Query.entryCreditRate(undefined, undefined, { factomd });
+        assert.isNumber(ecRate);
     });
 });

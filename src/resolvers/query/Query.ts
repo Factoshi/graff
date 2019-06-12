@@ -120,5 +120,9 @@ export const Query: QueryResolvers = {
             height: entryCreditBlockHead.directoryBlockHeight
         };
     },
+
+    entryCreditRate: async (root, args, { factomd }) => {
+        const { rate } = await factomd.entryCreditRate.load();
+        return rate;
     }
 };
