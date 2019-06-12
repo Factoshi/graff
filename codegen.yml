@@ -11,6 +11,7 @@ generates:
                 Hash: string
                 PublicFactoidAddress: string
                 PublicEntryCreditAddress: string
+                Height: number
             defaultMapper: Partial<{T}>
             useIndexSignature: true
             contextType: ./server#Context

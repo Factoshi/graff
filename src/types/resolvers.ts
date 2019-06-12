@@ -15,6 +15,8 @@ export type Scalars = {
   Float: number;
   /** Sha256 hash. */
   Hash: string;
+  /** Block height must be a positive integer. */
+  Height: string | number;
   /** Public entry credit address. */
   PublicEntryCreditAddress: string;
   /** Public factoid address. */
@@ -144,6 +146,8 @@ export type AdminBlock = Block & {
   __typename?: "AdminBlock";
   /** The hash of the current block. */
   hash: Scalars["Hash"];
+  /** Block height. */
+  height: Scalars["Int"];
   /** The previous block. */
   prevBlock?: Maybe<AdminBlock>;
   /** The next block. */
@@ -200,6 +204,8 @@ export type Block = {
   __typename?: "Block";
   /** The hash of the current block. */
   hash: Scalars["Hash"];
+  /** Block height. */
+  height: Scalars["Int"];
 };
 
 /** Creates a future genesis transaction.
@@ -403,6 +409,8 @@ export type EntryCreditBlock = Block & {
   __typename?: "EntryCreditBlock";
   /** The hash of the current block. */
   hash: Scalars["Hash"];
+  /** Block height. */
+  height: Scalars["Int"];
   /** The previous block. */
   prevBlock?: Maybe<EntryCreditBlock>;
   /** The next block. */
@@ -424,6 +432,8 @@ export type FactoidBlock = Block & {
   __typename?: "FactoidBlock";
   /** The hash of the current block. */
   hash: Scalars["Hash"];
+  /** Block height. */
+  height: Scalars["Int"];
   /** The previous block. */
   prevBlock?: Maybe<FactoidBlock>;
   /** The next block. */
@@ -458,6 +468,8 @@ export type FactoidTransactionAck = {
   /** The status of the factoid transaction */
   status: Ack;
 };
+
+export type HashHeight = Scalars["Hash"] | Scalars["Height"];
 
 /** Network and server heights. */
 export type Heights = {
@@ -648,10 +660,8 @@ export type PublicAddress =
 
 export type Query = {
   __typename?: "Query";
-  /** Get an admin block by the specified block hash. */
+  /** Get an admin block by the specified block hash or height. */
   adminBlock?: Maybe<AdminBlock>;
-  /** Get an admin block by the specified block height. */
-  adminBlockByHeight?: Maybe<AdminBlock>;
   /** Get the admin block at the tip of the admin chain. */
   adminBlockHead?: Maybe<AdminBlock>;
   /** Get the balance of public entry credit or factoid addresses. */
@@ -664,28 +674,22 @@ export type Query = {
   currentMinute: CurrentMinute;
   /** Get a directory block by the specified block hash. */
   directoryBlock?: Maybe<DirectoryBlock>;
-  /** Get a directory block by the specified block height. */
-  directoryBlockByHeight?: Maybe<DirectoryBlock>;
   /** Get the directory block at the tip of the directory chain. */
   directoryBlockHead?: Maybe<DirectoryBlock>;
   /** Get an entry by its hash. */
   entry?: Maybe<Entry>;
-  /** Get an entry block by the specified block hash. */
-  entryBlock?: Maybe<EntryBlock>;
   /** Entry status. */
   entryAck: EntryCommitAck;
+  /** Get an entry block by the specified block hash. */
+  entryBlock?: Maybe<EntryBlock>;
   /** Get an entry credit block by the specified block hash. */
   entryCreditBlock?: Maybe<EntryCreditBlock>;
-  /** Get an entry credit block by the specified block height. */
-  entryCreditBlockByHeight?: Maybe<EntryCreditBlock>;
   /** Get the entry credit block at the tip of the entry credit chain. */
   entryCreditBlockHead?: Maybe<EntryCreditBlock>;
   /** Get the EC-FCT exchange rate. */
   entryCreditRate: Scalars["Int"];
   /** Get a factoid block by the specified block hash. */
   factoidBlock?: Maybe<FactoidBlock>;
-  /** Get a factoid block by the specified block height. */
-  factoidBlockByHeight?: Maybe<FactoidBlock>;
   /** Get the factoid block at the tip of the factoid chain. */
   factoidBlockHead?: Maybe<FactoidBlock>;
   /** Factoid transaction status. */
@@ -705,11 +709,7 @@ export type Query = {
 };
 
 export type QueryAdminBlockArgs = {
-  hash: Scalars["Hash"];
-};
-
-export type QueryAdminBlockByHeightArgs = {
-  height: Scalars["Int"];
+  arg: HashHeight;
 };
 
 export type QueryBalancesArgs = {
@@ -725,18 +725,10 @@ export type QueryChainHeadArgs = {
 };
 
 export type QueryDirectoryBlockArgs = {
-  hash: Scalars["Hash"];
-};
-
-export type QueryDirectoryBlockByHeightArgs = {
-  height: Scalars["Int"];
+  arg: HashHeight;
 };
 
 export type QueryEntryArgs = {
-  hash: Scalars["Hash"];
-};
-
-export type QueryEntryBlockArgs = {
   hash: Scalars["Hash"];
 };
 
@@ -745,20 +737,16 @@ export type QueryEntryAckArgs = {
   chain: Scalars["Hash"];
 };
 
-export type QueryEntryCreditBlockArgs = {
+export type QueryEntryBlockArgs = {
   hash: Scalars["Hash"];
 };
 
-export type QueryEntryCreditBlockByHeightArgs = {
-  height: Scalars["Int"];
+export type QueryEntryCreditBlockArgs = {
+  arg: HashHeight;
 };
 
 export type QueryFactoidBlockArgs = {
-  hash: Scalars["Hash"];
-};
-
-export type QueryFactoidBlockByHeightArgs = {
-  height: Scalars["Int"];
+  arg: HashHeight;
 };
 
 export type QueryFactoidTransactionAckArgs = {
@@ -920,11 +908,13 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Query: {};
+  HashHeight: Partial<ResolversTypes["Hash"] | ResolversTypes["Height"]>;
   Hash: Partial<Scalars["Hash"]>;
+  Height: Partial<Scalars["Height"]>;
   AdminBlock: Partial<AdminBlock>;
   Block: Partial<Block>;
-  AdminEntry: Partial<AdminEntry>;
   Int: Partial<Scalars["Int"]>;
+  AdminEntry: Partial<AdminEntry>;
   AdminCode: Partial<AdminCode>;
   DirectoryBlock: Partial<DirectoryBlock>;
   PaginatedEntryBlocks: Partial<PaginatedEntryBlocks>;
@@ -1092,6 +1082,7 @@ export type AdminBlockResolvers<
   ParentType = ResolversTypes["AdminBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   prevBlock?: Resolver<
     Maybe<ResolversTypes["AdminBlock"]>,
     ParentType,
@@ -1151,6 +1142,7 @@ export type BlockResolvers<
     ContextType
   >;
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
 }>;
 
 export type CoinbaseDescriptorResolvers<
@@ -1370,6 +1362,7 @@ export type EntryCreditBlockResolvers<
   ParentType = ResolversTypes["EntryCreditBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   prevBlock?: Resolver<
     Maybe<ResolversTypes["EntryCreditBlock"]>,
     ParentType,
@@ -1398,6 +1391,7 @@ export type FactoidBlockResolvers<
   ParentType = ResolversTypes["FactoidBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   prevBlock?: Resolver<
     Maybe<ResolversTypes["FactoidBlock"]>,
     ParentType,
@@ -1441,6 +1435,18 @@ export type FactoidTransactionAckResolvers<
 export interface HashScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes["Hash"], any> {
   name: "Hash";
+}
+
+export type HashHeightResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["HashHeight"]
+> = ResolversObject<{
+  __resolveType: TypeResolveFn<"Hash" | "Height", ParentType, ContextType>;
+}>;
+
+export interface HeightScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["Height"], any> {
+  name: "Height";
 }
 
 export type HeightsResolvers<
@@ -1700,12 +1706,6 @@ export type QueryResolvers<
     ContextType,
     QueryAdminBlockArgs
   >;
-  adminBlockByHeight?: Resolver<
-    Maybe<ResolversTypes["AdminBlock"]>,
-    ParentType,
-    ContextType,
-    QueryAdminBlockByHeightArgs
-  >;
   adminBlockHead?: Resolver<
     Maybe<ResolversTypes["AdminBlock"]>,
     ParentType,
@@ -1740,12 +1740,6 @@ export type QueryResolvers<
     ContextType,
     QueryDirectoryBlockArgs
   >;
-  directoryBlockByHeight?: Resolver<
-    Maybe<ResolversTypes["DirectoryBlock"]>,
-    ParentType,
-    ContextType,
-    QueryDirectoryBlockByHeightArgs
-  >;
   directoryBlockHead?: Resolver<
     Maybe<ResolversTypes["DirectoryBlock"]>,
     ParentType,
@@ -1757,29 +1751,23 @@ export type QueryResolvers<
     ContextType,
     QueryEntryArgs
   >;
-  entryBlock?: Resolver<
-    Maybe<ResolversTypes["EntryBlock"]>,
-    ParentType,
-    ContextType,
-    QueryEntryBlockArgs
-  >;
   entryAck?: Resolver<
     ResolversTypes["EntryCommitAck"],
     ParentType,
     ContextType,
     QueryEntryAckArgs
   >;
+  entryBlock?: Resolver<
+    Maybe<ResolversTypes["EntryBlock"]>,
+    ParentType,
+    ContextType,
+    QueryEntryBlockArgs
+  >;
   entryCreditBlock?: Resolver<
     Maybe<ResolversTypes["EntryCreditBlock"]>,
     ParentType,
     ContextType,
     QueryEntryCreditBlockArgs
-  >;
-  entryCreditBlockByHeight?: Resolver<
-    Maybe<ResolversTypes["EntryCreditBlock"]>,
-    ParentType,
-    ContextType,
-    QueryEntryCreditBlockByHeightArgs
   >;
   entryCreditBlockHead?: Resolver<
     Maybe<ResolversTypes["EntryCreditBlock"]>,
@@ -1792,12 +1780,6 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryFactoidBlockArgs
-  >;
-  factoidBlockByHeight?: Resolver<
-    Maybe<ResolversTypes["FactoidBlock"]>,
-    ParentType,
-    ContextType,
-    QueryFactoidBlockByHeightArgs
   >;
   factoidBlockHead?: Resolver<
     Maybe<ResolversTypes["FactoidBlock"]>,
@@ -1971,6 +1953,8 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   FactoidBlock?: FactoidBlockResolvers<ContextType>;
   FactoidTransactionAck?: FactoidTransactionAckResolvers<ContextType>;
   Hash?: GraphQLScalarType;
+  HashHeight?: HashHeightResolvers;
+  Height?: GraphQLScalarType;
   Heights?: HeightsResolvers<ContextType>;
   IncreaseServerCount?: IncreaseServerCountResolvers<ContextType>;
   MatryoshkaHash?: MatryoshkaHashResolvers<ContextType>;

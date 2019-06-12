@@ -11,17 +11,26 @@ scalar PublicFactoidAddress
 "Public entry credit address."
 scalar PublicEntryCreditAddress
 
+"Block height must be a positive integer."
+scalar Height
+
+# ********************* #
+#   ---- UNIONS ----    #
+# ********************* #
+
+# Any public address. Can be either Factoid or Entry Credit.
 union PublicAddress = PublicFactoidAddress | PublicEntryCreditAddress
+
+# A hash or an integer. Useful for querying blocks.
+union HashHeight = Hash | Height
 
 # *************************************** #
 #   ---- QUERIES AND SUBSCRIPTIONS ----   #
 # *************************************** #
 
 type Query {
-    "Get an admin block by the specified block hash."
-    adminBlock(hash: Hash!): AdminBlock
-    "Get an admin block by the specified block height."
-    adminBlockByHeight(height: Int!): AdminBlock
+    "Get an admin block by the specified block hash or height."
+    adminBlock(arg: HashHeight!): AdminBlock
     "Get the admin block at the tip of the admin chain."
     adminBlockHead: AdminBlock
     "Get the balance of public entry credit or factoid addresses."
@@ -33,9 +42,7 @@ type Query {
     "Get protocol time state."
     currentMinute: CurrentMinute!
     "Get a directory block by the specified block hash."
-    directoryBlock(hash: Hash!): DirectoryBlock
-    "Get a directory block by the specified block height."
-    directoryBlockByHeight(height: Int!): DirectoryBlock
+    directoryBlock(arg: HashHeight!): DirectoryBlock
     "Get the directory block at the tip of the directory chain."
     directoryBlockHead: DirectoryBlock
     "Get an entry by its hash."
@@ -50,17 +57,13 @@ type Query {
     "Get an entry block by the specified block hash."
     entryBlock(hash: Hash!): EntryBlock
     "Get an entry credit block by the specified block hash."
-    entryCreditBlock(hash: Hash!): EntryCreditBlock
-    "Get an entry credit block by the specified block height."
-    entryCreditBlockByHeight(height: Int!): EntryCreditBlock
+    entryCreditBlock(arg: HashHeight!): EntryCreditBlock
     "Get the entry credit block at the tip of the entry credit chain."
     entryCreditBlockHead: EntryCreditBlock
     "Get the EC-FCT exchange rate."
     entryCreditRate: Int!
     "Get a factoid block by the specified block hash."
-    factoidBlock(hash: Hash!): FactoidBlock
-    "Get a factoid block by the specified block height."
-    factoidBlockByHeight(height: Int!): FactoidBlock
+    factoidBlock(arg: HashHeight!): FactoidBlock
     "Get the factoid block at the tip of the factoid chain."
     factoidBlockHead: FactoidBlock
     "Factoid transaction status."

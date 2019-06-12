@@ -1,24 +1,24 @@
 import { GraphQLScalarType } from 'graphql';
 import { isValidPublicFctAddress, isValidPublicEcAddress } from 'factom';
 
-/**
- * Higher order function to create string testing functions.
- * @param test Function to test a string type.
- * @param err Error thrown on test failure.
- */
-export const createStringTest = (test: (str: string) => boolean, err: Error) => (
-    val: string
-) => {
-    if (typeof val === 'string' && test(val)) {
+type Test = (val: any) => boolean;
+
+export const createTest = <T>(test: Test, err: Error) => (val: T) => {
+    if (test(val)) {
         return val;
     }
     throw err;
 };
 
-// Create Hash scalar
-export const hashError = new Error('Hash cannot represent an invalid SHA256 string.');
+//////////////////////////
+//      HASH SCALAR     //
+//////////////////////////
+export const hashError = new TypeError('Hash cannot represent an invalid SHA256 string.');
 const sha256Regex = /^[A-Fa-f0-9]{64}$/g;
-export const sha256Test = createStringTest(sha256Regex.test.bind(sha256Regex), hashError);
+export const sha256Test = createTest<string>(
+    val => typeof val === 'string' && sha256Regex.test(val),
+    hashError
+);
 
 export const Hash = new GraphQLScalarType({
     name: 'Hash',
@@ -28,13 +28,15 @@ export const Hash = new GraphQLScalarType({
     parseLiteral: (ast: any) => sha256Test(ast.val)
 });
 
-// Create PublicFactoidAddress scalar
-export const publicFactoidAddressError = new Error(
+//////////////////////////////////////////
+//      PUBLICFACTOIDADDRESS SCALAR     //
+/////////////////////////////////////////
+export const publicFactoidAddressError = new TypeError(
     'PublicFactoidAddress must be a valid public factoid address.'
 );
 
-export const publicFactoidAddressTest = createStringTest(
-    isValidPublicFctAddress,
+export const publicFactoidAddressTest = createTest<string>(
+    val => typeof val === 'string' && isValidPublicFctAddress(val),
     publicFactoidAddressError
 );
 
@@ -46,13 +48,15 @@ export const PublicFactoidAddress = new GraphQLScalarType({
     parseLiteral: (ast: any) => publicFactoidAddressTest(ast.val)
 });
 
-// create PublicEntryCreditAddress scalar
-export const publicEntryCreditAddressError = new Error(
+//////////////////////////////////////////////
+//      PUBLICENTRYCREDITADDRESS SCALAR     //
+/////////////////////////////////////////////
+export const publicEntryCreditAddressError = new TypeError(
     'PublicEntryCreditAddress must be a valid public entry credit address.'
 );
 
-export const publicEntryCreditAddressTest = createStringTest(
-    isValidPublicEcAddress,
+export const publicEntryCreditAddressTest = createTest<string>(
+    (val: string) => typeof val === 'string' && isValidPublicEcAddress(val),
     publicEntryCreditAddressError
 );
 
@@ -62,4 +66,22 @@ export const PublicEntryCreditAddress = new GraphQLScalarType({
     serialize: publicEntryCreditAddressTest,
     parseValue: publicEntryCreditAddressTest,
     parseLiteral: (ast: any) => publicEntryCreditAddressTest(ast.val)
+});
+
+////////////////////////////
+//      HEIGHT SCALAR     //
+////////////////////////////
+export const heightError = new TypeError('Height must be a positive integer.');
+
+export const heightTest = createTest<number>(
+    val => typeof val === 'number' && val >= 0 && Number.isInteger(val),
+    heightError
+);
+
+export const Height = new GraphQLScalarType({
+    name: 'Height',
+    description: 'A positive integer.',
+    serialize: heightTest,
+    parseValue: heightTest,
+    parseLiteral: (ast: any) => heightTest(ast.val)
 });

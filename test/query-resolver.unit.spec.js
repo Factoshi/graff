@@ -7,21 +7,22 @@ describe('Query Resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
 
-    it('Should get the leaves of AdminBlock from the adminBlock resolver', () => {
+    it('Should get the leaves of AdminBlock from the adminBlock resolver using a hash.', async () => {
         const hash = '60d6c075925bbd2ddaf3b8c6737225d9df1963d0d098e10b67605d557857fc52';
-        const adminBlock = Query.adminBlock(undefined, { hash }, { factomd });
-        assert.deepStrictEqual({ hash }, adminBlock);
+        const height = 10;
+        const adminBlock = await Query.adminBlock(undefined, { arg: hash }, { factomd });
+        assert.deepStrictEqual(adminBlock, { hash, height });
     });
 
-    it('Should get the leaves of AdminBlock from the adminBlockByHeight resolver', async () => {
-        const height = 10;
+    it('Should get the leaves of AdminBlock from the adminBlock resolver using a height.', async () => {
         const hash = '60d6c075925bbd2ddaf3b8c6737225d9df1963d0d098e10b67605d557857fc52';
-        const adminBlock = await Query.adminBlockByHeight(
+        const height = 10;
+        const adminBlock = await Query.adminBlock(
             undefined,
-            { height },
+            { arg: height },
             { factomd }
         );
-        assert.deepStrictEqual({ hash }, adminBlock);
+        assert.deepStrictEqual(adminBlock, { hash, height });
     });
 
     it('Should get the leaves of AdminBlock from the adminBlockHead resolver', async () => {
@@ -97,7 +98,7 @@ describe('Query Resolvers', () => {
         const hash = '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5';
         const directoryBlock = await Query.directoryBlock(
             undefined,
-            { hash },
+            { arg: hash },
             { factomd }
         );
         assert.deepStrictEqual(directoryBlock, {
@@ -109,9 +110,9 @@ describe('Query Resolvers', () => {
 
     it('should get the leaves of DirectoryBlock from the directoryBlock resolver', async () => {
         const height = 196398;
-        const directoryBlock = await Query.directoryBlockByHeight(
+        const directoryBlock = await Query.directoryBlock(
             undefined,
-            { height },
+            { arg: height },
             { factomd }
         );
         assert.deepStrictEqual(directoryBlock, {

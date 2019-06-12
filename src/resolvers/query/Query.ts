@@ -1,11 +1,12 @@
 import { QueryResolvers } from '../../types/resolvers';
 
 export const Query: QueryResolvers = {
-    adminBlock: (_, { hash }) => ({ hash }),
-
-    adminBlockByHeight: async (root, { height }, { factomd }) => {
-        const admimBlock = await factomd.adminBlock.load(height);
-        return { hash: admimBlock.lookupHash };
+    adminBlock: async (root, { arg }, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(arg);
+        return {
+            hash: adminBlock.lookupHash,
+            height: adminBlock.directoryBlockHeight
+        };
     },
 
     adminBlockHead: async (root, args, { factomd }) => {
@@ -56,14 +57,9 @@ export const Query: QueryResolvers = {
         };
     },
 
-    directoryBlock: async (root, { hash }, { factomd }) => {
-        const { timestamp, height } = await factomd.directoryBlock.load(hash);
-        return { timestamp, height, hash };
-    },
-
-    directoryBlockByHeight: async (root, { height }, { factomd }) => {
-        const { timestamp, keyMR: hash } = await factomd.directoryBlock.load(height);
-        return { timestamp, height, hash };
+    directoryBlock: async (root, { arg }, { factomd }) => {
+        const { timestamp, height, keyMR } = await factomd.directoryBlock.load(arg);
+        return { timestamp, height, hash: keyMR };
     },
 
     directoryBlockHead: async (root, args, { factomd }) => {
