@@ -100,5 +100,14 @@ export const Query: QueryResolvers = {
             chain,
             height
         };
+    },
+
+    entryCreditBlock: async (root, { arg }, { factomd }) => {
+        const entryCreditBlock = await factomd.entryCreditBlock.load(arg);
+        return {
+            hash: entryCreditBlock.headerHash,
+            height: entryCreditBlock.directoryBlockHeight
+        };
+    },
     }
 };

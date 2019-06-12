@@ -146,6 +146,16 @@ describe('Query Resolvers', () => {
         entry.externalIds.forEach(id => assert.isString(id));
     });
 
+    it('should get the leaves of EntryCommitAck from the entryAck resolver', async () => {
+        const hash = '2346db420b35ee2c8e811305c36ea140ff47c59af70221be41ef3285e324d264';
+        const chain = '9b5c6dbec96faef4f855182fa8d1475427eed27fc18f4c8deec588d1c252b7f8';
+        const ack = await Query.entryAck(undefined, { hash, chain }, { factomd });
+        assert.deepStrictEqual(ack, {
+            entryHash: hash,
+            commitHash: '66555bb630cfad18702104c3af62cda8cb1d4b247f15e885c27109987816bcc2'
+        });
+    });
+
     it('should get the leaves of EntryBlock from the entryBlock resolver', async () => {
         const hash = '4dd4d88ab67c272817f78672768f5bac546743546c7755949f9c20a4583a0c9c';
         const entryBlock = await Query.entryBlock(undefined, { hash }, { factomd });
@@ -158,13 +168,28 @@ describe('Query Resolvers', () => {
         assert.strictEqual(entryBlock.timestamp, 1560238680000);
     });
 
-    it('should get the leaves of EntryCommitAck from the entryAck resolver', async () => {
-        const hash = '2346db420b35ee2c8e811305c36ea140ff47c59af70221be41ef3285e324d264';
-        const chain = '9b5c6dbec96faef4f855182fa8d1475427eed27fc18f4c8deec588d1c252b7f8';
-        const ack = await Query.entryAck(undefined, { hash, chain }, { factomd });
-        assert.deepStrictEqual(ack, {
-            entryHash: hash,
-            commitHash: '66555bb630cfad18702104c3af62cda8cb1d4b247f15e885c27109987816bcc2'
+    it('Should get the leaves of EntryCreditBlock from the entryCreditBlock resolver using a hash.', async () => {
+        const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
+        const height = 10;
+        const entryCreditBlock = await Query.entryCreditBlock(
+            undefined,
+            { arg: hash },
+            { factomd }
+        );
+        assert.deepStrictEqual(entryCreditBlock, { hash, height });
+    });
+
+    it('Should get the leaves of EntryCreditBlock from the entryCreditBlock resolver using a height.', async () => {
+        const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
+        const height = 10;
+        const entryCreditBlock = await Query.entryCreditBlock(
+            undefined,
+            { arg: height },
+            { factomd }
+        );
+        assert.deepStrictEqual(entryCreditBlock, { hash, height });
+    });
+
         });
     });
 });
