@@ -133,5 +133,17 @@ export const Query: QueryResolvers = {
             height: factoidBlock.directoryBlockHeight,
             entryCreditRate: factoidBlock.entryCreditRate
         };
+    },
+
+    factoidBlockHead: async (root, args, { factomd }) => {
+        const directoryBlockHead = await factomd.directoryBlockHead.load();
+        const factoidBlockHead = await factomd.factoidBlock.load(
+            directoryBlockHead.factoidBlockRef
+        );
+        return {
+            hash: factoidBlockHead.keyMR,
+            height: factoidBlockHead.directoryBlockHeight,
+            entryCreditRate: factoidBlockHead.entryCreditRate
+        };
     }
 };

@@ -225,4 +225,15 @@ describe('Query Resolvers', () => {
         );
         assert.deepStrictEqual(factoidBlock, { hash, height, entryCreditRate: 666600 });
     });
+
+    it('Should get the leaves of FactoidBlock from the factoidBlockHead resolver', async () => {
+        const factoidBlock = await Query.factoidBlockHead(undefined, undefined, {
+            factomd
+        });
+        assert.hasAllKeys(factoidBlock, ['hash', 'height', 'entryCreditRate']);
+        assert.isString(factoidBlock.hash);
+        assert.isNumber(factoidBlock.height);
+        assert.isNumber(factoidBlock.entryCreditRate);
+    });
+
 });
