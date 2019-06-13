@@ -124,5 +124,14 @@ export const Query: QueryResolvers = {
     entryCreditRate: async (root, args, { factomd }) => {
         const { rate } = await factomd.entryCreditRate.load();
         return rate;
+    },
+
+    factoidBlock: async (root, { arg }, { factomd }) => {
+        const factoidBlock = await factomd.factoidBlock.load(arg);
+        return {
+            hash: factoidBlock.keyMR,
+            height: factoidBlock.directoryBlockHeight,
+            entryCreditRate: factoidBlock.entryCreditRate
+        };
     }
 };

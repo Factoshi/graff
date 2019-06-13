@@ -16,7 +16,7 @@ export type Scalars = {
   /** Sha256 hash. */
   Hash: string;
   /** Block height must be a positive integer. */
-  Height: string | number;
+  Height: number;
   /** Public entry credit address. */
   PublicEntryCreditAddress: string;
   /** Public factoid address. */

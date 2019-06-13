@@ -203,4 +203,26 @@ describe('Query Resolvers', () => {
         const ecRate = await Query.entryCreditRate(undefined, undefined, { factomd });
         assert.isNumber(ecRate);
     });
+
+    it('Should get the leaves of FactoidBlock from the factoidBlock resolver using a hash.', async () => {
+        const hash = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
+        const height = 10;
+        const factoidBlock = await Query.factoidBlock(
+            undefined,
+            { arg: hash },
+            { factomd }
+        );
+        assert.deepStrictEqual(factoidBlock, { hash, height, entryCreditRate: 666600 });
+    });
+
+    it('Should get the leaves of FactoidBlock from the factoidBlock resolver using a height.', async () => {
+        const hash = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
+        const height = 10;
+        const factoidBlock = await Query.factoidBlock(
+            undefined,
+            { arg: height },
+            { factomd }
+        );
+        assert.deepStrictEqual(factoidBlock, { hash, height, entryCreditRate: 666600 });
+    });
 });
