@@ -36,7 +36,7 @@ export const Query: QueryResolvers = {
     },
 
     commitAck: async (root, { hash }, { factomd }) => {
-        const ack = await factomd.commitAck.load(hash);
+        const ack = await factomd.ack.load({ hash, chainid: 'c' });
         return { commitHash: ack.committxid, entryHash: ack.entryhash };
     },
 
@@ -83,7 +83,7 @@ export const Query: QueryResolvers = {
     },
 
     entryAck: async (root, { hash, chain }, { factomd }) => {
-        const ack = await factomd.entryAck.load({ hash, chainid: chain });
+        const ack = await factomd.ack.load({ hash, chainid: chain });
         return { commitHash: ack.committxid, entryHash: ack.entryhash };
     },
 

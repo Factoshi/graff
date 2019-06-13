@@ -17,15 +17,15 @@ export class FactomdDataLoader {
         return { load: () => fetch() };
     }
 
+    ack = this.createDataLoader((key: { hash: string; chainid: string }) =>
+        this.cli.factomdApi('ack', key)
+    );
+
     adminBlock = this.createDataLoader(this.cli.getAdminBlock.bind(this.cli));
 
     balance = this.createDataLoader(this.cli.getBalance.bind(this.cli));
 
     chainHead = this.createDataLoader(this.cli.getChainHead.bind(this.cli));
-
-    commitAck = this.createDataLoader((hash: string) =>
-        this.cli.factomdApi('ack', { hash, chainid: 'c' })
-    );
 
     currentMinute = this.createMockDataLoader(() =>
         this.cli.factomdApi('current-minute')
@@ -38,10 +38,6 @@ export class FactomdDataLoader {
     );
 
     entry = this.createDataLoader(this.cli.getEntryWithBlockContext.bind(this.cli));
-
-    entryAck = this.createDataLoader((key: { hash: string; chainid: string }) =>
-        this.cli.factomdApi('ack', key)
-    );
 
     entryBlock = this.createDataLoader(this.cli.getEntryBlock.bind(this.cli));
 
