@@ -167,5 +167,10 @@ export const Query: QueryResolvers = {
             entryBlockHeight: heights.entryblockheight,
             entryHeight: heights.entryheight
         };
+    },
+
+    pendingEntries: async (root, args, { factomd }) => {
+        const pendingEntries = await factomd.pendingEntries.load();
+        return { totalCount: pendingEntries.length };
     }
 };

@@ -249,7 +249,7 @@ describe('Query Resolvers', () => {
         });
     });
 
-    it('should get the leave of Heights from the heights resolver', async () => {
+    it('should get the leaves of Heights from the heights resolver', async () => {
         const heights = await Query.heights(undefined, undefined, { factomd });
         assert.hasAllKeys(heights, [
             'leaderHeight',
@@ -258,5 +258,13 @@ describe('Query Resolvers', () => {
             'entryHeight'
         ]);
         Object.values(heights).forEach(assert.isNumber);
+    });
+
+    it('should get the leaves of PaginatedPendingEntries from the pendingEntries resolver', async () => {
+        const pendingEntries = await Query.pendingEntries(undefined, undefined, {
+            factomd
+        });
+        assert.hasAllKeys(pendingEntries, ['totalCount']);
+        assert.isNumber(pendingEntries.totalCount);
     });
 });
