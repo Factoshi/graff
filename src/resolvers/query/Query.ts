@@ -172,5 +172,10 @@ export const Query: QueryResolvers = {
     pendingEntries: async (root, args, { factomd }) => {
         const pendingEntries = await factomd.pendingEntries.load();
         return { totalCount: pendingEntries.length };
+    },
+
+    pendingTransactions: async (root, args, { factomd }) => {
+        const pendingTransactions = await factomd.pendingTransactions.load();
+        return { totalCount: pendingTransactions.length };
     }
 };

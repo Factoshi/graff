@@ -267,4 +267,14 @@ describe('Query Resolvers', () => {
         assert.hasAllKeys(pendingEntries, ['totalCount']);
         assert.isNumber(pendingEntries.totalCount);
     });
+
+    it('should get the leaves of PaginatedPendingTransactions from the pendingTransactions resolver', async () => {
+        const pendingTransactions = await Query.pendingTransactions(
+            undefined,
+            undefined,
+            { factomd }
+        );
+        assert.hasAllKeys(pendingTransactions, ['totalCount']);
+        assert.isNumber(pendingTransactions.totalCount);
+    });
 });
