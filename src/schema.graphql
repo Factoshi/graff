@@ -710,9 +710,9 @@ type Properties {
     "The version of the factomd API server."
     factomdVersion: String!
     "The version of the factomd API."
-    factomdApiVersion: String!
+    factomdAPIVersion: String!
     "The version fo the GraphQL API."
-    graphQLApiVersion: String!
+    graphQLAPIVersion: String!
 }
 
 ##############
@@ -765,7 +765,7 @@ type PaginatedPendingEntries implements Paginated {
     pendingEntries: [PendingEntry!]!
 }
 
-"Pagianted pending transactions"
+"Paginated pending transactions"
 type PaginatedPendingTransactions implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!

@@ -582,7 +582,7 @@ export type PaginatedPendingEntries = Paginated & {
   pendingEntries: Array<PendingEntry>;
 };
 
-/** Pagianted pending transactions */
+/** Paginated pending transactions */
 export type PaginatedPendingTransactions = Paginated & {
   __typename?: "PaginatedPendingTransactions";
   /** Total number of nodes within pages. */
@@ -649,9 +649,9 @@ export type Properties = {
   /** The version of the factomd API server. */
   factomdVersion: Scalars["String"];
   /** The version of the factomd API. */
-  factomdApiVersion: Scalars["String"];
+  factomdAPIVersion: Scalars["String"];
   /** The version fo the GraphQL API. */
-  graphQLApiVersion: Scalars["String"];
+  graphQLAPIVersion: Scalars["String"];
 };
 
 export type PublicAddress =
@@ -1664,12 +1664,12 @@ export type PropertiesResolvers<
   ParentType = ResolversTypes["Properties"]
 > = ResolversObject<{
   factomdVersion?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  factomdApiVersion?: Resolver<
+  factomdAPIVersion?: Resolver<
     ResolversTypes["String"],
     ParentType,
     ContextType
   >;
-  graphQLApiVersion?: Resolver<
+  graphQLAPIVersion?: Resolver<
     ResolversTypes["String"],
     ParentType,
     ContextType

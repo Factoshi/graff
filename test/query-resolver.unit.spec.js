@@ -277,4 +277,14 @@ describe('Query Resolvers', () => {
         assert.hasAllKeys(pendingTransactions, ['totalCount']);
         assert.isNumber(pendingTransactions.totalCount);
     });
+
+    it('should get the leaves of Properties from the properties resolver', async () => {
+        const properties = await Query.properties(undefined, undefined, { factomd });
+        assert.hasAllKeys(properties, [
+            'factomdVersion',
+            'factomdAPIVersion',
+            'graphQLAPIVersion'
+        ]);
+        Object.values(properties).forEach(assert.isString);
+    });
 });

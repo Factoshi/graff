@@ -177,5 +177,15 @@ export const Query: QueryResolvers = {
     pendingTransactions: async (root, args, { factomd }) => {
         const pendingTransactions = await factomd.pendingTransactions.load();
         return { totalCount: pendingTransactions.length };
+    },
+
+    properties: async (root, args, { factomd }) => {
+        const properties = await factomd.properties.load();
+        // TODO: add GQL API version from env vars
+        return {
+            factomdAPIVersion: properties.factomdapiversion,
+            factomdVersion: properties.factomdversion,
+            graphQLAPIVersion: 'TODO'
+        };
     }
 };

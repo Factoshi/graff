@@ -58,4 +58,6 @@ export class FactomdDataLoader {
     pendingTransactions = this.createMockDataLoader(() =>
         this.cli.factomdApi('pending-transactions')
     );
+
+    properties = this.createMockDataLoader(() => this.cli.factomdApi('properties'));
 }
