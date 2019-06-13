@@ -236,4 +236,16 @@ describe('Query Resolvers', () => {
         assert.isNumber(factoidBlock.entryCreditRate);
     });
 
+    it('should get the leaves of FactoidTransactionAck from the factoidTransactionAck resolver', async () => {
+        const hash = 'b853f921bb6598b20c5054fa422a83a6a128ccd3c0fed2aaf03f0060d6805744';
+        const ack = await Query.factoidTransactionAck(undefined, { hash }, { factomd });
+        assert.deepStrictEqual(ack, {
+            hash,
+            txTimestamp: 1560361379165,
+            txDate: '2019-06-12 17:42:59',
+            blockTimestamp: 1560361080000,
+            blockDate: '2019-06-12 17:38:00',
+            status: 'DBlockConfirmed'
+        });
+    });
 });

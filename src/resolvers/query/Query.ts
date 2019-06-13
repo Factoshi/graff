@@ -145,5 +145,17 @@ export const Query: QueryResolvers = {
             height: factoidBlockHead.directoryBlockHeight,
             entryCreditRate: factoidBlockHead.entryCreditRate
         };
+    },
+
+    factoidTransactionAck: async (root, { hash }, { factomd }) => {
+        const factoidTransactionAck = await factomd.ack.load({ hash, chainid: 'f' });
+        return {
+            hash: factoidTransactionAck.txid,
+            txTimestamp: factoidTransactionAck.transactiondate,
+            txDate: factoidTransactionAck.transactiondatestring,
+            blockTimestamp: factoidTransactionAck.blockdate,
+            blockDate: factoidTransactionAck.blockdatestring,
+            status: factoidTransactionAck.status
+        };
     }
 };

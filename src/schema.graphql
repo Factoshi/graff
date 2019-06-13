@@ -67,10 +67,7 @@ type Query {
     "Get the factoid block at the tip of the factoid chain."
     factoidBlockHead: FactoidBlock
     "Factoid transaction status."
-    factoidTransactionAck(
-        "Factoid transaction hash, otherwise known as transaction ID"
-        hash: Hash!
-    ): FactoidTransactionAck!
+    factoidTransactionAck(hash: Hash!): FactoidTransactionAck!
     "Get blockchain heights."
     heights: Heights!
     "Get paginated pending entries."
@@ -256,13 +253,13 @@ type Address {
 "Possible states of a ledger entry."
 enum Ack {
     "Found in the blockchain."
-    DIRECTORY_BLOCK_CONFIRMED
+    DBlockConfirmed
     "Found on local node but not on the network."
-    NOT_CONFIRMED
+    NotConfirmed
     "Found on the network but not yet in the blockchain."
-    TRANSACTION_ACK
+    TransactionACK
     "Not found anywhere."
-    UNKNOWN
+    Unknown
 }
 
 type AckStatus {

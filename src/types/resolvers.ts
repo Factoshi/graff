@@ -26,13 +26,13 @@ export type Scalars = {
 /** Possible states of a ledger entry. */
 export enum Ack {
   /** Found in the blockchain. */
-  DirectoryBlockConfirmed = "DIRECTORY_BLOCK_CONFIRMED",
+  DBlockConfirmed = "DBlockConfirmed",
   /** Found on local node but not on the network. */
-  NotConfirmed = "NOT_CONFIRMED",
+  NotConfirmed = "NotConfirmed",
   /** Found on the network but not yet in the blockchain. */
-  TransactionAck = "TRANSACTION_ACK",
+  TransactionAck = "TransactionACK",
   /** Not found anywhere. */
-  Unknown = "UNKNOWN"
+  Unknown = "Unknown"
 }
 
 export type AckStatus = {
