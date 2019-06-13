@@ -157,5 +157,15 @@ export const Query: QueryResolvers = {
             blockDate: factoidTransactionAck.blockdatestring,
             status: factoidTransactionAck.status
         };
+    },
+
+    heights: async (root, args, { factomd }) => {
+        const heights = await factomd.heights.load();
+        return {
+            leaderHeight: heights.leaderheight,
+            directoryBlockHeight: heights.directoryblockheight,
+            entryBlockHeight: heights.entryblockheight,
+            entryHeight: heights.entryheight
+        };
     }
 };

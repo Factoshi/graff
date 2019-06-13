@@ -48,4 +48,6 @@ export class FactomdDataLoader {
     );
 
     factoidBlock = this.createDataLoader(this.cli.getFactoidBlock.bind(this.cli));
+
+    heights = this.createMockDataLoader(() => this.cli.factomdApi('heights'));
 }

@@ -672,9 +672,9 @@ type AddAuthorityEfficiency implements AdminEntry {
 "Blockchain time state."
 type CurrentMinute {
     "The current block height."
-    leaderHeight: Int!
+    leaderHeight: Height!
     "The highest saved directory block height of the factomd API server."
-    directoryBlockHeight: Int!
+    directoryBlockHeight: Height!
     "The minute number of the open entry block."
     minute: Int!
     "The start time of the current block."
@@ -696,13 +696,13 @@ type CurrentMinute {
 "Network and server heights."
 type Heights {
     "The current block height."
-    leaderHeight: Int!
+    leaderHeight: Height!
     "The highest saved directory block height of the factomd API server."
-    directoryBlockHeight: Int!
+    directoryBlockHeight: Height!
     "The height at which the factomd API server has all the entry blocks."
-    entryBlockHeight: Int!
+    entryBlockHeight: Height!
     "The height at which the local factomd API server has all the entries."
-    entryHeight: Int!
+    entryHeight: Height!
 }
 
 "Fctomd and API properties."

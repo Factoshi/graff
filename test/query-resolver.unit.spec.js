@@ -248,4 +248,15 @@ describe('Query Resolvers', () => {
             status: 'DBlockConfirmed'
         });
     });
+
+    it('should get the leave of Heights from the heights resolver', async () => {
+        const heights = await Query.heights(undefined, undefined, { factomd });
+        assert.hasAllKeys(heights, [
+            'leaderHeight',
+            'directoryBlockHeight',
+            'entryBlockHeight',
+            'entryHeight'
+        ]);
+        Object.values(heights).forEach(assert.isNumber);
+    });
 });

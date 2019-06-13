@@ -281,9 +281,9 @@ export type CommitRevealSend = {
 export type CurrentMinute = {
   __typename?: "CurrentMinute";
   /** The current block height. */
-  leaderHeight: Scalars["Int"];
+  leaderHeight: Scalars["Height"];
   /** The highest saved directory block height of the factomd API server. */
-  directoryBlockHeight: Scalars["Int"];
+  directoryBlockHeight: Scalars["Height"];
   /** The minute number of the open entry block. */
   minute: Scalars["Int"];
   /** The start time of the current block. */
@@ -475,13 +475,13 @@ export type HashHeight = Scalars["Hash"] | Scalars["Height"];
 export type Heights = {
   __typename?: "Heights";
   /** The current block height. */
-  leaderHeight: Scalars["Int"];
+  leaderHeight: Scalars["Height"];
   /** The highest saved directory block height of the factomd API server. */
-  directoryBlockHeight: Scalars["Int"];
+  directoryBlockHeight: Scalars["Height"];
   /** The height at which the factomd API server has all the entry blocks. */
-  entryBlockHeight: Scalars["Int"];
+  entryBlockHeight: Scalars["Height"];
   /** The height at which the local factomd API server has all the entries. */
-  entryHeight: Scalars["Int"];
+  entryHeight: Scalars["Height"];
 };
 
 /** Increment the server count.
@@ -1214,9 +1214,9 @@ export type CurrentMinuteResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["CurrentMinute"]
 > = ResolversObject<{
-  leaderHeight?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  leaderHeight?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
   directoryBlockHeight?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Height"],
     ParentType,
     ContextType
   >;
@@ -1453,14 +1453,18 @@ export type HeightsResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["Heights"]
 > = ResolversObject<{
-  leaderHeight?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  leaderHeight?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
   directoryBlockHeight?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Height"],
     ParentType,
     ContextType
   >;
-  entryBlockHeight?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  entryHeight?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  entryBlockHeight?: Resolver<
+    ResolversTypes["Height"],
+    ParentType,
+    ContextType
+  >;
+  entryHeight?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
 }>;
 
 export type IncreaseServerCountResolvers<
