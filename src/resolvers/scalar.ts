@@ -1,9 +1,7 @@
 import { GraphQLScalarType } from 'graphql';
 import { isValidPublicFctAddress, isValidPublicEcAddress } from 'factom';
 
-type Test = (val: any) => boolean;
-
-export const createTest = <T>(test: Test, err: Error) => (val: T) => {
+export const createTest = <T>(test: (val: T) => boolean, err: Error) => (val: T) => {
     if (test(val)) {
         return val;
     }
@@ -13,10 +11,9 @@ export const createTest = <T>(test: Test, err: Error) => (val: T) => {
 //////////////////////////
 //      HASH SCALAR     //
 //////////////////////////
-export const hashError = new TypeError('Hash cannot represent an invalid SHA256 string.');
-const sha256Regex = /^[A-Fa-f0-9]{64}$/g;
-export const sha256Test = createTest<string>(
-    val => typeof val === 'string' && sha256Regex.test(val),
+export const hashError = new TypeError('Hash must be a valid SHA256 hex string.');
+export const sha256Test = createTest(
+    (val: string) => typeof val === 'string' && /^[A-Fa-f0-9]{64}$/g.test(val),
     hashError
 );
 
@@ -35,8 +32,8 @@ export const publicFactoidAddressError = new TypeError(
     'PublicFactoidAddress must be a valid public factoid address.'
 );
 
-export const publicFactoidAddressTest = createTest<string>(
-    val => typeof val === 'string' && isValidPublicFctAddress(val),
+export const publicFactoidAddressTest = createTest(
+    (val: string) => typeof val === 'string' && isValidPublicFctAddress(val),
     publicFactoidAddressError
 );
 
@@ -55,7 +52,7 @@ export const publicEntryCreditAddressError = new TypeError(
     'PublicEntryCreditAddress must be a valid public entry credit address.'
 );
 
-export const publicEntryCreditAddressTest = createTest<string>(
+export const publicEntryCreditAddressTest = createTest(
     (val: string) => typeof val === 'string' && isValidPublicEcAddress(val),
     publicEntryCreditAddressError
 );
@@ -73,8 +70,8 @@ export const PublicEntryCreditAddress = new GraphQLScalarType({
 ////////////////////////////
 export const heightError = new TypeError('Height must be a positive integer.');
 
-export const heightTest = createTest<number>(
-    val => typeof val === 'number' && val >= 0 && Number.isInteger(val),
+export const heightTest = createTest(
+    (val: number) => typeof val === 'number' && val >= 0 && Number.isInteger(val),
     heightError
 );
 

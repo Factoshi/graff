@@ -17,7 +17,7 @@ describe('Custom Scalars', () => {
         const invalidHash = 'this is not a sha256';
         assert.throws(
             () => sha256Test(invalidHash),
-            'Hash cannot represent an invalid SHA256 string.'
+            'Hash must be a valid SHA256 hex string.'
         );
     });
 
