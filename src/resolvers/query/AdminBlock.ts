@@ -9,7 +9,7 @@ export const getAdminBlockLeaves = async (
     return {
         hash: adminBlock.backReferenceHash,
         height: adminBlock.directoryBlockHeight
-};
+    };
 };
 
 /**
@@ -40,10 +40,15 @@ export const AdminBlock: AdminBlockResolvers = {
 
     entries: async (parent, args, { factomd }) => {
         const adminBlock = await factomd.adminBlock.load(parent.hash as string);
-        // Return the entry with renamed adminId and adminCode
+        // Return each entry with renamed adminId and adminCode
         return adminBlock.entries.map((entry: any) => {
             const { adminId: id, adminCode: code, ...rest } = entry;
             return { id, code, ...rest };
         });
     },
+
+    directoryBlock: async (parent, args, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(parent.hash as string);
+        return { height: adminBlock.directoryBlockHeight };
+    }
 };

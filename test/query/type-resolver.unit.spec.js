@@ -21,16 +21,16 @@ describe('AdminBlock Resolvers', () => {
 
     it('should resolve the leaves of the nextBlock field', async () => {
         const hash = 'a1f965e4359f23371f27e6b1073ec1a84b7dc076a61c7375f21262efbe558011';
-        const previousBlock = await AdminBlock.nextBlock({ hash }, undefined, {
+        const nextBlock = await AdminBlock.nextBlock({ hash }, undefined, {
             factomd
         });
-        assert.deepStrictEqual(previousBlock, {
+        assert.deepStrictEqual(nextBlock, {
             hash: '5f285984f186293eca7fc7944b864d16afb75c4438f755689ae1c52306b7f9ef',
             height: 189106
         });
     });
 
-    it('should resolve the leaves of the entries fields', async () => {
+    it('should resolve the leaves of the entries field', async () => {
         // A block with a few different types of admin entry.
         const hash = 'fd92d8174a0e53eebae95af6ebe1a1bc8abe1f5acdc4c1cab4d1425ceb205767';
         const entries = await AdminBlock.entries({ hash }, undefined, {
@@ -46,5 +46,13 @@ describe('AdminBlock Resolvers', () => {
             assert.isNumber(entry.id);
             assert(entry.id >= 1 && entry.id <= 14), 'ID is out of bounds';
         });
+    });
+
+    it('should resolve the leaves of the directoryBlock field', async () => {
+        const hash = 'a1f965e4359f23371f27e6b1073ec1a84b7dc076a61c7375f21262efbe558011';
+        const directoryBlock = await AdminBlock.directoryBlock({ hash }, undefined, {
+            factomd
+        });
+        assert.deepStrictEqual(directoryBlock, { height: 189105 });
     });
 });
