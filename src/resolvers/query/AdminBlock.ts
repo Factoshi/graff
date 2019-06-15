@@ -6,7 +6,10 @@ export const getAdminBlockLeaves = async (
     factomd: FactomdDataLoader
 ) => {
     const adminBlock = await factomd.adminBlock.load(reference);
-    return { hash: adminBlock.lookupHash, height: adminBlock.directoryBlockHeight };
+    return {
+        hash: adminBlock.backReferenceHash,
+        height: adminBlock.directoryBlockHeight
+};
 };
 
 /**

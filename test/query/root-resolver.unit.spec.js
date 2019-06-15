@@ -8,14 +8,14 @@ describe('Query Resolvers', () => {
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
 
     it('Should get the leaves of AdminBlock from the adminBlock resolver using a hash.', async () => {
-        const hash = '60d6c075925bbd2ddaf3b8c6737225d9df1963d0d098e10b67605d557857fc52';
+        const hash = 'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';
         const height = 10;
         const adminBlock = await Query.adminBlock(undefined, { arg: hash }, { factomd });
         assert.deepStrictEqual(adminBlock, { hash, height });
     });
 
     it('Should get the leaves of AdminBlock from the adminBlock resolver using a height.', async () => {
-        const hash = '60d6c075925bbd2ddaf3b8c6737225d9df1963d0d098e10b67605d557857fc52';
+        const hash = 'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';
         const height = 10;
         const adminBlock = await Query.adminBlock(
             undefined,
