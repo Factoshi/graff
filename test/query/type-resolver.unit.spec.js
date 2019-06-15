@@ -2,6 +2,7 @@ const { assert } = require('chai');
 const { AdminBlock } = require('../../src/resolvers/query/AdminBlock');
 const { FactomdDataLoader } = require('../../src/data_loader');
 const { cli } = require('../../src/factom');
+const { AdminCode } = require('../../src/types/resolvers');
 
 describe('AdminBlock Resolvers', () => {
     let factomd;
@@ -26,6 +27,24 @@ describe('AdminBlock Resolvers', () => {
         assert.deepStrictEqual(previousBlock, {
             hash: '5f285984f186293eca7fc7944b864d16afb75c4438f755689ae1c52306b7f9ef',
             height: 189106
+        });
+    });
+
+    it('should resolve the leaves of the entries fields', async () => {
+        // A block with a few different types of admin entry.
+        const hash = 'fd92d8174a0e53eebae95af6ebe1a1bc8abe1f5acdc4c1cab4d1425ceb205767';
+        const entries = await AdminBlock.entries({ hash }, undefined, {
+            factomd
+        });
+        assert.isArray(entries);
+        assert.lengthOf(entries, 32);
+        entries.forEach(entry => {
+            assert(
+                Object.values(AdminCode).includes(entry.code),
+                `code "${entry.code}" does not exist on the AdminCode enum`
+            );
+            assert.isNumber(entry.id);
+            assert(entry.id >= 1 && entry.id <= 14), 'ID is out of bounds';
         });
     });
 });

@@ -37,4 +37,13 @@ export const AdminBlock: AdminBlockResolvers = {
         const adminBlock = await factomd.adminBlock.load(parent.hash as string);
         return getAdminBlockLeaves(adminBlock.directoryBlockHeight + 1, factomd);
     },
+
+    entries: async (parent, args, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(parent.hash as string);
+        // Return the entry with renamed adminId and adminCode
+        return adminBlock.entries.map((entry: any) => {
+            const { adminId: id, adminCode: code, ...rest } = entry;
+            return { id, code, ...rest };
+        });
+    },
 };
