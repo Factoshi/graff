@@ -1,5 +1,6 @@
 const { assert } = require('chai');
 const { adminBlockResolvers } = require('../../src/resolvers/query/AdminBlock');
+const { adminEntryResolvers } = require('../../src/resolvers/query/AdminEntry');
 const { FactomdDataLoader } = require('../../src/data_loader');
 const { cli } = require('../../src/factom');
 const { AdminCode } = require('../../src/types/resolvers');
@@ -59,7 +60,12 @@ describe('AdminBlock Resolvers', () => {
         );
         assert.deepStrictEqual(directoryBlock, { height: 189105 });
     });
-        });
-        assert.deepStrictEqual(directoryBlock, { height: 189105 });
+});
+
+describe('AdminEntry resolvers', () => {
+    it('should resolve the AdminEntry type', () => {
+        const adminEntry = { id: 1, code: AdminCode.DirectoryBlockSignature };
+        const resolvedType = adminEntryResolvers.__resolveType(adminEntry);
+        assert.strictEqual(resolvedType, 'DirectoryBlockSignature');
     });
 });
