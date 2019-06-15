@@ -1,21 +1,9 @@
 import { QueryResolvers } from '../../types/resolvers';
+import { adminBlockRootQueries } from './AdminBlock';
 
 export const Query: QueryResolvers = {
-    adminBlock: async (root, { arg }, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(arg);
-        return {
-            hash: adminBlock.lookupHash,
-            height: adminBlock.directoryBlockHeight
-        };
-    },
-
-    adminBlockHead: async (root, args, { factomd }) => {
-        const directoryBlockHead = await factomd.directoryBlockHead.load();
-        const adminBlock = await factomd.adminBlock.load(
-            directoryBlockHead.adminBlockRef
-        );
-        return { hash: adminBlock.lookupHash };
-    },
+    adminBlock: adminBlockRootQueries.adminBlock,
+    adminBlockHead: adminBlockRootQueries.adminBlockHead,
 
     balances: async (root, { addresses }, { factomd }) => {
         const balances = await factomd.balance.loadMany(addresses);

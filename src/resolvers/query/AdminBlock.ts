@@ -1,0 +1,22 @@
+import { AdminBlockResolvers, QueryResolvers } from '../../types/resolvers';
+import { FactomdDataLoader } from '../../data_loader';
+
+export const getAdminBlockLeaves = async (
+    reference: string | number,
+    factomd: FactomdDataLoader
+) => {
+    const adminBlock = await factomd.adminBlock.load(reference);
+    return { hash: adminBlock.lookupHash, height: adminBlock.directoryBlockHeight };
+};
+
+/**
+ * Root Query resolvers that return a partial AdminBlock type.
+ */
+export const adminBlockRootQueries: QueryResolvers = {
+    adminBlock: async (parent, { arg }, { factomd }) => getAdminBlockLeaves(arg, factomd),
+
+    adminBlockHead: async (root, args, { factomd }) => {
+        const directoryBlockHead = await factomd.directoryBlockHead.load();
+        return getAdminBlockLeaves(directoryBlockHead.adminBlockRef, factomd);
+    }
+};
