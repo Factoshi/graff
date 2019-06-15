@@ -1,19 +1,11 @@
 import { AdminBlockResolvers, QueryResolvers } from '../../types/resolvers';
-import { FactomdDataLoader } from '../../data_loader';
 import { AdminBlock } from 'factom';
+import { handleBlockApiError } from '../helpers';
 
 export const extractAdminBlockLeaves = (adminBlock: AdminBlock) => ({
     hash: adminBlock.backReferenceHash,
     height: adminBlock.directoryBlockHeight
 });
-
-export const handleUnfound = (error: Error) => {
-    if (error.message.endsWith('Block not found (code: -32008)')) {
-        return null;
-    } else {
-        throw error;
-    }
-};
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
@@ -23,7 +15,7 @@ export const adminBlockRootQueries: QueryResolvers = {
         return factomd.adminBlock
             .load(arg)
             .then(extractAdminBlockLeaves)
-            .catch(handleUnfound);
+            .catch(handleBlockApiError);
     },
 
     adminBlockHead: async (root, args, { factomd }) => {
@@ -31,7 +23,7 @@ export const adminBlockRootQueries: QueryResolvers = {
         return factomd.adminBlock
             .load(directoryBlockHead.adminBlockRef)
             .then(extractAdminBlockLeaves)
-            .catch(handleUnfound);
+            .catch(handleBlockApiError);
     }
 };
 
@@ -44,7 +36,7 @@ export const adminBlockResolvers: AdminBlockResolvers = {
         return factomd.adminBlock
             .load(adminBlock.previousBackReferenceHash)
             .then(extractAdminBlockLeaves)
-            .catch(handleUnfound);
+            .catch(handleBlockApiError);
     },
 
     nextBlock: async (parent, args, { factomd }) => {
@@ -52,7 +44,7 @@ export const adminBlockResolvers: AdminBlockResolvers = {
         return factomd.adminBlock
             .load(adminBlock.directoryBlockHeight + 1)
             .then(extractAdminBlockLeaves)
-            .catch(handleUnfound);
+            .catch(handleBlockApiError);
     },
 
     entries: async (parent, args, { factomd }) => {
