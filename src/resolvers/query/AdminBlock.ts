@@ -23,3 +23,14 @@ export const adminBlockRootQueries: QueryResolvers = {
         return getAdminBlockLeaves(directoryBlockHead.adminBlockRef, factomd);
     }
 };
+
+/**
+ * AdminBlock type resolvers.
+ */
+export const AdminBlock: AdminBlockResolvers = {
+    previousBlock: async (parent, args, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(parent.hash as string);
+        return getAdminBlockLeaves(adminBlock.previousBackReferenceHash, factomd);
+    },
+
+};
