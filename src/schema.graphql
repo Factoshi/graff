@@ -121,7 +121,7 @@ type AdminBlock implements Block {
     "Block height."
     height: Int!
     "The previous block."
-    prevBlock: AdminBlock
+    previousBlock: AdminBlock
     "The next block."
     nextBlock: AdminBlock
     "Array of admin entries contained within this admin block."
@@ -143,7 +143,7 @@ type DirectoryBlock implements Block {
     "The hash of the current block."
     hash: Hash!
     "The previous block."
-    prevBlock: DirectoryBlock
+    previousBlock: DirectoryBlock
     "The next block."
     nextBlock: DirectoryBlock
     "Block height."
@@ -170,7 +170,7 @@ type EntryBlock implements Block {
     "The hash of the current block."
     hash: Hash!
     "The previous block."
-    prevBlock: EntryBlock
+    previousBlock: EntryBlock
     "The next block."
     nextBlock: EntryBlock
     "The ID of the parent chain."
@@ -197,7 +197,7 @@ type EntryCreditBlock implements Block {
     "Block height."
     height: Int!
     "The previous block."
-    prevBlock: EntryCreditBlock
+    previousBlock: EntryCreditBlock
     "The next block."
     nextBlock: EntryCreditBlock
     "Paginated commits contained within the entry credit block"
@@ -218,7 +218,7 @@ type FactoidBlock implements Block {
     "Block height."
     height: Int!
     "The previous block."
-    prevBlock: FactoidBlock
+    previousBlock: FactoidBlock
     "The next block."
     nextBlock: FactoidBlock
     "EC-FCT exchange rate."

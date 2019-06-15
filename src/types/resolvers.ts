@@ -149,7 +149,7 @@ export type AdminBlock = Block & {
   /** Block height. */
   height: Scalars["Int"];
   /** The previous block. */
-  prevBlock?: Maybe<AdminBlock>;
+  previousBlock?: Maybe<AdminBlock>;
   /** The next block. */
   nextBlock?: Maybe<AdminBlock>;
   /** Array of admin entries contained within this admin block. */
@@ -308,7 +308,7 @@ export type DirectoryBlock = Block & {
   /** The hash of the current block. */
   hash: Scalars["Hash"];
   /** The previous block. */
-  prevBlock?: Maybe<DirectoryBlock>;
+  previousBlock?: Maybe<DirectoryBlock>;
   /** The next block. */
   nextBlock?: Maybe<DirectoryBlock>;
   /** Block height. */
@@ -370,7 +370,7 @@ export type EntryBlock = Block & {
   /** The hash of the current block. */
   hash: Scalars["Hash"];
   /** The previous block. */
-  prevBlock?: Maybe<EntryBlock>;
+  previousBlock?: Maybe<EntryBlock>;
   /** The next block. */
   nextBlock?: Maybe<EntryBlock>;
   /** The ID of the parent chain. */
@@ -412,7 +412,7 @@ export type EntryCreditBlock = Block & {
   /** Block height. */
   height: Scalars["Int"];
   /** The previous block. */
-  prevBlock?: Maybe<EntryCreditBlock>;
+  previousBlock?: Maybe<EntryCreditBlock>;
   /** The next block. */
   nextBlock?: Maybe<EntryCreditBlock>;
   /** Paginated commits contained within the entry credit block */
@@ -435,7 +435,7 @@ export type FactoidBlock = Block & {
   /** Block height. */
   height: Scalars["Int"];
   /** The previous block. */
-  prevBlock?: Maybe<FactoidBlock>;
+  previousBlock?: Maybe<FactoidBlock>;
   /** The next block. */
   nextBlock?: Maybe<FactoidBlock>;
   /** EC-FCT exchange rate. */
@@ -1083,7 +1083,7 @@ export type AdminBlockResolvers<
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  prevBlock?: Resolver<
+  previousBlock?: Resolver<
     Maybe<ResolversTypes["AdminBlock"]>,
     ParentType,
     ContextType
@@ -1247,7 +1247,7 @@ export type DirectoryBlockResolvers<
   ParentType = ResolversTypes["DirectoryBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  prevBlock?: Resolver<
+  previousBlock?: Resolver<
     Maybe<ResolversTypes["DirectoryBlock"]>,
     ParentType,
     ContextType
@@ -1313,7 +1313,7 @@ export type EntryBlockResolvers<
   ParentType = ResolversTypes["EntryBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  prevBlock?: Resolver<
+  previousBlock?: Resolver<
     Maybe<ResolversTypes["EntryBlock"]>,
     ParentType,
     ContextType
@@ -1363,7 +1363,7 @@ export type EntryCreditBlockResolvers<
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  prevBlock?: Resolver<
+  previousBlock?: Resolver<
     Maybe<ResolversTypes["EntryCreditBlock"]>,
     ParentType,
     ContextType
@@ -1392,7 +1392,7 @@ export type FactoidBlockResolvers<
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  prevBlock?: Resolver<
+  previousBlock?: Resolver<
     Maybe<ResolversTypes["FactoidBlock"]>,
     ParentType,
     ContextType
