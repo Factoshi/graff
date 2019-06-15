@@ -4,8 +4,8 @@
     "description": "GraphQL translation layer for the factomd RPC API.",
     "main": "index.js",
     "scripts": {
-        "test": "mocha -r ts-node/register test/**/*.spec.js",
-        "test-watch": "mocha -r ts-node/register test/**/*.spec.js --watch",
+        "test": "mocha -r ts-node/register --recursive",
+        "test-watch": "mocha -r ts-node/register --recursive --watch",
         "generate": "graphql-codegen --config codegen.yml",
         "generate-init": "graphql-codegen init"
     },
