@@ -17,4 +17,15 @@ describe('AdminBlock Resolvers', () => {
             height: 189104
         });
     });
+
+    it('should resolve the leaves of the nextBlock field', async () => {
+        const hash = 'a1f965e4359f23371f27e6b1073ec1a84b7dc076a61c7375f21262efbe558011';
+        const previousBlock = await AdminBlock.nextBlock({ hash }, undefined, {
+            factomd
+        });
+        assert.deepStrictEqual(previousBlock, {
+            hash: '5f285984f186293eca7fc7944b864d16afb75c4438f755689ae1c52306b7f9ef',
+            height: 189106
+        });
+    });
 });

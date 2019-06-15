@@ -33,4 +33,8 @@ export const AdminBlock: AdminBlockResolvers = {
         return getAdminBlockLeaves(adminBlock.previousBackReferenceHash, factomd);
     },
 
+    nextBlock: async (parent, args, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(parent.hash as string);
+        return getAdminBlockLeaves(adminBlock.directoryBlockHeight + 1, factomd);
+    },
 };
