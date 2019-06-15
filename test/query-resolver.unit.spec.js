@@ -27,8 +27,9 @@ describe('Query Resolvers', () => {
 
     it('Should get the leaves of AdminBlock from the adminBlockHead resolver', async () => {
         const adminBlock = await Query.adminBlockHead(undefined, undefined, { factomd });
-        assert.hasAllKeys(adminBlock, ['hash']);
+        assert.hasAllKeys(adminBlock, ['hash', 'height']);
         assert.isString(adminBlock.hash);
+        assert.isNumber(adminBlock.height);
     });
 
     it('should get an array of the leaves of Address from the balances resolver', async () => {
