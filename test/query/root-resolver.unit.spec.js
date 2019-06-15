@@ -25,6 +25,15 @@ describe('Query Resolvers', () => {
         assert.deepStrictEqual(adminBlock, { hash, height });
     });
 
+    it('Should return null if an AdminBlock cannot be found.', async () => {
+        const adminBlock = await Query.adminBlock(
+            undefined,
+            { arg: Number.MAX_SAFE_INTEGER },
+            { factomd }
+        );
+        assert.isNull(adminBlock);
+    });
+
     it('Should get the leaves of AdminBlock from the adminBlockHead resolver', async () => {
         const adminBlock = await Query.adminBlockHead(undefined, undefined, { factomd });
         assert.hasAllKeys(adminBlock, ['hash', 'height']);
@@ -32,7 +41,7 @@ describe('Query Resolvers', () => {
         assert.isNumber(adminBlock.height);
     });
 
-    it('should get an array of the leaves of Address from the balances resolver', async () => {
+    it('Should get an array of the leaves of Address from the balances resolver', async () => {
         ecAddress = 'EC3QVDcZ88chcKxHnatyigwq4nSZbsY56B6Q7HuyL9yUEFSoSf6Q';
         fctAddress = 'FA2MZs5wASMo9cCiKezdiQKCd8KA6Zbg2xKXKGmYEZBqon9J3ZKv';
         const balances = await Query.balances(
@@ -48,7 +57,7 @@ describe('Query Resolvers', () => {
         balances.forEach(balance => assert.isNumber(balance.amount));
     });
 
-    it('should get the leaves of EntryBlock from the chainHead resolver', async () => {
+    it('Should get the leaves of EntryBlock from the chainHead resolver', async () => {
         const chain = 'b47b83b04ba3b09305e7e02618c457c3fd82531a4ab81b16e73d780dfc2f3b18';
         const chainHead = await Query.chainHead(undefined, { chain }, { factomd });
         assert.hasAllKeys(chainHead, ['hash', 'chain', 'height']);
@@ -57,7 +66,7 @@ describe('Query Resolvers', () => {
         assert.isNumber(chainHead.height);
     });
 
-    it('should get the leaves of EntryCommitAck from the commitAck resolver', async () => {
+    it('Should get the leaves of EntryCommitAck from the commitAck resolver', async () => {
         const hash = '5f3599d372e9dfe9dd7fe5f2a72743496e99209b0a5776c1e34622fcb3c78e0b';
         const ack = await Query.commitAck(undefined, { hash }, { factomd });
         assert.deepStrictEqual(ack, {
@@ -66,7 +75,7 @@ describe('Query Resolvers', () => {
         });
     });
 
-    it('should get the leaves of CurrentMinute from the currentMinute resolver', async () => {
+    it('Should get the leaves of CurrentMinute from the currentMinute resolver', async () => {
         const currentMinute = await Query.currentMinute(undefined, undefined, {
             factomd
         });
@@ -95,7 +104,7 @@ describe('Query Resolvers', () => {
         assert.isNumber(currentMinute.roundTimeout);
     });
 
-    it('should get the leaves of DirectoryBlock from the directoryBlock resolver', async () => {
+    it('Should get the leaves of DirectoryBlock from the directoryBlock resolver', async () => {
         const hash = '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5';
         const directoryBlock = await Query.directoryBlock(
             undefined,
@@ -109,7 +118,7 @@ describe('Query Resolvers', () => {
         });
     });
 
-    it('should get the leaves of DirectoryBlock from the directoryBlock resolver', async () => {
+    it('Should get the leaves of DirectoryBlock from the directoryBlock resolver', async () => {
         const height = 196398;
         const directoryBlock = await Query.directoryBlock(
             undefined,
@@ -123,7 +132,7 @@ describe('Query Resolvers', () => {
         });
     });
 
-    it('should get the leaves of DirectoryBlock from the directoryBlockHead resolver', async () => {
+    it('Should get the leaves of DirectoryBlock from the directoryBlockHead resolver', async () => {
         const directoryBlock = await Query.directoryBlockHead(undefined, undefined, {
             factomd
         });
@@ -133,7 +142,7 @@ describe('Query Resolvers', () => {
         assert.isNumber(directoryBlock.timestamp);
     });
 
-    it('should get the leaves of Entry from the entry resolver', async () => {
+    it('Should get the leaves of Entry from the entry resolver', async () => {
         const hash = 'ef67f1a08b849ae188ae71fe0cdbdd3d6bd0c2d4df661c890d339787cbc5ee6b';
         const entry = await Query.entry(undefined, { hash }, { factomd });
         assert.strictEqual(entry.hash, hash);
@@ -147,7 +156,7 @@ describe('Query Resolvers', () => {
         entry.externalIds.forEach(id => assert.isString(id));
     });
 
-    it('should get the leaves of EntryCommitAck from the entryAck resolver', async () => {
+    it('Should get the leaves of EntryCommitAck from the entryAck resolver', async () => {
         const hash = '2346db420b35ee2c8e811305c36ea140ff47c59af70221be41ef3285e324d264';
         const chain = '9b5c6dbec96faef4f855182fa8d1475427eed27fc18f4c8deec588d1c252b7f8';
         const ack = await Query.entryAck(undefined, { hash, chain }, { factomd });
@@ -157,7 +166,7 @@ describe('Query Resolvers', () => {
         });
     });
 
-    it('should get the leaves of EntryBlock from the entryBlock resolver', async () => {
+    it('Should get the leaves of EntryBlock from the entryBlock resolver', async () => {
         const hash = '4dd4d88ab67c272817f78672768f5bac546743546c7755949f9c20a4583a0c9c';
         const entryBlock = await Query.entryBlock(undefined, { hash }, { factomd });
         assert.strictEqual(entryBlock.hash, hash);
@@ -200,7 +209,7 @@ describe('Query Resolvers', () => {
         assert.isNumber(entryCreditBlock.height);
     });
 
-    it('should get the entry credit rate', async () => {
+    it('Should get the entry credit rate', async () => {
         const ecRate = await Query.entryCreditRate(undefined, undefined, { factomd });
         assert.isNumber(ecRate);
     });
@@ -237,7 +246,7 @@ describe('Query Resolvers', () => {
         assert.isNumber(factoidBlock.entryCreditRate);
     });
 
-    it('should get the leaves of FactoidTransactionAck from the factoidTransactionAck resolver', async () => {
+    it('Should get the leaves of FactoidTransactionAck from the factoidTransactionAck resolver', async () => {
         const hash = 'b853f921bb6598b20c5054fa422a83a6a128ccd3c0fed2aaf03f0060d6805744';
         const ack = await Query.factoidTransactionAck(undefined, { hash }, { factomd });
         assert.deepStrictEqual(ack, {
@@ -250,7 +259,7 @@ describe('Query Resolvers', () => {
         });
     });
 
-    it('should get the leaves of Heights from the heights resolver', async () => {
+    it('Should get the leaves of Heights from the heights resolver', async () => {
         const heights = await Query.heights(undefined, undefined, { factomd });
         assert.hasAllKeys(heights, [
             'leaderHeight',
@@ -261,7 +270,7 @@ describe('Query Resolvers', () => {
         Object.values(heights).forEach(assert.isNumber);
     });
 
-    it('should get the leaves of PaginatedPendingEntries from the pendingEntries resolver', async () => {
+    it('Should get the leaves of PaginatedPendingEntries from the pendingEntries resolver', async () => {
         const pendingEntries = await Query.pendingEntries(undefined, undefined, {
             factomd
         });
@@ -269,7 +278,7 @@ describe('Query Resolvers', () => {
         assert.isNumber(pendingEntries.totalCount);
     });
 
-    it('should get the leaves of PaginatedPendingTransactions from the pendingTransactions resolver', async () => {
+    it('Should get the leaves of PaginatedPendingTransactions from the pendingTransactions resolver', async () => {
         const pendingTransactions = await Query.pendingTransactions(
             undefined,
             undefined,
@@ -279,7 +288,7 @@ describe('Query Resolvers', () => {
         assert.isNumber(pendingTransactions.totalCount);
     });
 
-    it('should get the leaves of Properties from the properties resolver', async () => {
+    it('Should get the leaves of Properties from the properties resolver', async () => {
         const properties = await Query.properties(undefined, undefined, { factomd });
         assert.hasAllKeys(properties, [
             'factomdVersion',

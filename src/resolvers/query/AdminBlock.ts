@@ -1,15 +1,28 @@
 import { AdminBlockResolvers, QueryResolvers } from '../../types/resolvers';
 import { FactomdDataLoader } from '../../data_loader';
+import { AdminBlock } from 'factom';
 
 export const getAdminBlockLeaves = async (
     reference: string | number,
     factomd: FactomdDataLoader
 ) => {
-    const adminBlock = await factomd.adminBlock.load(reference);
-    return {
-        hash: adminBlock.backReferenceHash,
-        height: adminBlock.directoryBlockHeight
-    };
+    return factomd.adminBlock
+        .load(reference)
+        .then(extractAdminBlockLeaves)
+        .catch(handleUnfound);
+};
+
+export const extractAdminBlockLeaves = (adminBlock: AdminBlock) => ({
+    hash: adminBlock.backReferenceHash,
+    height: adminBlock.directoryBlockHeight
+});
+
+export const handleUnfound = (error: Error) => {
+    if (error.message.endsWith('Block not found (code: -32008)')) {
+        return null;
+    } else {
+        throw error;
+    }
 };
 
 /**
