@@ -60,10 +60,11 @@ describe('Query Resolvers', () => {
     it('Should get the leaves of EntryBlock from the chainHead resolver', async () => {
         const chain = 'b47b83b04ba3b09305e7e02618c457c3fd82531a4ab81b16e73d780dfc2f3b18';
         const chainHead = await Query.chainHead(undefined, { chain }, { factomd });
-        assert.hasAllKeys(chainHead, ['hash', 'chain', 'height']);
+        assert.hasAllKeys(chainHead, ['hash', 'chain', 'height', 'timestamp']);
         assert.isString(chainHead.hash);
         assert.isString(chainHead.chain);
         assert.isNumber(chainHead.height);
+        assert.isNumber(chainHead.timestamp);
     });
 
     it('Should get the leaves of EntryCommitAck from the commitAck resolver', async () => {

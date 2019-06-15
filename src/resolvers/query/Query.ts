@@ -1,5 +1,6 @@
 import { QueryResolvers } from '../../types/resolvers';
 import { adminBlockRootQueries } from './AdminBlock';
+import { entryBlockRootQueries } from './EntryBlock';
 
 export const Query: QueryResolvers = {
     adminBlock: adminBlockRootQueries.adminBlock,
@@ -13,15 +14,7 @@ export const Query: QueryResolvers = {
         }));
     },
 
-    chainHead: async (root, { chain }, { factomd }) => {
-        const chainHead = await factomd.chainHead.load(chain);
-        const entryBlock = await factomd.entryBlock.load(chainHead.keyMR);
-        return {
-            hash: entryBlock.keyMR,
-            chain,
-            height: entryBlock.sequenceNumber
-        };
-    },
+    chainHead: entryBlockRootQueries.chainHead,
 
     commitAck: async (root, { hash }, { factomd }) => {
         const ack = await factomd.ack.load({ hash, chainid: 'c' });
