@@ -21,3 +21,13 @@ export const entryBlockRootQueries: QueryResolvers = {
             .catch(handleBlockApiError);
     }
 };
+
+export const entryBlockResolvers: EntryBlockResolvers = {
+    previousBlock: async (root, args, { factomd }) => {
+        const entryBlock = await factomd.entryBlock.load(root.hash as string);
+        return factomd.entryBlock
+            .load(entryBlock.previousBlockKeyMR)
+            .then(extractEntryBlockLeaves)
+            .catch(handleBlockApiError);
+    }
+};
