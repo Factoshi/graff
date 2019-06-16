@@ -371,8 +371,6 @@ export type EntryBlock = Block & {
   hash: Scalars["Hash"];
   /** The previous block. */
   previousBlock?: Maybe<EntryBlock>;
-  /** The next block. */
-  nextBlock?: Maybe<EntryBlock>;
   /** The ID of the parent chain. */
   chain: Scalars["Hash"];
   /** Height of entry block. Also known as sequence number. */
@@ -1314,11 +1312,6 @@ export type EntryBlockResolvers<
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   previousBlock?: Resolver<
-    Maybe<ResolversTypes["EntryBlock"]>,
-    ParentType,
-    ContextType
-  >;
-  nextBlock?: Resolver<
     Maybe<ResolversTypes["EntryBlock"]>,
     ParentType,
     ContextType

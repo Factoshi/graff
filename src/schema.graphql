@@ -171,8 +171,6 @@ type EntryBlock implements Block {
     hash: Hash!
     "The previous block."
     previousBlock: EntryBlock
-    "The next block."
-    nextBlock: EntryBlock
     "The ID of the parent chain."
     chain: Hash!
     "Height of entry block. Also known as sequence number."
