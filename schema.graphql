@@ -721,12 +721,20 @@ type Properties {
 interface Paginated {
     "Total number of nodes available for pagination."
     totalCount: Int!
+    "Position to offset first from beginning of list"
+    offset: Int!
+    "Get first x in list following offset"
+    first: Int!
 }
 
 "Paginated entry blocks"
 type PaginatedEntryBlocks implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
+    "Position to offset first from beginning of list"
+    offset: Int!
+    "Get first x in list following offset"
+    first: Int!
     "An array of entry blocks."
     entryBlocks: [EntryBlock!]!
 }
@@ -735,6 +743,10 @@ type PaginatedEntryBlocks implements Paginated {
 type PaginatedEntries implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
+    "Position to offset first from beginning of list"
+    offset: Int!
+    "Get first x in list following offset"
+    first: Int!
     "An array of entries."
     entries: [Entry!]!
 }
@@ -743,6 +755,10 @@ type PaginatedEntries implements Paginated {
 type PaginatedCommits implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
+    "Position to offset first from beginning of list"
+    offset: Int!
+    "Get first x in list following offset"
+    first: Int!
     "An array of commits."
     commits: [Commit!]!
 }
@@ -751,6 +767,10 @@ type PaginatedCommits implements Paginated {
 type PaginatedTransactions implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
+    "Position to offset first from beginning of list"
+    offset: Int!
+    "Get first x in list following offset"
+    first: Int!
     "An array of transactions."
     transactions: [Transaction!]!
 }
@@ -759,6 +779,10 @@ type PaginatedTransactions implements Paginated {
 type PaginatedPendingEntries implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
+    "Position to offset first from beginning of list"
+    offset: Int!
+    "Get first x in list following offset"
+    first: Int!
     "An array of pending entries."
     pendingEntries: [PendingEntry!]!
 }
@@ -767,6 +791,10 @@ type PaginatedPendingEntries implements Paginated {
 type PaginatedPendingTransactions implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
+    "Position to offset first from beginning of list"
+    offset: Int!
+    "Get first x in list following offset"
+    first: Int!
     "An array of pending transactions."
     pendingTransactions: [PendingTransaction!]!
 }
