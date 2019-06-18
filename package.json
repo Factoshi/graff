@@ -6,7 +6,8 @@
     "scripts": {
         "start": "node ./build/server.js",
         "build": "tsc",
-        "test-watch": "mocha -r ts-node/register --recursive --watch",
+        "test": "nyc mocha -r ts-node/register --recursive",
+        "test-watch": "nyc mocha -r ts-node/register --recursive --watch",
         "generate": "graphql-codegen --config codegen.yml",
         "generate-init": "graphql-codegen init"
     },
