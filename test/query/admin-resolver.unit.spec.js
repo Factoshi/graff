@@ -9,7 +9,7 @@ describe('AdminBlock Resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
 
-    it('should resolve the leaves of the previousBlock field', async () => {
+    it('Should resolve the leaves of the previousBlock field', async () => {
         const hash = 'a1f965e4359f23371f27e6b1073ec1a84b7dc076a61c7375f21262efbe558011';
         const previousBlock = await adminBlockResolvers.previousBlock(
             { hash },
@@ -22,7 +22,7 @@ describe('AdminBlock Resolvers', () => {
         });
     });
 
-    it('should resolve the leaves of the nextBlock field', async () => {
+    it('Should resolve the leaves of the nextBlock field', async () => {
         const hash = 'a1f965e4359f23371f27e6b1073ec1a84b7dc076a61c7375f21262efbe558011';
         const nextBlock = await adminBlockResolvers.nextBlock({ hash }, undefined, {
             factomd
@@ -33,7 +33,7 @@ describe('AdminBlock Resolvers', () => {
         });
     });
 
-    it('should resolve the leaves of the entries field', async () => {
+    it('Should resolve the leaves of the entries field', async () => {
         // A block with a few different types of admin entry.
         const hash = 'fd92d8174a0e53eebae95af6ebe1a1bc8abe1f5acdc4c1cab4d1425ceb205767';
         const entries = await adminBlockResolvers.entries({ hash }, undefined, {
@@ -51,7 +51,7 @@ describe('AdminBlock Resolvers', () => {
         });
     });
 
-    it('should resolve the leaves of the directoryBlock field', async () => {
+    it('Should resolve the leaves of the directoryBlock field', async () => {
         const hash = 'a1f965e4359f23371f27e6b1073ec1a84b7dc076a61c7375f21262efbe558011';
         const directoryBlock = await adminBlockResolvers.directoryBlock(
             { hash },
@@ -63,7 +63,7 @@ describe('AdminBlock Resolvers', () => {
 });
 
 describe('AdminEntry resolvers', () => {
-    it('should resolve the AdminEntry type', () => {
+    it('Should resolve the AdminEntry type', () => {
         const adminEntry = { id: 1, code: AdminCode.DirectoryBlockSignature };
         const resolvedType = adminEntryResolvers.__resolveType(adminEntry);
         assert.strictEqual(resolvedType, 'DirectoryBlockSignature');
