@@ -38,7 +38,6 @@ export enum Ack {
 export type AckStatus = {
   __typename?: "AckStatus";
   timestamp?: Maybe<Scalars["Int"]>;
-  date?: Maybe<Scalars["String"]>;
   status: Ack;
 };
 
@@ -397,7 +396,7 @@ export type EntryCommitAck = {
   /** The hash of the entry. May be null if the commit has not yet been revealed. */
   entryHash?: Maybe<Scalars["Hash"]>;
   /** The status of the commit. */
-  commitStatus?: Maybe<AckStatus>;
+  commitStatus: AckStatus;
   /** The status of the entry. */
   entryStatus?: Maybe<AckStatus>;
 };
@@ -457,12 +456,8 @@ export type FactoidTransactionAck = {
   hash: Scalars["Hash"];
   /** The timestamp of the transaction. Milliseconds since Unix epoch. */
   txTimestamp?: Maybe<Scalars["Int"]>;
-  /** The date of the transaction. Human-readable format. */
-  txDate?: Maybe<Scalars["String"]>;
   /** The timestamp of the containing block. Milliseconds since Unix epoch. */
   blockTimestamp?: Maybe<Scalars["Int"]>;
-  /** The date of the containing block. Human-readable format. */
-  blockDate?: Maybe<Scalars["Int"]>;
   /** The status of the factoid transaction */
   status: Ack;
 };
@@ -700,10 +695,10 @@ export type Query = {
   adminBlockHead?: Maybe<AdminBlock>;
   /** Get the balance of public entry credit or factoid addresses. */
   balances: Array<Address>;
-  /** Entry status. */
-  commitAck: EntryCommitAck;
   /** Get the entry block at the tip of the specified chain. */
   chainHead?: Maybe<EntryBlock>;
+  /** Entry status. */
+  commitAck: EntryCommitAck;
   /** Get protocol time state. */
   currentMinute: CurrentMinute;
   /** Get a directory block by the specified block hash. */
@@ -750,12 +745,12 @@ export type QueryBalancesArgs = {
   addresses: Array<PublicAddress>;
 };
 
-export type QueryCommitAckArgs = {
-  hash: Scalars["Hash"];
-};
-
 export type QueryChainHeadArgs = {
   chain: Scalars["Hash"];
+};
+
+export type QueryCommitAckArgs = {
+  hash: Scalars["Hash"];
 };
 
 export type QueryDirectoryBlockArgs = {
@@ -1028,7 +1023,6 @@ export type AckStatusResolvers<
   ParentType = ResolversTypes["AckStatus"]
 > = ResolversObject<{
   timestamp?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
-  date?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Ack"], ParentType, ContextType>;
 }>;
 
@@ -1374,11 +1368,7 @@ export type EntryCommitAckResolvers<
 > = ResolversObject<{
   commitHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   entryHash?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
-  commitStatus?: Resolver<
-    Maybe<ResolversTypes["AckStatus"]>,
-    ParentType,
-    ContextType
-  >;
+  commitStatus?: Resolver<ResolversTypes["AckStatus"], ParentType, ContextType>;
   entryStatus?: Resolver<
     Maybe<ResolversTypes["AckStatus"]>,
     ParentType,
@@ -1451,13 +1441,11 @@ export type FactoidTransactionAckResolvers<
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   txTimestamp?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
-  txDate?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   blockTimestamp?: Resolver<
     Maybe<ResolversTypes["Int"]>,
     ParentType,
     ContextType
   >;
-  blockDate?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Ack"], ParentType, ContextType>;
 }>;
 
@@ -1768,17 +1756,17 @@ export type QueryResolvers<
     ContextType,
     QueryBalancesArgs
   >;
-  commitAck?: Resolver<
-    ResolversTypes["EntryCommitAck"],
-    ParentType,
-    ContextType,
-    QueryCommitAckArgs
-  >;
   chainHead?: Resolver<
     Maybe<ResolversTypes["EntryBlock"]>,
     ParentType,
     ContextType,
     QueryChainHeadArgs
+  >;
+  commitAck?: Resolver<
+    ResolversTypes["EntryCommitAck"],
+    ParentType,
+    ContextType,
+    QueryCommitAckArgs
   >;
   currentMinute?: Resolver<
     ResolversTypes["CurrentMinute"],

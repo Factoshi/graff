@@ -2,6 +2,7 @@ const { assert } = require('chai');
 const { Query } = require('../../src/resolvers/query/Query');
 const { FactomdDataLoader } = require('../../src/data_loader');
 const { cli } = require('../../src/factom');
+const { Ack } = require('../../src/types/resolvers');
 
 describe('Query Resolvers', () => {
     let factomd;
@@ -72,7 +73,15 @@ describe('Query Resolvers', () => {
         const ack = await Query.commitAck(undefined, { hash }, { factomd });
         assert.deepStrictEqual(ack, {
             entryHash: '6501bcfb818c5d24130c9ecd520071163a8692942f7fc11d48ea44e340c14904',
-            commitHash: hash
+            commitHash: hash,
+            commitStatus: {
+                timestamp: 1560269280000,
+                status: Ack.DBlockConfirmed
+            },
+            entryStatus: {
+                timestamp: 1560269280000,
+                status: Ack.DBlockConfirmed
+            }
         });
     });
 
@@ -163,7 +172,16 @@ describe('Query Resolvers', () => {
         const ack = await Query.entryAck(undefined, { hash, chain }, { factomd });
         assert.deepStrictEqual(ack, {
             entryHash: hash,
-            commitHash: '66555bb630cfad18702104c3af62cda8cb1d4b247f15e885c27109987816bcc2'
+            commitHash:
+                '66555bb630cfad18702104c3af62cda8cb1d4b247f15e885c27109987816bcc2',
+            commitStatus: {
+                timestamp: null,
+                status: Ack.DBlockConfirmed
+            },
+            entryStatus: {
+                timestamp: 1560269280000,
+                status: Ack.DBlockConfirmed
+            }
         });
     });
 
@@ -253,9 +271,7 @@ describe('Query Resolvers', () => {
         assert.deepStrictEqual(ack, {
             hash,
             txTimestamp: 1560361379165,
-            txDate: '2019-06-12 17:42:59',
             blockTimestamp: 1560361080000,
-            blockDate: '2019-06-12 17:38:00',
             status: 'DBlockConfirmed'
         });
     });

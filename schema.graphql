@@ -35,10 +35,10 @@ type Query {
     adminBlockHead: AdminBlock
     "Get the balance of public entry credit or factoid addresses."
     balances(addresses: [PublicAddress!]!): [Address!]!
-    "Entry status."
-    commitAck(hash: Hash!): EntryCommitAck!
     "Get the entry block at the tip of the specified chain."
     chainHead(chain: Hash!): EntryBlock
+    "Entry status."
+    commitAck(hash: Hash!): EntryCommitAck!
     "Get protocol time state."
     currentMinute: CurrentMinute!
     "Get a directory block by the specified block hash."
@@ -262,7 +262,6 @@ enum Ack {
 
 type AckStatus {
     timestamp: Int
-    date: String
     status: Ack!
 }
 
@@ -273,7 +272,7 @@ type EntryCommitAck {
     "The hash of the entry. May be null if the commit has not yet been revealed."
     entryHash: Hash
     "The status of the commit."
-    commitStatus: AckStatus
+    commitStatus: AckStatus!
     "The status of the entry."
     entryStatus: AckStatus
 }
@@ -284,12 +283,8 @@ type FactoidTransactionAck {
     hash: Hash!
     "The timestamp of the transaction. Milliseconds since Unix epoch."
     txTimestamp: Int
-    "The date of the transaction. Human-readable format."
-    txDate: String
     "The timestamp of the containing block. Milliseconds since Unix epoch."
     blockTimestamp: Int
-    "The date of the containing block. Human-readable format."
-    blockDate: Int
     "The status of the factoid transaction"
     status: Ack!
 }

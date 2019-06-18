@@ -1,6 +1,7 @@
 import { QueryResolvers } from '../../types/resolvers';
 import { adminBlockRootQueries } from './AdminBlock';
 import { entryBlockRootQueries } from './EntryBlock';
+import { ackRootQueries } from './EntryCommitAck';
 
 export const Query: QueryResolvers = {
     adminBlock: adminBlockRootQueries.adminBlock,
@@ -16,10 +17,7 @@ export const Query: QueryResolvers = {
 
     chainHead: entryBlockRootQueries.chainHead,
 
-    commitAck: async (root, { hash }, { factomd }) => {
-        const ack = await factomd.ack.load({ hash, chainid: 'c' });
-        return { commitHash: ack.committxid, entryHash: ack.entryhash };
-    },
+    commitAck: ackRootQueries.commitAck,
 
     currentMinute: async (root, args, { factomd }) => {
         const currentMinute = await factomd.currentMinute.load();
@@ -63,10 +61,7 @@ export const Query: QueryResolvers = {
         };
     },
 
-    entryAck: async (root, { hash, chain }, { factomd }) => {
-        const ack = await factomd.ack.load({ hash, chainid: chain });
-        return { commitHash: ack.committxid, entryHash: ack.entryhash };
-    },
+    entryAck: ackRootQueries.entryAck,
 
     entryBlock: async (root, { hash }, { factomd }) => {
         const {
@@ -133,9 +128,7 @@ export const Query: QueryResolvers = {
         return {
             hash: factoidTransactionAck.txid,
             txTimestamp: factoidTransactionAck.transactiondate,
-            txDate: factoidTransactionAck.transactiondatestring,
             blockTimestamp: factoidTransactionAck.blockdate,
-            blockDate: factoidTransactionAck.blockdatestring,
             status: factoidTransactionAck.status
         };
     },
