@@ -133,4 +133,14 @@ describe('EntryBlock Resolvers', () => {
             '50bf062c924426c704293a4601cf5e4f2c62ca0b62f3f3abb75010ea4897d447'
         );
     });
+
+    it('Should get the directory block height', async () => {
+        const hash = '7a0f1b6ebb43bab079640e7ff192571b38b2b30cdfc7e50e9acfe1641499c2dc';
+        const directoryBlock = await entryBlockResolvers.directoryBlock(
+            { hash },
+            {},
+            { factomd }
+        );
+        assert.deepStrictEqual(directoryBlock, { height: 197517 });
+    });
 });

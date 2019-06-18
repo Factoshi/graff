@@ -55,5 +55,9 @@ export const entryBlockResolvers: EntryBlockResolvers = {
             finalPage: entries.length + offset! === entryBlock.entryRefs.length
         };
     },
+
+    directoryBlock: async (parent, args, { factomd }) => {
+        const entryBlock = await factomd.entryBlock.load(parent.hash as string);
+        return { height: entryBlock.directoryBlockHeight };
     }
 };
