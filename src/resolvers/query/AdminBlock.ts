@@ -1,6 +1,6 @@
 import { AdminBlockResolvers, QueryResolvers } from '../../types/resolvers';
 import { AdminBlock } from 'factom';
-import { handleBlockApiError } from '../helpers';
+import { handleBlockApiError } from '../resolver-helpers';
 
 export const extractAdminBlockLeaves = (adminBlock: AdminBlock) => ({
     hash: adminBlock.backReferenceHash,
