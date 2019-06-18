@@ -529,7 +529,7 @@ export type Mutation = {
   commitChain: CommitRevealSend;
   /** Send an Entry Commit Message to factom to create a new Entry. */
   commitEntry: CommitRevealSend;
-  /** Reveal the First Entry in a Chain to factomd after the Commit to complete the Chain creation. */
+  /** Reveal the pageLength Entry in a Chain to factomd after the Commit to complete the Chain creation. */
   revealChain: CommitRevealSend;
   /** Reveal an Entry to factomd after the Commit to complete the Entry creation. */
   revealEntry: CommitRevealSend;
@@ -542,6 +542,10 @@ export type Paginated = {
   __typename?: "Paginated";
   /** Total number of nodes available for pagination. */
   totalCount: Scalars["Int"];
+  /** Position to offset from beginning of list */
+  offset: Scalars["Int"];
+  /** Get pageLength x in list following offset */
+  pageLength: Scalars["Int"];
 };
 
 /** Paginated commits */
@@ -549,6 +553,12 @@ export type PaginatedCommits = Paginated & {
   __typename?: "PaginatedCommits";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
+  /** Position to offset from beginning of list */
+  offset: Scalars["Int"];
+  /** Get pageLength x in list following offset */
+  pageLength: Scalars["Int"];
+  /** Boolean to indicate whether the final page has been reached */
+  finalPage: Scalars["Boolean"];
   /** An array of commits. */
   commits: Array<Commit>;
 };
@@ -558,6 +568,12 @@ export type PaginatedEntries = Paginated & {
   __typename?: "PaginatedEntries";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
+  /** Position to offset from beginning of list */
+  offset: Scalars["Int"];
+  /** Get pageLength x in list following offset */
+  pageLength: Scalars["Int"];
+  /** Boolean to indicate whether the final page has been reached */
+  finalPage: Scalars["Boolean"];
   /** An array of entries. */
   entries: Array<Entry>;
 };
@@ -567,6 +583,12 @@ export type PaginatedEntryBlocks = Paginated & {
   __typename?: "PaginatedEntryBlocks";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
+  /** Position to offset from beginning of list */
+  offset: Scalars["Int"];
+  /** Get pageLength x in list following offset */
+  pageLength: Scalars["Int"];
+  /** Boolean to indicate whether the final page has been reached */
+  finalPage: Scalars["Boolean"];
   /** An array of entry blocks. */
   entryBlocks: Array<EntryBlock>;
 };
@@ -576,6 +598,10 @@ export type PaginatedPendingEntries = Paginated & {
   __typename?: "PaginatedPendingEntries";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
+  /** Position to offset from beginning of list */
+  offset: Scalars["Int"];
+  /** Get pageLength x in list following offset */
+  pageLength: Scalars["Int"];
   /** An array of pending entries. */
   pendingEntries: Array<PendingEntry>;
 };
@@ -585,6 +611,10 @@ export type PaginatedPendingTransactions = Paginated & {
   __typename?: "PaginatedPendingTransactions";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
+  /** Position to offset from beginning of list */
+  offset: Scalars["Int"];
+  /** Get pageLength x in list following offset */
+  pageLength: Scalars["Int"];
   /** An array of pending transactions. */
   pendingTransactions: Array<PendingTransaction>;
 };
@@ -594,6 +624,12 @@ export type PaginatedTransactions = Paginated & {
   __typename?: "PaginatedTransactions";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
+  /** Position to offset from beginning of list */
+  offset: Scalars["Int"];
+  /** Get pageLength x in list following offset */
+  pageLength: Scalars["Int"];
+  /** Boolean to indicate whether the final page has been reached */
+  finalPage: Scalars["Boolean"];
   /** An array of transactions. */
   transactions: Array<Transaction>;
 };
@@ -917,6 +953,7 @@ export type ResolversTypes = ResolversObject<{
   DirectoryBlock: Partial<DirectoryBlock>;
   PaginatedEntryBlocks: Partial<PaginatedEntryBlocks>;
   Paginated: Partial<Paginated>;
+  Boolean: Partial<Scalars["Boolean"]>;
   EntryBlock: Partial<EntryBlock>;
   PaginatedEntries: Partial<PaginatedEntries>;
   Entry: Partial<Entry>;
@@ -948,7 +985,6 @@ export type ResolversTypes = ResolversObject<{
   AckStatus: Partial<AckStatus>;
   Ack: Partial<Ack>;
   CurrentMinute: Partial<CurrentMinute>;
-  Boolean: Partial<Scalars["Boolean"]>;
   FactoidTransactionAck: Partial<FactoidTransactionAck>;
   Heights: Partial<Heights>;
   PaginatedPendingEntries: Partial<PaginatedPendingEntries>;
@@ -1534,6 +1570,8 @@ export type PaginatedResolvers<
     ContextType
   >;
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
 }>;
 
 export type PaginatedCommitsResolvers<
@@ -1541,6 +1579,9 @@ export type PaginatedCommitsResolvers<
   ParentType = ResolversTypes["PaginatedCommits"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  finalPage?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   commits?: Resolver<Array<ResolversTypes["Commit"]>, ParentType, ContextType>;
 }>;
 
@@ -1549,6 +1590,9 @@ export type PaginatedEntriesResolvers<
   ParentType = ResolversTypes["PaginatedEntries"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  finalPage?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   entries?: Resolver<Array<ResolversTypes["Entry"]>, ParentType, ContextType>;
 }>;
 
@@ -1557,6 +1601,9 @@ export type PaginatedEntryBlocksResolvers<
   ParentType = ResolversTypes["PaginatedEntryBlocks"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  finalPage?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   entryBlocks?: Resolver<
     Array<ResolversTypes["EntryBlock"]>,
     ParentType,
@@ -1569,6 +1616,8 @@ export type PaginatedPendingEntriesResolvers<
   ParentType = ResolversTypes["PaginatedPendingEntries"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pendingEntries?: Resolver<
     Array<ResolversTypes["PendingEntry"]>,
     ParentType,
@@ -1581,6 +1630,8 @@ export type PaginatedPendingTransactionsResolvers<
   ParentType = ResolversTypes["PaginatedPendingTransactions"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pendingTransactions?: Resolver<
     Array<ResolversTypes["PendingTransaction"]>,
     ParentType,
@@ -1593,6 +1644,9 @@ export type PaginatedTransactionsResolvers<
   ParentType = ResolversTypes["PaginatedTransactions"]
 > = ResolversObject<{
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  finalPage?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   transactions?: Resolver<
     Array<ResolversTypes["Transaction"]>,
     ParentType,

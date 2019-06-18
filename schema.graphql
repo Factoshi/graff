@@ -102,7 +102,7 @@ type Mutation {
     commitChain: CommitRevealSend!
     "Send an Entry Commit Message to factom to create a new Entry."
     commitEntry: CommitRevealSend!
-    "Reveal the First Entry in a Chain to factomd after the Commit to complete the Chain creation."
+    "Reveal the pageLength Entry in a Chain to factomd after the Commit to complete the Chain creation."
     revealChain: CommitRevealSend!
     "Reveal an Entry to factomd after the Commit to complete the Entry creation."
     revealEntry: CommitRevealSend!
@@ -156,7 +156,7 @@ type DirectoryBlock implements Block {
     entryBlocks(
         "Number of entries to return. Defaults to infinity."
         first: Int
-        "Index of the first PaginatedEntryBlock to return. Defaults to 0."
+        "Index of the pageLength PaginatedEntryBlock to return. Defaults to 0."
         offset: Int
     ): PaginatedEntryBlocks!
     "The entry credit block referenced by this directory block."
@@ -181,7 +181,7 @@ type EntryBlock implements Block {
     entries(
         "Number of entries to return. Defaults to infinity."
         first: Int
-        "Index of the first PaginatedEntryBlock to return. Defaults to 0."
+        "Index of the pageLength PaginatedEntryBlock to return. Defaults to 0."
         offset: Int
     ): PaginatedEntries!
     "Parent directory block."
@@ -202,7 +202,7 @@ type EntryCreditBlock implements Block {
     commits(
         "Number of commits to return. Defaults to infinity."
         first: Int
-        "Index of the first PaginatedCommit to return. Defaults to 0."
+        "Index of the pageLength PaginatedCommit to return. Defaults to 0."
         offset: Int
     ): PaginatedCommits!
     "Parent directory block."
@@ -225,7 +225,7 @@ type FactoidBlock implements Block {
     transactions(
         "Number of transactions to return. Defaults to infinity."
         first: Int
-        "Index of the first PaginatedTransaction to return. Defaults to 0."
+        "Index of the pageLength PaginatedTransaction to return. Defaults to 0."
         offset: Int
     ): PaginatedTransactions!
     "Parent directory block."
@@ -721,20 +721,22 @@ type Properties {
 interface Paginated {
     "Total number of nodes available for pagination."
     totalCount: Int!
-    "Position to offset first from beginning of list"
+    "Position to offset from beginning of list"
     offset: Int!
-    "Get first x in list following offset"
-    first: Int!
+    "Get pageLength x in list following offset"
+    pageLength: Int!
 }
 
 "Paginated entry blocks"
 type PaginatedEntryBlocks implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
-    "Position to offset first from beginning of list"
+    "Position to offset from beginning of list"
     offset: Int!
-    "Get first x in list following offset"
-    first: Int!
+    "Get pageLength x in list following offset"
+    pageLength: Int!
+    "Boolean to indicate whether the final page has been reached"
+    finalPage: Boolean!
     "An array of entry blocks."
     entryBlocks: [EntryBlock!]!
 }
@@ -743,10 +745,12 @@ type PaginatedEntryBlocks implements Paginated {
 type PaginatedEntries implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
-    "Position to offset first from beginning of list"
+    "Position to offset from beginning of list"
     offset: Int!
-    "Get first x in list following offset"
-    first: Int!
+    "Get pageLength x in list following offset"
+    pageLength: Int!
+    "Boolean to indicate whether the final page has been reached"
+    finalPage: Boolean!
     "An array of entries."
     entries: [Entry!]!
 }
@@ -755,10 +759,12 @@ type PaginatedEntries implements Paginated {
 type PaginatedCommits implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
-    "Position to offset first from beginning of list"
+    "Position to offset from beginning of list"
     offset: Int!
-    "Get first x in list following offset"
-    first: Int!
+    "Get pageLength x in list following offset"
+    pageLength: Int!
+    "Boolean to indicate whether the final page has been reached"
+    finalPage: Boolean!
     "An array of commits."
     commits: [Commit!]!
 }
@@ -767,10 +773,12 @@ type PaginatedCommits implements Paginated {
 type PaginatedTransactions implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
-    "Position to offset first from beginning of list"
+    "Position to offset from beginning of list"
     offset: Int!
-    "Get first x in list following offset"
-    first: Int!
+    "Get pageLength x in list following offset"
+    pageLength: Int!
+    "Boolean to indicate whether the final page has been reached"
+    finalPage: Boolean!
     "An array of transactions."
     transactions: [Transaction!]!
 }
@@ -779,10 +787,10 @@ type PaginatedTransactions implements Paginated {
 type PaginatedPendingEntries implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
-    "Position to offset first from beginning of list"
+    "Position to offset from beginning of list"
     offset: Int!
-    "Get first x in list following offset"
-    first: Int!
+    "Get pageLength x in list following offset"
+    pageLength: Int!
     "An array of pending entries."
     pendingEntries: [PendingEntry!]!
 }
@@ -791,10 +799,10 @@ type PaginatedPendingEntries implements Paginated {
 type PaginatedPendingTransactions implements Paginated {
     "Total number of nodes within pages."
     totalCount: Int!
-    "Position to offset first from beginning of list"
+    "Position to offset from beginning of list"
     offset: Int!
-    "Get first x in list following offset"
-    first: Int!
+    "Get pageLength x in list following offset"
+    pageLength: Int!
     "An array of pending transactions."
     pendingTransactions: [PendingTransaction!]!
 }
