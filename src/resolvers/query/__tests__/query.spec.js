@@ -1,46 +1,12 @@
+const { Query } = require('../Query');
+const { FactomdDataLoader } = require('../../../data_loader');
+const { cli } = require('../../../factom');
 const { assert } = require('chai');
-const { Query } = require('../../src/resolvers/query/Query');
-const { FactomdDataLoader } = require('../../src/data_loader');
-const { cli } = require('../../src/factom');
-const { Ack } = require('../../src/types/resolvers');
+const { Ack } = require('../../../types/resolvers');
 
 describe('Query Resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
-
-    it('Should get the leaves of AdminBlock from the adminBlock resolver using a hash.', async () => {
-        const hash = 'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';
-        const height = 10;
-        const adminBlock = await Query.adminBlock(undefined, { arg: hash }, { factomd });
-        assert.deepStrictEqual(adminBlock, { hash, height });
-    });
-
-    it('Should get the leaves of AdminBlock from the adminBlock resolver using a height.', async () => {
-        const hash = 'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';
-        const height = 10;
-        const adminBlock = await Query.adminBlock(
-            undefined,
-            { arg: height },
-            { factomd }
-        );
-        assert.deepStrictEqual(adminBlock, { hash, height });
-    });
-
-    it('Should return null if an AdminBlock cannot be found.', async () => {
-        const adminBlock = await Query.adminBlock(
-            undefined,
-            { arg: Number.MAX_SAFE_INTEGER },
-            { factomd }
-        );
-        assert.isNull(adminBlock);
-    });
-
-    it('Should get the leaves of AdminBlock from the adminBlockHead resolver', async () => {
-        const adminBlock = await Query.adminBlockHead(undefined, undefined, { factomd });
-        assert.hasAllKeys(adminBlock, ['hash', 'height']);
-        assert.isString(adminBlock.hash);
-        assert.isNumber(adminBlock.height);
-    });
 
     it('Should get an array of the leaves of Address from the balances resolver', async () => {
         ecAddress = 'EC3QVDcZ88chcKxHnatyigwq4nSZbsY56B6Q7HuyL9yUEFSoSf6Q';
@@ -299,7 +265,9 @@ describe('Query Resolvers', () => {
         const pendingTransactions = await Query.pendingTransactions(
             undefined,
             undefined,
-            { factomd }
+            {
+                factomd
+            }
         );
         assert.hasAllKeys(pendingTransactions, ['totalCount']);
         assert.isNumber(pendingTransactions.totalCount);

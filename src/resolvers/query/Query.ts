@@ -4,8 +4,7 @@ import { entryBlockRootQueries } from './EntryBlock';
 import { ackRootQueries } from './EntryCommitAck';
 
 export const Query: QueryResolvers = {
-    adminBlock: adminBlockRootQueries.adminBlock,
-    adminBlockHead: adminBlockRootQueries.adminBlockHead,
+    ...adminBlockRootQueries,
 
     balances: async (root, { addresses }, { factomd }) => {
         const balances = await factomd.balance.loadMany(addresses);

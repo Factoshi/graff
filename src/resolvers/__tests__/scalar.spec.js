@@ -4,7 +4,7 @@ const {
     publicFactoidAddressTest,
     publicEntryCreditAddressTest,
     heightTest
-} = require('../src/resolvers/scalar');
+} = require('../scalar');
 
 describe('Custom Scalars', () => {
     it('should test a valid sha256 hash', () => {

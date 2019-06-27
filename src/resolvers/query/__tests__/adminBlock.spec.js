@@ -1,13 +1,55 @@
 const { assert } = require('chai');
-const { adminBlockResolvers } = require('../../src/resolvers/query/AdminBlock');
-const { adminEntryResolvers } = require('../../src/resolvers/query/AdminEntry');
-const { FactomdDataLoader } = require('../../src/data_loader');
-const { cli } = require('../../src/factom');
-const { AdminCode } = require('../../src/types/resolvers');
+const { adminBlockResolvers, adminBlockRootQueries } = require('../AdminBlock');
+const { adminEntryResolvers } = require('../AdminEntry');
+const { FactomdDataLoader } = require('../../../data_loader');
+const { cli } = require('../../../factom');
+const { AdminCode } = require('../../../types/resolvers');
 
 describe('AdminBlock Resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
+
+    it('Should get the leaves of AdminBlock from the adminBlock resolver using a hash.', async () => {
+        const hash = 'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';
+        const height = 10;
+        const adminBlock = await adminBlockRootQueries.adminBlock(
+            {},
+            { arg: hash },
+            { factomd }
+        );
+        assert.deepStrictEqual(adminBlock, { hash, height });
+    });
+
+    it('Should get the leaves of AdminBlock from the adminBlock resolver using a height.', async () => {
+        const hash = 'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';
+        const height = 10;
+        const adminBlock = await adminBlockRootQueries.adminBlock(
+            undefined,
+            { arg: height },
+            { factomd }
+        );
+        assert.deepStrictEqual(adminBlock, { hash, height });
+    });
+
+    it('Should return null if an AdminBlock cannot be found.', async () => {
+        const adminBlock = await adminBlockRootQueries.adminBlock(
+            undefined,
+            { arg: Number.MAX_SAFE_INTEGER },
+            { factomd }
+        );
+        assert.isNull(adminBlock);
+    });
+
+    it('Should get the leaves of AdminBlock from the adminBlockHead resolver', async () => {
+        const adminBlock = await adminBlockRootQueries.adminBlockHead(
+            undefined,
+            undefined,
+            { factomd }
+        );
+        assert.hasAllKeys(adminBlock, ['hash', 'height']);
+        assert.isString(adminBlock.hash);
+        assert.isNumber(adminBlock.height);
+    });
 
     it('Should resolve the leaves of the previousBlock field', async () => {
         const hash = 'a1f965e4359f23371f27e6b1073ec1a84b7dc076a61c7375f21262efbe558011';

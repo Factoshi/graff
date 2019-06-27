@@ -1,8 +1,5 @@
 const { assert } = require('chai');
-const {
-    handleBlockApiError,
-    testPaginationInput
-} = require('../src/resolvers/resolver-helpers');
+const { handleBlockApiError, testPaginationInput } = require('../resolver-helpers');
 
 describe('Resolver Helpers', () => {
     it('Should return null on a missing block block', () => {
