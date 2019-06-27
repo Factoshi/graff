@@ -1,6 +1,6 @@
-import { Query } from './query/Query'
-import { Hash, PublicEntryCreditAddress, PublicFactoidAddress } from './scalar'
-import { Resolvers } from '../types/resolvers'
+import { Query } from './Query';
+import { Hash, PublicEntryCreditAddress, PublicFactoidAddress } from './scalar';
+import { Resolvers } from '../types/resolvers';
 
 export const resolvers: Resolvers = {
     //Queries
@@ -9,4 +9,4 @@ export const resolvers: Resolvers = {
     Hash,
     PublicEntryCreditAddress,
     PublicFactoidAddress
-}
+};

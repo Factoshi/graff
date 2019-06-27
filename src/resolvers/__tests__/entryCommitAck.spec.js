@@ -1,8 +1,8 @@
 const { ackRootQueries } = require('../EntryCommitAck');
-const { FactomdDataLoader } = require('../../../data_loader');
-const { cli } = require('../../../factom');
+const { FactomdDataLoader } = require('../../data_loader');
+const { cli } = require('../../factom');
 const { assert } = require('chai');
-const { Ack } = require('../../../types/resolvers');
+const { Ack } = require('../../types/resolvers');
 
 describe('EntryAck Resolvers', () => {
     let factomd;

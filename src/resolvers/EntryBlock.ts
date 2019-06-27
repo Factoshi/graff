@@ -1,6 +1,6 @@
-import { EntryBlockResolvers, QueryResolvers, Entry } from '../../types/resolvers';
+import { EntryBlockResolvers, QueryResolvers, Entry } from '../types/resolvers';
 import { EntryBlock } from 'factom';
-import { handleBlockApiError, testPaginationInput } from '../resolver-helpers';
+import { handleBlockApiError, testPaginationInput } from './resolver-helpers';
 
 export const extractEntryBlockLeaves = (entryBlock: EntryBlock) => ({
     hash: entryBlock.keyMR,

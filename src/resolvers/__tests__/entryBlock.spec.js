@@ -1,6 +1,6 @@
 const { entryBlockResolvers, entryBlockRootQueries } = require('../EntryBlock');
-const { FactomdDataLoader } = require('../../../data_loader');
-const { cli } = require('../../../factom');
+const { FactomdDataLoader } = require('../../data_loader');
+const { cli } = require('../../factom');
 const { assert } = require('chai');
 
 describe('EntryBlock Resolvers', () => {

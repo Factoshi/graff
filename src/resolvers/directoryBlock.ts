@@ -1,10 +1,6 @@
-import {
-    DirectoryBlockResolvers,
-    QueryResolvers,
-    EntryBlock
-} from '../../types/resolvers';
+import { DirectoryBlockResolvers, QueryResolvers, EntryBlock } from '../types/resolvers';
 import { DirectoryBlock } from 'factom';
-import { handleBlockApiError, testPaginationInput } from '../resolver-helpers';
+import { handleBlockApiError, testPaginationInput } from './resolver-helpers';
 
 export const extractDirectoryBlockLeaves = (directoryBlock: DirectoryBlock) => ({
     hash: directoryBlock.keyMR,

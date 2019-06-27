@@ -1,6 +1,6 @@
 const { assert } = require('chai');
-const { FactomdDataLoader } = require('../../../data_loader');
-const { cli } = require('../../../factom');
+const { FactomdDataLoader } = require('../../data_loader');
+const { cli } = require('../../factom');
 const {
     directoryBlockRootQueries,
     directoryBlockResolvers

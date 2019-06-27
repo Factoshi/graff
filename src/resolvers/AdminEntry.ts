@@ -1,4 +1,4 @@
-import { AdminEntryResolvers, AdminCode } from '../../types/resolvers';
+import { AdminEntryResolvers, AdminCode } from '../types/resolvers';
 
 export const adminEntryResolvers: AdminEntryResolvers = {
     __resolveType: parent => {

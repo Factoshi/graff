@@ -1,8 +1,8 @@
 const { Query } = require('../Query');
-const { FactomdDataLoader } = require('../../../data_loader');
-const { cli } = require('../../../factom');
+const { FactomdDataLoader } = require('../../data_loader');
+const { cli } = require('../../factom');
 const { assert } = require('chai');
-const { Ack } = require('../../../types/resolvers');
+const { Ack } = require('../../types/resolvers');
 
 describe('Query Resolvers', () => {
     let factomd;

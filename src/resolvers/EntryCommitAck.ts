@@ -1,4 +1,4 @@
-import { QueryResolvers, Ack } from '../../types/resolvers';
+import { QueryResolvers, Ack } from '../types/resolvers';
 
 export const formatAckStatus = (ackStatus: any) => ({
     status: ackStatus.status as Ack,

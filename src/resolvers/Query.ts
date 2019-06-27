@@ -1,4 +1,4 @@
-import { QueryResolvers } from '../../types/resolvers';
+import { QueryResolvers } from '../types/resolvers';
 import { adminBlockRootQueries } from './AdminBlock';
 import { entryBlockRootQueries } from './EntryBlock';
 import { ackRootQueries } from './EntryCommitAck';

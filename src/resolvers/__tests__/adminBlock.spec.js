@@ -1,9 +1,9 @@
 const { assert } = require('chai');
 const { adminBlockResolvers, adminBlockRootQueries } = require('../AdminBlock');
 const { adminEntryResolvers } = require('../AdminEntry');
-const { FactomdDataLoader } = require('../../../data_loader');
-const { cli } = require('../../../factom');
-const { AdminCode } = require('../../../types/resolvers');
+const { FactomdDataLoader } = require('../../data_loader');
+const { cli } = require('../../factom');
+const { AdminCode } = require('../../types/resolvers');
 
 describe('AdminBlock Resolvers', () => {
     let factomd;
