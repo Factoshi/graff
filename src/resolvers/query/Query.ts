@@ -5,6 +5,8 @@ import { ackRootQueries } from './EntryCommitAck';
 
 export const Query: QueryResolvers = {
     ...adminBlockRootQueries,
+    ...ackRootQueries,
+    ...entryBlockRootQueries,
 
     balances: async (root, { addresses }, { factomd }) => {
         const balances = await factomd.balance.loadMany(addresses);
@@ -13,10 +15,6 @@ export const Query: QueryResolvers = {
             publicAddress: addresses[i]
         }));
     },
-
-    chainHead: entryBlockRootQueries.chainHead,
-
-    commitAck: ackRootQueries.commitAck,
 
     currentMinute: async (root, args, { factomd }) => {
         const currentMinute = await factomd.currentMinute.load();
@@ -59,8 +57,6 @@ export const Query: QueryResolvers = {
             content: content.toString('base64')
         };
     },
-
-    entryAck: ackRootQueries.entryAck,
 
     entryBlock: async (root, { hash }, { factomd }) => {
         const {

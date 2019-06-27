@@ -1,4 +1,4 @@
-const { entryBlockResolvers } = require('../EntryBlock');
+const { entryBlockResolvers, entryBlockRootQueries } = require('../EntryBlock');
 const { FactomdDataLoader } = require('../../../data_loader');
 const { cli } = require('../../../factom');
 const { assert } = require('chai');
@@ -6,6 +6,20 @@ const { assert } = require('chai');
 describe('EntryBlock Resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
+
+    it('Should get the leaves of EntryBlock from the chainHead resolver', async () => {
+        const chain = 'b47b83b04ba3b09305e7e02618c457c3fd82531a4ab81b16e73d780dfc2f3b18';
+        const chainHead = await entryBlockRootQueries.chainHead(
+            undefined,
+            { chain },
+            { factomd }
+        );
+        assert.hasAllKeys(chainHead, ['hash', 'chain', 'height', 'timestamp']);
+        assert.isString(chainHead.hash);
+        assert.isString(chainHead.chain);
+        assert.isNumber(chainHead.height);
+        assert.isNumber(chainHead.timestamp);
+    });
 
     it('Should get the previous EntryBlock', async () => {
         const hash = '5cdc8d974ff8ffa438b1803a8c19342f117bf72bfec107187fdd777ebd327a17';
