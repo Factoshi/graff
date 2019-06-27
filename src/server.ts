@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from 'apollo-server';
 import { importSchema } from 'graphql-import';
-import { resolvers } from './resolvers/resolvers';
+import { resolvers } from './resolvers';
 import { FactomdDataLoader } from './data_loader';
 import { cli } from './factom';
 import { Context } from './types/server';
