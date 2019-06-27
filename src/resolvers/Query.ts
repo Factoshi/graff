@@ -2,11 +2,13 @@ import { QueryResolvers } from '../types/resolvers';
 import { adminBlockRootQueries } from './AdminBlock';
 import { entryBlockRootQueries } from './EntryBlock';
 import { ackRootQueries } from './EntryCommitAck';
+import { entryResolvers } from './Entry';
 
 export const Query: QueryResolvers = {
     ...adminBlockRootQueries,
     ...ackRootQueries,
     ...entryBlockRootQueries,
+    ...entryResolvers,
 
     balances: async (root, { addresses }, { factomd }) => {
         const balances = await factomd.balance.loadMany(addresses);
