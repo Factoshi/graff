@@ -33,20 +33,6 @@ export const Query: QueryResolvers = {
         };
     },
 
-    directoryBlock: async (root, { arg }, { factomd }) => {
-        const { timestamp, height, keyMR } = await factomd.directoryBlock.load(arg);
-        return { timestamp, height, hash: keyMR };
-    },
-
-    directoryBlockHead: async (root, args, { factomd }) => {
-        const {
-            timestamp,
-            keyMR: hash,
-            height
-        } = await factomd.directoryBlockHead.load();
-        return { timestamp, height, hash };
-    },
-
     entry: async (root, { hash }, { factomd }) => {
         const { chainIdHex, timestamp, extIds, content } = await factomd.entry.load(hash);
         return {
