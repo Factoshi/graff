@@ -33,17 +33,6 @@ export const Query: QueryResolvers = {
         };
     },
 
-    entry: async (root, { hash }, { factomd }) => {
-        const { chainIdHex, timestamp, extIds, content } = await factomd.entry.load(hash);
-        return {
-            hash,
-            chain: chainIdHex,
-            timestamp,
-            externalIds: extIds.map(id => id.toString('base64')),
-            content: content.toString('base64')
-        };
-    },
-
     entryBlock: async (root, { hash }, { factomd }) => {
         const {
             chainId: chain,
