@@ -49,7 +49,7 @@ export const directoryBlockResolvers: DirectoryBlockResolvers = {
             })) as EntryBlock[];
         return {
             entryBlocks,
-            totalCount: directoryBlock.entryCreditBlockRef.length,
+            totalCount: directoryBlock.entryBlockRefs.length,
             offset: offset as number,
             pageLength: entryBlocks.length,
             finalPage:
