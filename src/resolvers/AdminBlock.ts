@@ -58,6 +58,9 @@ export const adminBlockResolvers: AdminBlockResolvers = {
 
     directoryBlock: async (parent, args, { factomd }) => {
         const adminBlock = await factomd.adminBlock.load(parent.hash as string);
-        return { height: adminBlock.directoryBlockHeight };
+        const directoryBlock = await factomd.directoryBlock.load(
+            adminBlock.directoryBlockHeight
+        );
+        return { hash: directoryBlock.keyMR };
     }
 };

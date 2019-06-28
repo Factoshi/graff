@@ -93,14 +93,16 @@ describe('AdminBlock Resolvers', () => {
         });
     });
 
-    it('Should resolve the leaves of the directoryBlock field', async () => {
+    it('Should resolve the hash of the directoryBlock field', async () => {
         const hash = 'a1f965e4359f23371f27e6b1073ec1a84b7dc076a61c7375f21262efbe558011';
         const directoryBlock = await adminBlockResolvers.directoryBlock(
             { hash },
             undefined,
             { factomd }
         );
-        assert.deepStrictEqual(directoryBlock, { height: 189105 });
+        assert.deepStrictEqual(directoryBlock, {
+            hash: '40f8138a651cd9a0f6313f5031d5ee6480a9a176262333e4c29e423f98904c1c'
+        });
     });
 });
 
