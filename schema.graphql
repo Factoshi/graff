@@ -293,20 +293,20 @@ type FactoidTransactionAck {
 # Non-Admin Ledger Entries #
 ############################
 
-"Entry included in the blockchain."
+"An Entry. Fields may be null if the entry has not yet been revealed."
 type Entry {
     "The hash of the entry"
     hash: Hash!
     "The chain the entry belongs to."
-    chain: Hash!
+    chain: Hash
     "The timestamp of the entry."
-    timestamp: Int!
+    timestamp: Int
     "List of external IDs associated with the entry as base64."
-    externalIds: [String!]!
+    externalIds: [String!]
     "The content of the entry as base64."
-    content: String!
+    content: String
     "The parent entry block of the entry."
-    block: EntryBlock!
+    block: EntryBlock
 }
 
 "Entry commit included in the blockchain."

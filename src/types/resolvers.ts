@@ -344,21 +344,21 @@ export type DirectoryBlockSignature = AdminEntry & {
   previousDirectoryBlockSignature?: Maybe<PreviousDirectoryBlockSignature>;
 };
 
-/** Entry included in the blockchain. */
+/** An Entry. Fields may be null if the entry has not yet been revealed. */
 export type Entry = {
   __typename?: "Entry";
   /** The hash of the entry */
   hash: Scalars["Hash"];
   /** The chain the entry belongs to. */
-  chain: Scalars["Hash"];
+  chain?: Maybe<Scalars["Hash"]>;
   /** The timestamp of the entry. */
-  timestamp: Scalars["Int"];
+  timestamp?: Maybe<Scalars["Int"]>;
   /** List of external IDs associated with the entry as base64. */
-  externalIds: Array<Scalars["String"]>;
+  externalIds?: Maybe<Array<Scalars["String"]>>;
   /** The content of the entry as base64. */
-  content: Scalars["String"];
+  content?: Maybe<Scalars["String"]>;
   /** The parent entry block of the entry. */
-  block: EntryBlock;
+  block?: Maybe<EntryBlock>;
 };
 
 /** Entry Block */
@@ -1322,15 +1322,19 @@ export type EntryResolvers<
   ParentType = ResolversTypes["Entry"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  chain?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  chain?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
+  timestamp?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
   externalIds?: Resolver<
-    Array<ResolversTypes["String"]>,
+    Maybe<Array<ResolversTypes["String"]>>,
     ParentType,
     ContextType
   >;
-  content?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  block?: Resolver<ResolversTypes["EntryBlock"], ParentType, ContextType>;
+  content?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  block?: Resolver<
+    Maybe<ResolversTypes["EntryBlock"]>,
+    ParentType,
+    ContextType
+  >;
 }>;
 
 export type EntryBlockResolvers<
