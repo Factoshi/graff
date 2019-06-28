@@ -313,10 +313,8 @@ type Entry {
 type Commit {
     "Milliseconds since Unix epoch."
     timestamp: Int!
-    "The hash of the committed entry."
-    entryHash: Hash!
-    "The entry that was committed. Will be null if not yet revealed."
-    entry: Entry
+    "The entry that was committed. All fields except hash will be null if not yet revealed."
+    entry: Entry!
     "The cost of the entry."
     credits: Int!
     "The entry credit address that paid for the entry."

@@ -253,8 +253,6 @@ export type Commit = {
   __typename?: "Commit";
   /** Milliseconds since Unix epoch. */
   timestamp: Scalars["Int"];
-  /** The hash of the committed entry. */
-  entryHash: Scalars["Hash"];
   /** The entry that was committed. Will be null if not yet revealed. */
   entry?: Maybe<Entry>;
   /** The cost of the entry. */
@@ -1214,7 +1212,6 @@ export type CommitResolvers<
   ParentType = ResolversTypes["Commit"]
 > = ResolversObject<{
   timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  entryHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   entry?: Resolver<Maybe<ResolversTypes["Entry"]>, ParentType, ContextType>;
   credits?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   paymentAddress?: Resolver<
