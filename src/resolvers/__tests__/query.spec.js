@@ -65,37 +65,6 @@ describe('Query Resolvers', () => {
         assert.strictEqual(entryBlock.timestamp, 1560238680000);
     });
 
-    it('Should get the leaves of EntryCreditBlock from the entryCreditBlock resolver using a hash.', async () => {
-        const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
-        const height = 10;
-        const entryCreditBlock = await Query.entryCreditBlock(
-            undefined,
-            { arg: hash },
-            { factomd }
-        );
-        assert.deepStrictEqual(entryCreditBlock, { hash, height });
-    });
-
-    it('Should get the leaves of EntryCreditBlock from the entryCreditBlock resolver using a height.', async () => {
-        const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
-        const height = 10;
-        const entryCreditBlock = await Query.entryCreditBlock(
-            undefined,
-            { arg: height },
-            { factomd }
-        );
-        assert.deepStrictEqual(entryCreditBlock, { hash, height });
-    });
-
-    it('Should get the leaves of EntryCreditBlock from the entryCreditBlockHead resolver', async () => {
-        const entryCreditBlock = await Query.entryCreditBlockHead(undefined, undefined, {
-            factomd
-        });
-        assert.hasAllKeys(entryCreditBlock, ['hash', 'height']);
-        assert.isString(entryCreditBlock.hash);
-        assert.isNumber(entryCreditBlock.height);
-    });
-
     it('Should get the entry credit rate', async () => {
         const ecRate = await Query.entryCreditRate(undefined, undefined, { factomd });
         assert.isNumber(ecRate);

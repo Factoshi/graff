@@ -102,7 +102,7 @@ type Mutation {
     commitChain: CommitRevealSend!
     "Send an Entry Commit Message to factom to create a new Entry."
     commitEntry: CommitRevealSend!
-    "Reveal the pageLength Entry in a Chain to factomd after the Commit to complete the Chain creation."
+    "Reveal a Chain to factomd after the Commit to complete the Chain creation."
     revealChain: CommitRevealSend!
     "Reveal an Entry to factomd after the Commit to complete the Entry creation."
     revealEntry: CommitRevealSend!
