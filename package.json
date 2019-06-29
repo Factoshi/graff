@@ -6,10 +6,29 @@
     "scripts": {
         "start": "node ./build/server.js",
         "build": "tsc",
-        "test": "mocha -r ts-node/register src/**/*.spec.js",
-        "test-watch": "nyc mocha -r ts-node/register --recursive --watch",
+        "test": "nyc mocha src/**/*.spec.js",
         "generate": "graphql-codegen --config codegen.yml",
         "generate-init": "graphql-codegen init"
+    },
+    "nyc": {
+        "include": [
+            "src/**/*.ts",
+            "src/**/*.tsx"
+        ],
+        "extension": [
+            ".ts",
+            ".tsx"
+        ],
+        "require": [
+            "ts-node/register",
+            "source-map-support/register"
+        ],
+        "reporter": [
+            "text",
+            "html"
+        ],
+        "sourceMap": true,
+        "instrument": true
     },
     "repository": {
         "type": "git",
@@ -34,6 +53,8 @@
         "@types/mocha": "^5.2.7",
         "chai": "^4.2.0",
         "mocha": "^6.1.4",
+        "nyc": "^14.1.1",
+        "source-map-support": "^0.5.12",
         "ts-node": "^8.3.0",
         "typescript": "^3.5.2"
     },
