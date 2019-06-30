@@ -137,7 +137,7 @@ export type Address = {
   /** Amount may be balance or output value, depending on the context. */
   amount: Scalars["Int"];
   /** Public address. */
-  publicAddress: PublicAddress;
+  address: PublicAddress;
 };
 
 /** Admin Block */
@@ -846,11 +846,11 @@ export type Transaction = {
   /** Milliseconds since Unix epoch. */
   timestamp: Scalars["Int"];
   /** An array of factoid inputs. */
-  inputs: Array<PublicAddress>;
+  inputs: Array<Address>;
   /** An array of factoid outputs */
-  factoidOutputs: Array<PublicAddress>;
+  factoidOutputs: Array<Address>;
   /** An array of entry credit outputs. */
-  entryCreditOutputs: Array<PublicAddress>;
+  entryCreditOutputs: Array<Address>;
   /** The total value of all inputs. Denominated in factoshis. */
   totalInputs: Scalars["Int"];
   /** The total value of all factoid outputs. Denominated in factoshis. */
@@ -957,23 +957,15 @@ export type ResolversTypes = ResolversObject<{
   PublicEntryCreditAddress: Partial<Scalars["PublicEntryCreditAddress"]>;
   FactoidBlock: Partial<FactoidBlock>;
   PaginatedTransactions: Partial<PaginatedTransactions>;
-  Transaction: Partial<
-    Omit<Transaction, "inputs" | "factoidOutputs" | "entryCreditOutputs"> & {
-      inputs: Array<ResolversTypes["PublicAddress"]>;
-      factoidOutputs: Array<ResolversTypes["PublicAddress"]>;
-      entryCreditOutputs: Array<ResolversTypes["PublicAddress"]>;
-    }
+  Transaction: Partial<Transaction>;
+  Address: Partial<
+    Omit<Address, "address"> & { address: ResolversTypes["PublicAddress"] }
   >;
   PublicAddress: Partial<
     | ResolversTypes["PublicFactoidAddress"]
     | ResolversTypes["PublicEntryCreditAddress"]
   >;
   PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
-  Address: Partial<
-    Omit<Address, "publicAddress"> & {
-      publicAddress: ResolversTypes["PublicAddress"];
-    }
-  >;
   EntryCommitAck: Partial<EntryCommitAck>;
   AckStatus: Partial<AckStatus>;
   Ack: Partial<Ack>;
@@ -1096,11 +1088,7 @@ export type AddressResolvers<
   ParentType = ResolversTypes["Address"]
 > = ResolversObject<{
   amount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  publicAddress?: Resolver<
-    ResolversTypes["PublicAddress"],
-    ParentType,
-    ContextType
-  >;
+  address?: Resolver<ResolversTypes["PublicAddress"], ParentType, ContextType>;
 }>;
 
 export type AdminBlockResolvers<
@@ -1933,18 +1921,14 @@ export type TransactionResolvers<
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  inputs?: Resolver<
-    Array<ResolversTypes["PublicAddress"]>,
-    ParentType,
-    ContextType
-  >;
+  inputs?: Resolver<Array<ResolversTypes["Address"]>, ParentType, ContextType>;
   factoidOutputs?: Resolver<
-    Array<ResolversTypes["PublicAddress"]>,
+    Array<ResolversTypes["Address"]>,
     ParentType,
     ContextType
   >;
   entryCreditOutputs?: Resolver<
-    Array<ResolversTypes["PublicAddress"]>,
+    Array<ResolversTypes["Address"]>,
     ParentType,
     ContextType
   >;

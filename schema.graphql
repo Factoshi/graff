@@ -241,7 +241,7 @@ type Address {
     "Amount may be balance or output value, depending on the context."
     amount: Int!
     "Public address."
-    publicAddress: PublicAddress!
+    address: PublicAddress!
 }
 
 ########
@@ -330,11 +330,11 @@ type Transaction {
     "Milliseconds since Unix epoch."
     timestamp: Int!
     "An array of factoid inputs."
-    inputs: [PublicAddress!]!
+    inputs: [Address!]!
     "An array of factoid outputs"
-    factoidOutputs: [PublicAddress!]!
+    factoidOutputs: [Address!]!
     "An array of entry credit outputs."
-    entryCreditOutputs: [PublicAddress!]!
+    entryCreditOutputs: [Address!]!
     "The total value of all inputs. Denominated in factoshis."
     totalInputs: Int!
     "The total value of all factoid outputs. Denominated in factoshis."
