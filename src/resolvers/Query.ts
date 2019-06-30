@@ -2,13 +2,17 @@ import { QueryResolvers } from '../types/resolvers';
 import { adminBlockRootQueries } from './AdminBlock';
 import { entryBlockRootQueries } from './EntryBlock';
 import { ackRootQueries } from './EntryCommitAck';
-import { entryResolvers } from './Entry';
+import { entryRootQueries } from './Entry';
+import { entryCreditBlockRootQueries } from './EntryCreditBlock';
+import { factoidBlockRootQueries } from './FactoidBlock';
 
 export const Query: QueryResolvers = {
     ...adminBlockRootQueries,
     ...ackRootQueries,
     ...entryBlockRootQueries,
-    ...entryResolvers,
+    ...entryRootQueries,
+    ...entryCreditBlockRootQueries,
+    ...factoidBlockRootQueries,
 
     balances: async (root, { addresses }, { factomd }) => {
         const balances = await factomd.balance.loadMany(addresses);
@@ -20,7 +24,6 @@ export const Query: QueryResolvers = {
 
     currentMinute: async (root, args, { factomd }) => {
         const currentMinute = await factomd.currentMinute.load();
-        // All keys must be in camel case.
         return {
             leaderHeight: currentMinute.leaderheight,
             directoryBlockHeight: currentMinute.directoryblockheight,
@@ -35,64 +38,9 @@ export const Query: QueryResolvers = {
         };
     },
 
-    entryBlock: async (root, { hash }, { factomd }) => {
-        const {
-            chainId: chain,
-            timestamp,
-            sequenceNumber: height
-        } = await factomd.entryBlock.load(hash);
-        return {
-            hash,
-            // convert to milliseconds
-            timestamp: timestamp * 1000,
-            chain,
-            height
-        };
-    },
-
-    entryCreditBlock: async (root, { arg }, { factomd }) => {
-        const entryCreditBlock = await factomd.entryCreditBlock.load(arg);
-        return {
-            hash: entryCreditBlock.headerHash,
-            height: entryCreditBlock.directoryBlockHeight
-        };
-    },
-
-    entryCreditBlockHead: async (root, args, { factomd }) => {
-        const directoryBlockHead = await factomd.directoryBlockHead.load();
-        const entryCreditBlockHead = await factomd.entryCreditBlock.load(
-            directoryBlockHead.entryCreditBlockRef
-        );
-        return {
-            hash: entryCreditBlockHead.headerHash,
-            height: entryCreditBlockHead.directoryBlockHeight
-        };
-    },
-
     entryCreditRate: async (root, args, { factomd }) => {
         const { rate } = await factomd.entryCreditRate.load();
         return rate;
-    },
-
-    factoidBlock: async (root, { arg }, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(arg);
-        return {
-            hash: factoidBlock.keyMR,
-            height: factoidBlock.directoryBlockHeight,
-            entryCreditRate: factoidBlock.entryCreditRate
-        };
-    },
-
-    factoidBlockHead: async (root, args, { factomd }) => {
-        const directoryBlockHead = await factomd.directoryBlockHead.load();
-        const factoidBlockHead = await factomd.factoidBlock.load(
-            directoryBlockHead.factoidBlockRef
-        );
-        return {
-            hash: factoidBlockHead.keyMR,
-            height: factoidBlockHead.directoryBlockHeight,
-            entryCreditRate: factoidBlockHead.entryCreditRate
-        };
     },
 
     factoidTransactionAck: async (root, { hash }, { factomd }) => {

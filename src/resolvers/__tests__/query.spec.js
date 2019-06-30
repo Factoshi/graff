@@ -53,53 +53,9 @@ describe('Query Resolvers', () => {
         assert.isNumber(currentMinute.roundTimeout);
     });
 
-    it('Should get the leaves of EntryBlock from the entryBlock resolver', async () => {
-        const hash = '4dd4d88ab67c272817f78672768f5bac546743546c7755949f9c20a4583a0c9c';
-        const entryBlock = await Query.entryBlock(undefined, { hash }, { factomd });
-        assert.strictEqual(entryBlock.hash, hash);
-        assert.strictEqual(
-            entryBlock.chain,
-            '4a35522c834022a4153c4ac92f61f22fad640647f91a21a65cf632f738717966'
-        );
-        assert.strictEqual(entryBlock.height, 1381);
-        assert.strictEqual(entryBlock.timestamp, 1560238680000);
-    });
-
     it('Should get the entry credit rate', async () => {
         const ecRate = await Query.entryCreditRate(undefined, undefined, { factomd });
         assert.isNumber(ecRate);
-    });
-
-    it('Should get the leaves of FactoidBlock from the factoidBlock resolver using a hash.', async () => {
-        const hash = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
-        const height = 10;
-        const factoidBlock = await Query.factoidBlock(
-            undefined,
-            { arg: hash },
-            { factomd }
-        );
-        assert.deepStrictEqual(factoidBlock, { hash, height, entryCreditRate: 666600 });
-    });
-
-    it('Should get the leaves of FactoidBlock from the factoidBlock resolver using a height.', async () => {
-        const hash = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
-        const height = 10;
-        const factoidBlock = await Query.factoidBlock(
-            undefined,
-            { arg: height },
-            { factomd }
-        );
-        assert.deepStrictEqual(factoidBlock, { hash, height, entryCreditRate: 666600 });
-    });
-
-    it('Should get the leaves of FactoidBlock from the factoidBlockHead resolver', async () => {
-        const factoidBlock = await Query.factoidBlockHead(undefined, undefined, {
-            factomd
-        });
-        assert.hasAllKeys(factoidBlock, ['hash', 'height', 'entryCreditRate']);
-        assert.isString(factoidBlock.hash);
-        assert.isNumber(factoidBlock.height);
-        assert.isNumber(factoidBlock.entryCreditRate);
     });
 
     it('Should get the leaves of FactoidTransactionAck from the factoidTransactionAck resolver', async () => {
