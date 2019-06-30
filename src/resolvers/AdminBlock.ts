@@ -31,24 +31,24 @@ export const adminBlockRootQueries: QueryResolvers = {
  * AdminBlock type resolvers.
  */
 export const adminBlockResolvers: AdminBlockResolvers = {
-    previousBlock: async (parent, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(parent.hash as string);
+    previousBlock: async ({ hash }, args, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(hash as string);
         return factomd.adminBlock
             .load(adminBlock.previousBackReferenceHash)
             .then(extractAdminBlockLeaves)
             .catch(handleBlockApiError);
     },
 
-    nextBlock: async (parent, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(parent.hash as string);
+    nextBlock: async ({ hash }, args, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(hash as string);
         return factomd.adminBlock
             .load(adminBlock.directoryBlockHeight + 1)
             .then(extractAdminBlockLeaves)
             .catch(handleBlockApiError);
     },
 
-    entries: async (parent, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(parent.hash as string);
+    entries: async ({ hash }, args, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(hash as string);
         // Return each entry with renamed adminId and adminCode
         return adminBlock.entries.map((entry: any) => {
             const { adminId: id, adminCode: code, ...rest } = entry;
@@ -56,8 +56,8 @@ export const adminBlockResolvers: AdminBlockResolvers = {
         });
     },
 
-    directoryBlock: async (parent, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(parent.hash as string);
+    directoryBlock: async ({ hash }, args, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(hash as string);
         const directoryBlock = await factomd.directoryBlock.load(
             adminBlock.directoryBlockHeight
         );
