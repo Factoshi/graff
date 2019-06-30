@@ -696,14 +696,12 @@ type Heights {
     entryHeight: Height!
 }
 
-"Fctomd and API properties."
+"Factomd and API properties."
 type Properties {
     "The version of the factomd API server."
     factomdVersion: String!
     "The version of the factomd API."
     factomdAPIVersion: String!
-    "The version fo the GraphQL API."
-    graphQLAPIVersion: String!
 }
 
 ##############

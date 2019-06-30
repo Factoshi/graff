@@ -670,15 +670,13 @@ export type PreviousDirectoryBlockSignature = {
   signature: Scalars["String"];
 };
 
-/** Fctomd and API properties. */
+/** Factomd and API properties. */
 export type Properties = {
   __typename?: "Properties";
   /** The version of the factomd API server. */
   factomdVersion: Scalars["String"];
   /** The version of the factomd API. */
   factomdAPIVersion: Scalars["String"];
-  /** The version fo the GraphQL API. */
-  graphQLAPIVersion: Scalars["String"];
 };
 
 export type PublicAddress =
@@ -1689,11 +1687,6 @@ export type PropertiesResolvers<
 > = ResolversObject<{
   factomdVersion?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   factomdAPIVersion?: Resolver<
-    ResolversTypes["String"],
-    ParentType,
-    ContextType
-  >;
-  graphQLAPIVersion?: Resolver<
     ResolversTypes["String"],
     ParentType,
     ContextType
