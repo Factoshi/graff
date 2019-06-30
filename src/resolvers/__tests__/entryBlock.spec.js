@@ -21,6 +21,22 @@ describe('EntryBlock Resolvers', () => {
         assert.isNumber(chainHead.timestamp);
     });
 
+    it('Should get the leaves of EntryBlock from the entryBlock resolver', async () => {
+        const hash = '4dd4d88ab67c272817f78672768f5bac546743546c7755949f9c20a4583a0c9c';
+        const entryBlock = await entryBlockRootQueries.entryBlock(
+            undefined,
+            { hash },
+            { factomd }
+        );
+        assert.strictEqual(entryBlock.hash, hash);
+        assert.strictEqual(
+            entryBlock.chain,
+            '4a35522c834022a4153c4ac92f61f22fad640647f91a21a65cf632f738717966'
+        );
+        assert.strictEqual(entryBlock.height, 1381);
+        assert.strictEqual(entryBlock.timestamp, 1560238680000);
+    });
+
     it('Should get the previous EntryBlock', async () => {
         const hash = '5cdc8d974ff8ffa438b1803a8c19342f117bf72bfec107187fdd777ebd327a17';
         const previousBlock = await entryBlockResolvers.previousBlock(
@@ -32,7 +48,7 @@ describe('EntryBlock Resolvers', () => {
             hash: '82a609d7df91501b5669d1a9df34a6a3b7077aff8ee4308d4d00e03749e5a106',
             chain: '9d8ae4cff16ebe2eeec8f2f73a2dab4ab6950521e5c3f26cfe5dd9bb80b7268d',
             height: 0,
-            timestamp: 1560681180
+            timestamp: 1560681180000
         });
     });
 

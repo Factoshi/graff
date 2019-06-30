@@ -6,7 +6,7 @@ export const extractEntryBlockLeaves = (entryBlock: EntryBlock) => ({
     hash: entryBlock.keyMR,
     chain: entryBlock.chainId,
     height: entryBlock.sequenceNumber,
-    timestamp: entryBlock.timestamp
+    timestamp: entryBlock.timestamp * 1000
 });
 
 /**
@@ -17,6 +17,13 @@ export const entryBlockRootQueries: QueryResolvers = {
         const chainHead = await factomd.chainHead.load(chain);
         return factomd.entryBlock
             .load(chainHead.keyMR)
+            .then(extractEntryBlockLeaves)
+            .catch(handleBlockApiError);
+    },
+
+    entryBlock: async (root, { hash }, { factomd }) => {
+        return factomd.entryBlock
+            .load(hash)
             .then(extractEntryBlockLeaves)
             .catch(handleBlockApiError);
     }
