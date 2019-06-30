@@ -253,8 +253,8 @@ export type Commit = {
   __typename?: "Commit";
   /** Milliseconds since Unix epoch. */
   timestamp: Scalars["Int"];
-  /** The entry that was committed. Will be null if not yet revealed. */
-  entry?: Maybe<Entry>;
+  /** The entry that was committed. All fields except hash will be null if not yet revealed. */
+  entry: Entry;
   /** The cost of the entry. */
   credits: Scalars["Int"];
   /** The entry credit address that paid for the entry. */
@@ -522,7 +522,7 @@ export type Mutation = {
   commitChain: CommitRevealSend;
   /** Send an Entry Commit Message to factom to create a new Entry. */
   commitEntry: CommitRevealSend;
-  /** Reveal the pageLength Entry in a Chain to factomd after the Commit to complete the Chain creation. */
+  /** Reveal a Chain to factomd after the Commit to complete the Chain creation. */
   revealChain: CommitRevealSend;
   /** Reveal an Entry to factomd after the Commit to complete the Entry creation. */
   revealEntry: CommitRevealSend;
@@ -1198,7 +1198,7 @@ export type CommitResolvers<
   ParentType = ResolversTypes["Commit"]
 > = ResolversObject<{
   timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  entry?: Resolver<Maybe<ResolversTypes["Entry"]>, ParentType, ContextType>;
+  entry?: Resolver<ResolversTypes["Entry"], ParentType, ContextType>;
   credits?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   paymentAddress?: Resolver<
     ResolversTypes["PublicEntryCreditAddress"],
