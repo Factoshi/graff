@@ -102,11 +102,7 @@ describe('Query Resolvers', () => {
 
     it('Should get the leaves of Properties from the properties resolver', async () => {
         const properties = await Query.properties(undefined, undefined, { factomd });
-        assert.hasAllKeys(properties, [
-            'factomdVersion',
-            'factomdAPIVersion',
-            'graphQLAPIVersion'
-        ]);
+        assert.hasAllKeys(properties, ['factomdVersion', 'factomdAPIVersion']);
         Object.values(properties).forEach(assert.isString);
     });
 });

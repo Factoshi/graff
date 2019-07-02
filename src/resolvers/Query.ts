@@ -75,11 +75,9 @@ export const Query: QueryResolvers = {
 
     properties: async (root, args, { factomd }) => {
         const properties = await factomd.properties.load();
-        // TODO: add GQL API version from env vars
         return {
             factomdAPIVersion: properties.factomdapiversion,
-            factomdVersion: properties.factomdversion,
-            graphQLAPIVersion: 'TODO'
+            factomdVersion: properties.factomdversion
         };
     }
 };
