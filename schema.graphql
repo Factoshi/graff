@@ -71,9 +71,19 @@ type Query {
     "Get blockchain heights."
     heights: Heights!
     "Get paginated pending entries."
-    pendingEntries: PaginatedPendingEntries!
+    pendingEntries(
+        "Number of pending entries to return. Defaults to infinity."
+        first: Int
+        "Index of the first item in the page."
+        offset: Int
+    ): PaginatedPendingEntries!
     "Get paginated pending entries."
-    pendingTransactions: PaginatedPendingTransactions!
+    pendingTransactions(
+        "Number of pending transactions to return. Defaults to infinity."
+        first: Int
+        "Index of the first item in the page."
+        offset: Int
+    ): PaginatedPendingTransactions!
     "Get properties of factomd and the APIs."
     properties: Properties!
     "Get an entry receipt"
@@ -354,11 +364,11 @@ type PendingTransaction {
     "The status of the commit."
     status: Ack!
     "An array of factoid inputs."
-    inputs: [PublicAddress!]!
+    inputs: [Address!]!
     "An array of factoid outputs"
-    factoidOutputs: [PublicAddress!]!
+    factoidOutputs: [Address!]!
     "An array of entry credit outputs."
-    entryCreditOutputs: [PublicAddress!]!
+    entryCreditOutputs: [Address!]!
     "The total value of all inputs. Denominated in factoshis."
     totalInputs: Int!
     "The total value of all factoid outputs. Denominated in factoshis."

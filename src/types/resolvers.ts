@@ -646,11 +646,11 @@ export type PendingTransaction = {
   /** The status of the commit. */
   status: Ack;
   /** An array of factoid inputs. */
-  inputs: Array<PublicAddress>;
+  inputs: Array<Address>;
   /** An array of factoid outputs */
-  factoidOutputs: Array<PublicAddress>;
+  factoidOutputs: Array<Address>;
   /** An array of entry credit outputs. */
-  entryCreditOutputs: Array<PublicAddress>;
+  entryCreditOutputs: Array<Address>;
   /** The total value of all inputs. Denominated in factoshis. */
   totalInputs: Scalars["Int"];
   /** The total value of all factoid outputs. Denominated in factoshis. */
@@ -776,6 +776,16 @@ export type QueryFactoidBlockArgs = {
 
 export type QueryFactoidTransactionAckArgs = {
   hash: Scalars["Hash"];
+};
+
+export type QueryPendingEntriesArgs = {
+  first?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+};
+
+export type QueryPendingTransactionsArgs = {
+  first?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
 };
 
 export type QueryReceiptArgs = {
@@ -973,16 +983,7 @@ export type ResolversTypes = ResolversObject<{
   PaginatedPendingEntries: Partial<PaginatedPendingEntries>;
   PendingEntry: Partial<PendingEntry>;
   PaginatedPendingTransactions: Partial<PaginatedPendingTransactions>;
-  PendingTransaction: Partial<
-    Omit<
-      PendingTransaction,
-      "inputs" | "factoidOutputs" | "entryCreditOutputs"
-    > & {
-      inputs: Array<ResolversTypes["PublicAddress"]>;
-      factoidOutputs: Array<ResolversTypes["PublicAddress"]>;
-      entryCreditOutputs: Array<ResolversTypes["PublicAddress"]>;
-    }
-  >;
+  PendingTransaction: Partial<PendingTransaction>;
   Properties: Partial<Properties>;
   Receipt: Partial<Receipt>;
   MerkleNode: Partial<MerkleNode>;
@@ -1644,18 +1645,14 @@ export type PendingTransactionResolvers<
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Ack"], ParentType, ContextType>;
-  inputs?: Resolver<
-    Array<ResolversTypes["PublicAddress"]>,
-    ParentType,
-    ContextType
-  >;
+  inputs?: Resolver<Array<ResolversTypes["Address"]>, ParentType, ContextType>;
   factoidOutputs?: Resolver<
-    Array<ResolversTypes["PublicAddress"]>,
+    Array<ResolversTypes["Address"]>,
     ParentType,
     ContextType
   >;
   entryCreditOutputs?: Resolver<
-    Array<ResolversTypes["PublicAddress"]>,
+    Array<ResolversTypes["Address"]>,
     ParentType,
     ContextType
   >;
@@ -1817,12 +1814,14 @@ export type QueryResolvers<
   pendingEntries?: Resolver<
     ResolversTypes["PaginatedPendingEntries"],
     ParentType,
-    ContextType
+    ContextType,
+    QueryPendingEntriesArgs
   >;
   pendingTransactions?: Resolver<
     ResolversTypes["PaginatedPendingTransactions"],
     ParentType,
-    ContextType
+    ContextType,
+    QueryPendingTransactionsArgs
   >;
   properties?: Resolver<ResolversTypes["Properties"], ParentType, ContextType>;
   receipt?: Resolver<
