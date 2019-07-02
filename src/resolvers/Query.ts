@@ -63,14 +63,49 @@ export const Query: QueryResolvers = {
         };
     },
 
-    pendingEntries: async (root, args, { factomd }) => {
-        const pendingEntries = await factomd.pendingEntries.load();
-        return { totalCount: pendingEntries.length };
+    pendingEntries: async (root, { offset = 0, first = Infinity }, { factomd }) => {
+        const pendingEntries = (await factomd.pendingEntries.load()) as any[];
+        const paginatedPendingEntries = pendingEntries
+            .slice(offset!, offset! + first!)
+            .map(({ entryhash, chainid, status }) => ({
+                hash: entryhash,
+                chain: chainid,
+                status
+            }));
+        return {
+            totalCount: pendingEntries.length,
+            offset: offset!,
+            pageLength: paginatedPendingEntries.length,
+            pendingEntries: paginatedPendingEntries
+        };
     },
 
-    pendingTransactions: async (root, args, { factomd }) => {
-        const pendingTransactions = await factomd.pendingTransactions.load();
-        return { totalCount: pendingTransactions.length };
+    pendingTransactions: async (root, { offset = 0, first = Infinity }, { factomd }) => {
+        const pendingTransactions = (await factomd.pendingTransactions.load()) as any[];
+        const mapIO = (io: any) => ({ amount: io.amount, address: io.useraddress });
+        const sumAmount = (acc: number, cur: any) => acc + cur.amount;
+        const paginatedPendingTransactions = pendingTransactions
+            .slice(offset!, offset! + first!)
+            .map(tx => ({
+                hash: tx.transactionid,
+                status: tx.status,
+                inputs: tx.inputs ? tx.inputs.map(mapIO) : [],
+                factoidOutputs: tx.outputs ? tx.outputs.map(mapIO) : [],
+                entryCreditOutputs: tx.ecoutputs ? tx.ecoutputs.map(mapIO) : [],
+                totalInputs: tx.inputs ? tx.inputs.reduce(sumAmount, 0) : 0,
+                totalFactoidOutputs: tx.outputs ? tx.outputs.reduce(sumAmount, 0) : 0,
+                totalEntryCreditOutputs: tx.ecoutputs
+                    ? tx.ecoutputs.reduce(sumAmount, 0)
+                    : 0,
+                // factomd has a bug where it will provide a non-zero fee value for pending coinbase transactions.
+                fees: tx.inputs ? tx.fees : 0
+            }));
+        return {
+            totalCount: pendingTransactions.length,
+            offset: offset!,
+            pageLength: paginatedPendingTransactions.length,
+            pendingTransactions: paginatedPendingTransactions
+        };
     },
 
     properties: async (root, args, { factomd }) => {
