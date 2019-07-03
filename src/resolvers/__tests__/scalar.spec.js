@@ -17,7 +17,7 @@ describe('Custom Scalars', () => {
         const invalidHash = 'this is not a sha256';
         assert.throws(
             () => sha256Test(invalidHash),
-            'Hash must be a valid SHA256 hex string.'
+            'Hash must be a valid SHA256 string.'
         );
     });
 
@@ -57,14 +57,6 @@ describe('Custom Scalars', () => {
 
     it('should throw on a negative height', () => {
         const invalidHeight = -10;
-        assert.throws(
-            () => heightTest(invalidHeight),
-            'Height must be a positive integer.'
-        );
-    });
-
-    it('should throw on a float height', () => {
-        const invalidHeight = 10.5;
         assert.throws(
             () => heightTest(invalidHeight),
             'Height must be a positive integer.'
