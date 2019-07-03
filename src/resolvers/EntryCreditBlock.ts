@@ -1,10 +1,15 @@
 import { QueryResolvers, EntryCreditBlockResolvers, Commit } from '../types/resolvers';
-import { testPaginationInput, handleBlockApiError } from './resolver-helpers';
+import { testPaginationInput } from './resolver-helpers';
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const entryCreditBlockQueries: QueryResolvers = {
+    entryCreditBlock: async (root, { hash }) => ({ hash }),
+
+    entryCreditBlockByHeight: async (root, { height }, { factomd }) => {
+        const entryCreditBlock = await factomd.entryCreditBlock.load(height!);
+        return { hash: entryCreditBlock.headerHash };
     },
     entryCreditBlockHead: async (root, args, { factomd }) => {
         const directoryBlockHead = await factomd.directoryBlockHead.load();
@@ -26,10 +31,10 @@ export const entryCreditBlockResolvers: EntryCreditBlockResolvers = {
     },
     nextBlock: async ({ hash }, args, { factomd }) => {
         const entryCreditBlock = await factomd.entryCreditBlock.load(hash!);
-        return factomd.entryCreditBlock
-            .load(entryCreditBlock.directoryBlockHeight + 1)
-            .then(nextBlock => ({ hash: nextBlock.headerHash }))
-            .catch(handleBlockApiError);
+        const nextBlock = await factomd.entryCreditBlock.load(
+            entryCreditBlock.directoryBlockHeight + 1
+        );
+        return { hash: nextBlock.headerHash };
     },
     commits: async ({ hash }, { offset = 0, first = Infinity }, { factomd }) => {
         testPaginationInput(offset!, first!);
@@ -47,8 +52,7 @@ export const entryCreditBlockResolvers: EntryCreditBlockResolvers = {
             commits,
             totalCount: entryCreditBlock.commits.length,
             offset: offset as number,
-            pageLength: commits.length,
-            finalPage: commits.length + offset! === entryCreditBlock.commits.length
+            pageLength: commits.length
         };
     },
     directoryBlock: async ({ hash }, args, { factomd }) => {
