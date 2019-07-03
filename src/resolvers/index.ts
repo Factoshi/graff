@@ -1,4 +1,4 @@
-import { Query } from './Query';
+import { query } from './Query';
 import { Hash, PublicEntryCreditAddress, PublicFactoidAddress, Height } from './scalar';
 import { Resolvers } from '../types/resolvers';
 import { adminBlockResolvers } from './AdminBlock';
@@ -19,7 +19,7 @@ export const resolvers: Resolvers = {
     EntryBlock: entryBlockResolvers,
     EntryCreditBlock: entryCreditBlockResolvers,
     FactoidBlock: factoidBlockResolvers,
-    Query,
+    Query: query,
     Transaction: transactionResolvers,
     // Scalars
     Hash,

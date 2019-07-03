@@ -8,7 +8,7 @@ import { factoidBlockQueries } from './FactoidBlock';
 import { directoryBlockQueries } from './DirectoryBlock';
 import { transactionQueries } from './Transaction';
 
-export const Query: QueryResolvers = {
+export const query: QueryResolvers = {
     ...adminBlockQueries,
     ...ackQueries,
     ...directoryBlockQueries,
