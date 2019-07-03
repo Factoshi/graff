@@ -3,7 +3,7 @@ const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { directoryBlockQueries, directoryBlockResolvers } = require('../DirectoryBlock');
 
-describe.only('DirectoryBlock Resolvers', () => {
+describe('DirectoryBlock Resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
 
