@@ -1,6 +1,6 @@
 import { DirectoryBlockResolvers, QueryResolvers, EntryBlock } from '../types/resolvers';
 import { DirectoryBlock } from 'factom';
-import { handleBlockApiError, testPaginationInput } from './resolver-helpers';
+import { testPaginationInput } from './resolver-helpers';
 
 export const extractDirectoryBlockLeaves = (directoryBlock: DirectoryBlock) => ({
     hash: directoryBlock.keyMR,
@@ -29,22 +29,19 @@ export const directoryBlockQueries: QueryResolvers = {
  * AdminBlock type resolvers.
  */
 export const directoryBlockResolvers: DirectoryBlockResolvers = {
-    adminBlock: async (parent, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(parent.hash as string);
-        return { height: directoryBlock.height, hash: directoryBlock.adminBlockRef };
+    adminBlock: async ({ hash }, args, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(hash!);
+        return { hash: directoryBlock.adminBlockRef };
     },
 
-    entryCreditBlock: async (parent, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(parent.hash as string);
-        return {
-            height: directoryBlock.height,
-            hash: directoryBlock.entryCreditBlockRef
-        };
+    entryCreditBlock: async ({ hash }, args, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(hash!);
+        return { hash: directoryBlock.entryCreditBlockRef };
     },
 
-    entryBlocks: async (parent, { offset = 0, first = Infinity }, { factomd }) => {
+    entryBlocks: async ({ hash }, { offset = 0, first = Infinity }, { factomd }) => {
         testPaginationInput(offset!, first!);
-        const directoryBlock = await factomd.directoryBlock.load(parent.hash as string);
+        const directoryBlock = await factomd.directoryBlock.load(hash!);
         const entryBlocks = directoryBlock.entryBlockRefs
             .slice(offset!, offset! + first!)
             .map(({ chainId, keyMR }) => ({
@@ -55,30 +52,34 @@ export const directoryBlockResolvers: DirectoryBlockResolvers = {
             entryBlocks,
             totalCount: directoryBlock.entryBlockRefs.length,
             offset: offset as number,
-            pageLength: entryBlocks.length,
-            finalPage:
-                entryBlocks.length + offset! === directoryBlock.entryBlockRefs.length
+            pageLength: entryBlocks.length
         };
     },
 
-    factoidBlock: async (parent, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(parent.hash as string);
-        return { height: directoryBlock.height, hash: directoryBlock.factoidBlockRef };
+    factoidBlock: async ({ hash }, args, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(hash!);
+        return { hash: directoryBlock.factoidBlockRef };
     },
 
-    nextBlock: async (parent, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(parent.hash as string);
-        return factomd.directoryBlock
-            .load(directoryBlock.height + 1)
-            .then(extractDirectoryBlockLeaves)
-            .catch(handleBlockApiError);
+    height: async ({ hash }, args, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(hash!);
+        return directoryBlock.height;
     },
 
-    previousBlock: async (parent, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(parent.hash as string);
-        return factomd.directoryBlock
-            .load(directoryBlock.previousBlockKeyMR)
-            .then(extractDirectoryBlockLeaves)
-            .catch(handleBlockApiError);
+    nextBlock: async ({ hash }, args, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(hash!);
+        const nextBlock = await factomd.directoryBlock.load(directoryBlock.height + 1);
+        return { hash: nextBlock.keyMR };
+    },
+
+    previousBlock: async ({ hash }, args, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(hash!);
+        return { hash: directoryBlock.previousBlockKeyMR };
+    },
+
+    timestamp: async ({ hash }, args, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(hash!);
+        // convert to ms
+        return directoryBlock.timestamp * 1000;
     }
 };
