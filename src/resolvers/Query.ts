@@ -4,7 +4,7 @@ import { entryBlockQueries } from './EntryBlock';
 import { ackQueries } from './EntryCommitAck';
 import { entryQueries } from './Entry';
 import { entryCreditBlockQueries } from './EntryCreditBlock';
-import { factoidBlockRootQueries } from './FactoidBlock';
+import { factoidBlockQueries } from './FactoidBlock';
 import { directoryBlockQueries } from './DirectoryBlock';
 import { transactionQueries } from './Transaction';
 
@@ -15,7 +15,7 @@ export const Query: QueryResolvers = {
     ...entryBlockQueries,
     ...entryQueries,
     ...entryCreditBlockQueries,
-    ...factoidBlockRootQueries,
+    ...factoidBlockQueries,
     ...transactionQueries,
     balances: async (root, { addresses }, { factomd }) => {
         const balances = await factomd.balance.loadMany(addresses);
