@@ -32,35 +32,33 @@ export const adminBlockRootQueries: QueryResolvers = {
  */
 export const adminBlockResolvers: AdminBlockResolvers = {
     previousBlock: async ({ hash }, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(hash as string);
-        return factomd.adminBlock
-            .load(adminBlock.previousBackReferenceHash)
-            .then(extractAdminBlockLeaves)
-            .catch(handleBlockApiError);
+        const adminBlock = await factomd.adminBlock.load(hash!);
+        return { hash: adminBlock.previousBackReferenceHash };
     },
-
     nextBlock: async ({ hash }, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(hash as string);
-        return factomd.adminBlock
-            .load(adminBlock.directoryBlockHeight + 1)
-            .then(extractAdminBlockLeaves)
-            .catch(handleBlockApiError);
+        const adminBlock = await factomd.adminBlock.load(hash!);
+        const nextBlock = await factomd.adminBlock.load(
+            adminBlock.directoryBlockHeight + 1
+        );
+        return { hash: nextBlock.backReferenceHash };
     },
-
     entries: async ({ hash }, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(hash as string);
+        const adminBlock = await factomd.adminBlock.load(hash!);
         // Return each entry with renamed adminId and adminCode
         return adminBlock.entries.map((entry: any) => {
             const { adminId: id, adminCode: code, ...rest } = entry;
             return { id, code, ...rest };
         });
     },
-
     directoryBlock: async ({ hash }, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(hash as string);
+        const adminBlock = await factomd.adminBlock.load(hash!);
         const directoryBlock = await factomd.directoryBlock.load(
             adminBlock.directoryBlockHeight
         );
         return { hash: directoryBlock.keyMR };
+    },
+    height: async ({ hash }, args, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(hash!);
+        return adminBlock.directoryBlockHeight;
     }
 };

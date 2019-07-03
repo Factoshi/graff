@@ -104,6 +104,14 @@ describe('AdminBlock Resolvers', () => {
             hash: '40f8138a651cd9a0f6313f5031d5ee6480a9a176262333e4c29e423f98904c1c'
         });
     });
+
+    it('Should resolve the height of the admin block', async () => {
+        const hash = '73a65e3b82869831fd78f8a13f78d08ee7477063082c060ff4320a12ce02aed8';
+        const height = await adminBlockResolvers.height({ hash }, undefined, {
+            factomd
+        });
+        assert.strictEqual(height, 199653);
+    });
 });
 
 describe('AdminEntry resolvers', () => {
