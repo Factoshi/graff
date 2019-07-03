@@ -1,25 +1,22 @@
 import { AdminBlockResolvers, QueryResolvers } from '../types/resolvers';
-import { handleBlockApiError } from './resolver-helpers';
+import { handleBlockError } from './resolver-helpers';
+import factom = require('factom');
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const adminBlockQueries: QueryResolvers = {
     adminBlock: async (root, { hash }, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(hash).catch(handleBlockApiError);
+        const adminBlock = await factomd.adminBlock.load(hash).catch(handleBlockError);
         return adminBlock && { hash: adminBlock.backReferenceHash };
     },
     adminBlockByHeight: async (root, { height }, { factomd }) => {
-        const adminBlock = await factomd.adminBlock
-            .load(height)
-            .catch(handleBlockApiError);
+        const adminBlock = await factomd.adminBlock.load(height).catch(handleBlockError);
         return adminBlock && { hash: adminBlock.backReferenceHash };
     },
     adminBlockHead: async (root, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlockHead
-            .load()
-            .catch(handleBlockApiError);
-        return directoryBlock && { hash: directoryBlock.adminBlockRef };
+        const directoryBlock = await factomd.directoryBlockHead.load();
+        return { hash: directoryBlock.adminBlockRef };
     }
 };
 
@@ -29,14 +26,17 @@ export const adminBlockQueries: QueryResolvers = {
 export const adminBlockResolvers: AdminBlockResolvers = {
     previousBlock: async ({ hash }, args, { factomd }) => {
         const adminBlock = await factomd.adminBlock.load(hash!);
-        return { hash: adminBlock.previousBackReferenceHash };
+        const previousBlock = await factomd.adminBlock
+            .load(adminBlock.previousBackReferenceHash)
+            .catch(handleBlockError);
+        return previousBlock && { hash: previousBlock.backReferenceHash };
     },
     nextBlock: async ({ hash }, args, { factomd }) => {
         const adminBlock = await factomd.adminBlock.load(hash!);
-        const nextBlock = await factomd.adminBlock.load(
-            adminBlock.directoryBlockHeight + 1
-        );
-        return { hash: nextBlock.backReferenceHash };
+        const nextBlock = await factomd.adminBlock
+            .load(adminBlock.directoryBlockHeight + 1)
+            .catch(handleBlockError);
+        return nextBlock && { hash: nextBlock.backReferenceHash };
     },
     entries: async ({ hash }, args, { factomd }) => {
         const adminBlock = await factomd.adminBlock.load(hash!);

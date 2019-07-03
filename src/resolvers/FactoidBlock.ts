@@ -1,14 +1,21 @@
 import { QueryResolvers, FactoidBlockResolvers, Transaction } from '../types/resolvers';
-import { testPaginationInput } from './resolver-helpers';
+import { testPaginationInput, handleBlockError } from './resolver-helpers';
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const factoidBlockQueries: QueryResolvers = {
-    factoidBlock: async (root, { hash }) => ({ hash }),
+    factoidBlock: async (root, { hash }, { factomd }) => {
+        const factoidBlock = await factomd.factoidBlock
+            .load(hash)
+            .catch(handleBlockError);
+        return factoidBlock && { hash: factoidBlock.keyMR };
+    },
     factoidBlockByHeight: async (root, { height }, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(height);
-        return { hash: factoidBlock.keyMR };
+        const factoidBlock = await factomd.factoidBlock
+            .load(height)
+            .catch(handleBlockError);
+        return factoidBlock && { hash: factoidBlock.keyMR };
     },
     factoidBlockHead: async (root, args, { factomd }) => {
         const directoryBlockHead = await factomd.directoryBlockHead.load();
@@ -26,14 +33,17 @@ export const factoidBlockResolvers: FactoidBlockResolvers = {
     },
     previousBlock: async ({ hash }, args, { factomd }) => {
         const factoidBlock = await factomd.factoidBlock.load(hash!);
-        return { hash: factoidBlock.previousBlockKeyMR };
+        const previousBlock = await factomd.factoidBlock
+            .load(factoidBlock.previousBlockKeyMR)
+            .catch(handleBlockError);
+        return previousBlock && { hash: previousBlock.keyMR };
     },
     nextBlock: async ({ hash }, args, { factomd }) => {
         const factoidBlock = await factomd.factoidBlock.load(hash!);
-        const nextBlock = await factomd.factoidBlock.load(
-            factoidBlock.directoryBlockHeight + 1
-        );
-        return { hash: nextBlock.keyMR };
+        const nextBlock = await factomd.factoidBlock
+            .load(factoidBlock.directoryBlockHeight + 1)
+            .catch(handleBlockError);
+        return nextBlock && { hash: nextBlock.keyMR };
     },
     entryCreditRate: async ({ hash }, args, { factomd }) => {
         const factoidBlock = await factomd.factoidBlock.load(hash!);

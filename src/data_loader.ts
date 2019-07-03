@@ -8,7 +8,15 @@ export class FactomdDataLoader {
     constructor(private cli: Factom.FactomCli) {}
 
     private createDataLoader<K, V>(fetch: (key: K) => Promise<V>) {
-        return new DataLoader<K, V>(keys => Promise.all(keys.map(fetch)));
+        return new DataLoader<K, V>(keys => Promise.all(keys.map(fetch)), {
+            /*
+            Batching must be turned off, otherwise a single missing item with throw
+            an error for all. For example, this will happen when attempting to get the content
+            for a list of entries, and at least one in that list has not yet been revealed. 
+            Therefore, only dataloader's caching functionality is in use by the API.
+            */
+            batch: false
+        });
     }
 
     // Some methods do not take a key and therefore cannot use Dataloader.

@@ -1,41 +1,39 @@
 import { QueryResolvers, EntryResolvers } from '../types/resolvers';
-
-export const handleEntryError = (error: Error) => {
-    if (error.message.endsWith('Receipt creation error (code: -32010)')) {
-        return null;
-    } else {
-        throw error;
-    }
-};
+import { handleEntryError } from './resolver-helpers';
 
 export const entryQueries: QueryResolvers = {
-    entry: (root, { hash }) => ({ hash })
+    entry: async (root, { hash }, { factomd }) => {
+        const entry = await factomd.entry.load(hash).catch(handleEntryError);
+        return entry && { hash: entry.hashHex() };
+    }
 };
 
 export const entryResolvers: EntryResolvers = {
     chain: async ({ hash }, args, { factomd }) => {
-        const entry = await factomd.entry.load(hash!);
-        return entry.chainIdHex;
+        const entry = await factomd.entry.load(hash!).catch(handleEntryError);
+        return entry && entry.chainIdHex;
     },
     timestamp: async ({ hash }, args, { factomd }) => {
-        const entry = await factomd.entry.load(hash!);
-        return entry.timestamp;
+        const entry = await factomd.entry.load(hash!).catch(handleEntryError);
+        return entry && entry.timestamp;
     },
     externalIds: async ({ hash }, args, { factomd }) => {
-        const entry = await factomd.entry.load(hash!);
-        return entry.extIds.map(id => id.toString('base64'));
+        const entry = await factomd.entry.load(hash!).catch(handleEntryError);
+        return entry && entry.extIds.map(id => id.toString('base64'));
     },
-    content: async ({ hash }, args, { factomd }) => {
-        const entry = await factomd.entry.load(hash!);
-        return entry.content.toString('base64');
+    content: async (parent, args, { factomd }) => {
+        const entry = await factomd.entry.load(parent.hash!).catch(handleEntryError);
+        return entry && entry.content.toString('base64');
     },
 
     entryBlock: async ({ hash }, args, { factomd }) => {
-        const entry = await factomd.entry.load(hash!);
-        return {
-            hash: entry.blockContext.entryBlockKeyMR,
-            timestamp: entry.blockContext.entryBlockTimestamp * 1000,
-            height: entry.blockContext.entryBlockSequenceNumber
-        };
+        const entry = await factomd.entry.load(hash!).catch(handleEntryError);
+        return (
+            entry && {
+                hash: entry.blockContext.entryBlockKeyMR,
+                timestamp: entry.blockContext.entryBlockTimestamp * 1000,
+                height: entry.blockContext.entryBlockSequenceNumber
+            }
+        );
     }
 };

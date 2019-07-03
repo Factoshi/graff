@@ -5,6 +5,7 @@ const {
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { assert } = require('chai');
+const { randomBytes } = require('crypto');
 
 describe('EntryCreditBlock resolvers', () => {
     let factomd;
@@ -14,9 +15,19 @@ describe('EntryCreditBlock resolvers', () => {
         const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
         const entryCreditBlock = await entryCreditBlockQueries.entryCreditBlock(
             undefined,
-            { hash }
+            { hash },
+            { factomd }
         );
         assert.deepStrictEqual(entryCreditBlock, { hash });
+    });
+
+    it('Should return null for an entryCreditBlock that does not exist', async () => {
+        const entryCreditBlock = await entryCreditBlockQueries.entryCreditBlock(
+            undefined,
+            { hash: randomBytes(32).toString('hex') },
+            { factomd }
+        );
+        assert.isNull(entryCreditBlock);
     });
 
     it('Should get the hash from the entryCreditBlockByHeight query', async () => {
@@ -27,6 +38,15 @@ describe('EntryCreditBlock resolvers', () => {
             { factomd }
         );
         assert.deepStrictEqual(entryCreditBlock, { hash });
+    });
+
+    it('Should return null for an entryCreditBlockByHeight that does not exist', async () => {
+        const entryCreditBlock = await entryCreditBlockQueries.entryCreditBlockByHeight(
+            undefined,
+            { height: Number.MAX_SAFE_INTEGER },
+            { factomd }
+        );
+        assert.isNull(entryCreditBlock);
     });
 
     it('Should get the hash from the entryCreditBlockHead resolver', async () => {
@@ -64,6 +84,17 @@ describe('EntryCreditBlock resolvers', () => {
         });
     });
 
+    it('Should return null for a previousBlock that does not exist', async () => {
+        // Genesis block
+        const hash = '66fb49a15b68a2a0ce2382e6aa6970c835497c6074bec9794ccf84bb331ad135';
+        const previousBlock = await entryCreditBlockResolvers.previousBlock(
+            { hash },
+            undefined,
+            { factomd }
+        );
+        assert.isNull(previousBlock);
+    });
+
     it('Should resolve the nextBlock field', async () => {
         const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
         const nextBlock = await entryCreditBlockResolvers.nextBlock({ hash }, undefined, {
@@ -72,6 +103,16 @@ describe('EntryCreditBlock resolvers', () => {
         assert.deepStrictEqual(nextBlock, {
             hash: 'f294cd012b3c088740aa90b1fa8feead006c5a35176f57dd0bc7aac19c88f409'
         });
+    });
+
+    it('Should return null for a nextBlock that does not exist', async () => {
+        const directoryBlockHead = await cli.getDirectoryBlockHead();
+        const nextBlock = await entryCreditBlockResolvers.nextBlock(
+            { hash: directoryBlockHead.entryCreditBlockRef },
+            undefined,
+            { factomd }
+        );
+        assert.isNull(nextBlock);
     });
 
     it('Should get all the commits in an entryCredit block', async () => {

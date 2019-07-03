@@ -1,16 +1,23 @@
 import { EntryBlockResolvers, QueryResolvers, Entry } from '../types/resolvers';
-import { testPaginationInput } from './resolver-helpers';
+import {
+    testPaginationInput,
+    handleChainHeadError,
+    handleBlockError
+} from './resolver-helpers';
 
 /**
  * Root Query resolvers that return a partial EntryBlock type.
  */
 export const entryBlockQueries: QueryResolvers = {
     chainHead: async (root, { chain }, { factomd }) => {
-        const chainHead = await factomd.chainHead.load(chain);
-        return { hash: chainHead.keyMR };
+        const chainHead = await factomd.chainHead.load(chain).catch(handleChainHeadError);
+        return chainHead && { hash: chainHead.keyMR };
     },
 
-    entryBlock: async (root, { hash }) => ({ hash })
+    entryBlock: async (root, { hash }, { factomd }) => {
+        const entryBlock = await factomd.entryBlock.load(hash).catch(handleBlockError);
+        return entryBlock && { hash: entryBlock.keyMR };
+    }
 };
 
 /**
@@ -19,7 +26,10 @@ export const entryBlockQueries: QueryResolvers = {
 export const entryBlockResolvers: EntryBlockResolvers = {
     previousBlock: async ({ hash }, args, { factomd }) => {
         const entryBlock = await factomd.entryBlock.load(hash!);
-        return { hash: entryBlock.previousBlockKeyMR };
+        const previousBlock = await factomd.entryBlock
+            .load(entryBlock.previousBlockKeyMR)
+            .catch(handleBlockError);
+        return previousBlock && { hash: previousBlock.keyMR };
     },
     entries: async ({ hash }, { offset = 0, first = Infinity }, { factomd }) => {
         testPaginationInput(offset!, first!);

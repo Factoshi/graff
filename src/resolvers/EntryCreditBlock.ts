@@ -1,15 +1,22 @@
 import { QueryResolvers, EntryCreditBlockResolvers, Commit } from '../types/resolvers';
-import { testPaginationInput } from './resolver-helpers';
+import { testPaginationInput, handleBlockError } from './resolver-helpers';
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const entryCreditBlockQueries: QueryResolvers = {
-    entryCreditBlock: async (root, { hash }) => ({ hash }),
+    entryCreditBlock: async (root, { hash }, { factomd }) => {
+        const entryCreditBlock = await factomd.entryCreditBlock
+            .load(hash)
+            .catch(handleBlockError);
+        return entryCreditBlock && { hash: entryCreditBlock.headerHash };
+    },
 
     entryCreditBlockByHeight: async (root, { height }, { factomd }) => {
-        const entryCreditBlock = await factomd.entryCreditBlock.load(height!);
-        return { hash: entryCreditBlock.headerHash };
+        const entryCreditBlock = await factomd.entryCreditBlock
+            .load(height!)
+            .catch(handleBlockError);
+        return entryCreditBlock && { hash: entryCreditBlock.headerHash };
     },
     entryCreditBlockHead: async (root, args, { factomd }) => {
         const directoryBlockHead = await factomd.directoryBlockHead.load();
@@ -27,14 +34,17 @@ export const entryCreditBlockResolvers: EntryCreditBlockResolvers = {
     },
     previousBlock: async ({ hash }, args, { factomd }) => {
         const entryCreditBlock = await factomd.entryCreditBlock.load(hash!);
-        return { hash: entryCreditBlock.previousHeaderHash };
+        const previousBlock = await factomd.entryCreditBlock
+            .load(entryCreditBlock.previousHeaderHash)
+            .catch(handleBlockError);
+        return previousBlock && { hash: previousBlock.headerHash };
     },
     nextBlock: async ({ hash }, args, { factomd }) => {
         const entryCreditBlock = await factomd.entryCreditBlock.load(hash!);
-        const nextBlock = await factomd.entryCreditBlock.load(
-            entryCreditBlock.directoryBlockHeight + 1
-        );
-        return { hash: nextBlock.headerHash };
+        const nextBlock = await factomd.entryCreditBlock
+            .load(entryCreditBlock.directoryBlockHeight + 1)
+            .catch(handleBlockError);
+        return nextBlock && { hash: nextBlock.headerHash };
     },
     commits: async ({ hash }, { offset = 0, first = Infinity }, { factomd }) => {
         testPaginationInput(offset!, first!);

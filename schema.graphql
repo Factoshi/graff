@@ -27,7 +27,7 @@ type Query {
     "Get an admin block by the specified block height."
     adminBlockByHeight(height: Height!): AdminBlock
     "Get the admin block at the tip of the admin chain."
-    adminBlockHead: AdminBlock
+    adminBlockHead: AdminBlock!
     "Get the balance of public entry credit or factoid addresses."
     balances(addresses: [PublicAddress!]!): [Address!]!
     "Get the entry block at the tip of the specified chain."
@@ -41,7 +41,7 @@ type Query {
     "Get a directory block by the specified block height."
     directoryBlockByHeight(height: Height!): DirectoryBlock
     "Get the directory block at the tip of the directory chain."
-    directoryBlockHead: DirectoryBlock
+    directoryBlockHead: DirectoryBlock!
     "Get an entry by its hash."
     entry(hash: Hash!): Entry
     "Entry status."
@@ -58,7 +58,7 @@ type Query {
     "Get an entry credit block by the specified block height."
     entryCreditBlockByHeight(height: Height!): EntryCreditBlock
     "Get the entry credit block at the tip of the entry credit chain."
-    entryCreditBlockHead: EntryCreditBlock
+    entryCreditBlockHead: EntryCreditBlock!
     "Get the EC-FCT exchange rate."
     entryCreditRate: Int!
     "Get a factoid block by the specified block hash."
@@ -66,7 +66,7 @@ type Query {
     "Get a factoid block by the specified block hash."
     factoidBlockByHeight(height: Height!): FactoidBlock
     "Get the factoid block at the tip of the factoid chain."
-    factoidBlockHead: FactoidBlock
+    factoidBlockHead: FactoidBlock!
     "Factoid transaction status."
     factoidTransactionAck(hash: Hash!): FactoidTransactionAck!
     "Get blockchain heights."
@@ -88,7 +88,7 @@ type Query {
     "Get properties of factomd and the APIs."
     properties: Properties!
     "Get an entry receipt"
-    receipt(hash: Hash!): Receipt
+    receipt(hash: Hash!): Receipt!
     "Get a transaction by its hash."
     transaction(hash: Hash!): Transaction
 }

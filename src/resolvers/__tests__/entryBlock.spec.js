@@ -2,12 +2,13 @@ const { entryBlockResolvers, entryBlockQueries } = require('../EntryBlock');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { assert } = require('chai');
+const { randomBytes } = require('crypto');
 
 describe('EntryBlock Resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
 
-    it('Should get the leaves of EntryBlock from the chainHead resolver', async () => {
+    it('Should resolve an entry block hash from the chainHead query', async () => {
         const chain = 'b47b83b04ba3b09305e7e02618c457c3fd82531a4ab81b16e73d780dfc2f3b18';
         const chainHead = await entryBlockQueries.chainHead(
             undefined,
@@ -18,7 +19,16 @@ describe('EntryBlock Resolvers', () => {
         assert.isString(chainHead.hash);
     });
 
-    it('Should get the leaves of EntryBlock from the entryBlock resolver', async () => {
+    it('Should return null for a chain that doeas not exist', async () => {
+        const chainHead = await entryBlockQueries.chainHead(
+            undefined,
+            { chain: randomBytes(32).toString('hex') },
+            { factomd }
+        );
+        assert.isNull(chainHead);
+    });
+
+    it('Should resolve an entry block hash from the entryBlock query', async () => {
         const hash = '4dd4d88ab67c272817f78672768f5bac546743546c7755949f9c20a4583a0c9c';
         const entryBlock = await entryBlockQueries.entryBlock(
             undefined,
@@ -26,6 +36,15 @@ describe('EntryBlock Resolvers', () => {
             { factomd }
         );
         assert.strictEqual(entryBlock.hash, hash);
+    });
+
+    it('Should return null for an entry block that doeas not exist', async () => {
+        const entryBlock = await entryBlockQueries.entryBlock(
+            undefined,
+            { hash: randomBytes(32).toString('hex') },
+            { factomd }
+        );
+        assert.isNull(entryBlock);
     });
 
     it('Should get the previous EntryBlock', async () => {
@@ -38,6 +57,16 @@ describe('EntryBlock Resolvers', () => {
         assert.deepStrictEqual(previousBlock, {
             hash: '82a609d7df91501b5669d1a9df34a6a3b7077aff8ee4308d4d00e03749e5a106'
         });
+    });
+
+    it('Should return null if the previous EntryBlock does not exist', async () => {
+        const hash = 'c9a31274b89004c9a91c94ad1224b8e1ff59b08a32b3eef16cf7081692988b24';
+        const previousBlock = await entryBlockResolvers.previousBlock(
+            { hash },
+            undefined,
+            { factomd }
+        );
+        assert.isNull(previousBlock);
     });
 
     it('should get all the entries in an entry block', async () => {

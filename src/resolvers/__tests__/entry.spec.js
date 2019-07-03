@@ -2,15 +2,25 @@ const { assert } = require('chai');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { entryResolvers, entryQueries } = require('../Entry');
+const { randomBytes } = require('crypto');
 
 describe('Entry Resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
 
-    it('Should resolve an entry hash', () => {
+    it('Should resolve an entry hash', async () => {
         const hash = '135e3dc2c365cb1cf8d2343181cb2cd1fffe244d05c821ebb75774b4af637260';
-        const response = entryQueries.entry(undefined, { hash });
+        const response = await entryQueries.entry(undefined, { hash }, { factomd });
         assert.deepStrictEqual(response, { hash });
+    });
+
+    it('Should return null for an entry that does not exist', async () => {
+        const response = await entryQueries.entry(
+            undefined,
+            { hash: randomBytes(32).toString('hex') },
+            { factomd }
+        );
+        assert.isNull(response);
     });
 
     it('Should resolve the chain an entry belongs to', async () => {

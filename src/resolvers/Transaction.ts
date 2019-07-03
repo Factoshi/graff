@@ -1,12 +1,15 @@
 import { QueryResolvers, TransactionResolvers } from '../types/resolvers';
+import { handleTransactionError } from './resolver-helpers';
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const transactionQueries: QueryResolvers = {
     transaction: async (root, { hash }, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash);
-        return { hash: transaction.id };
+        const transaction = await factomd.transaction
+            .load(hash)
+            .catch(handleTransactionError);
+        return transaction && { hash: transaction.id };
     }
 };
 

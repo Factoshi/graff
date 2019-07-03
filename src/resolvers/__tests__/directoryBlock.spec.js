@@ -2,6 +2,7 @@ const { assert } = require('chai');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { directoryBlockQueries, directoryBlockResolvers } = require('../DirectoryBlock');
+const { randomBytes } = require('crypto');
 
 describe('DirectoryBlock Resolvers', () => {
     let factomd;
@@ -17,6 +18,15 @@ describe('DirectoryBlock Resolvers', () => {
         assert.deepStrictEqual(directoryBlock, { hash });
     });
 
+    it('Should return null for a diretoryBlock that does not exist', async () => {
+        const directoryBlock = await directoryBlockQueries.directoryBlock(
+            undefined,
+            { hash: randomBytes(32).toString('hex') },
+            { factomd }
+        );
+        assert.isNull(directoryBlock);
+    });
+
     it('Should get the hash from the directoryBlockByHeight query', async () => {
         const height = 196398;
         const directoryBlock = await directoryBlockQueries.directoryBlockByHeight(
@@ -27,6 +37,15 @@ describe('DirectoryBlock Resolvers', () => {
         assert.deepStrictEqual(directoryBlock, {
             hash: '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5'
         });
+    });
+
+    it('Should return null for a directoryBlockByHeight that does not exist', async () => {
+        const directoryBlock = await directoryBlockQueries.directoryBlockByHeight(
+            undefined,
+            { height: Number.MAX_SAFE_INTEGER },
+            { factomd }
+        );
+        assert.isNull(directoryBlock);
     });
 
     it('Should get the hash from the directoryBlockHead query', async () => {

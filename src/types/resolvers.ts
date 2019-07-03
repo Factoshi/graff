@@ -655,7 +655,7 @@ export type Query = {
   /** Get an admin block by the specified block height. */
   adminBlockByHeight?: Maybe<AdminBlock>;
   /** Get the admin block at the tip of the admin chain. */
-  adminBlockHead?: Maybe<AdminBlock>;
+  adminBlockHead: AdminBlock;
   /** Get the balance of public entry credit or factoid addresses. */
   balances: Array<Address>;
   /** Get the entry block at the tip of the specified chain. */
@@ -669,7 +669,7 @@ export type Query = {
   /** Get a directory block by the specified block height. */
   directoryBlockByHeight?: Maybe<DirectoryBlock>;
   /** Get the directory block at the tip of the directory chain. */
-  directoryBlockHead?: Maybe<DirectoryBlock>;
+  directoryBlockHead: DirectoryBlock;
   /** Get an entry by its hash. */
   entry?: Maybe<Entry>;
   /** Entry status. */
@@ -681,7 +681,7 @@ export type Query = {
   /** Get an entry credit block by the specified block height. */
   entryCreditBlockByHeight?: Maybe<EntryCreditBlock>;
   /** Get the entry credit block at the tip of the entry credit chain. */
-  entryCreditBlockHead?: Maybe<EntryCreditBlock>;
+  entryCreditBlockHead: EntryCreditBlock;
   /** Get the EC-FCT exchange rate. */
   entryCreditRate: Scalars["Int"];
   /** Get a factoid block by the specified block hash. */
@@ -689,7 +689,7 @@ export type Query = {
   /** Get a factoid block by the specified block hash. */
   factoidBlockByHeight?: Maybe<FactoidBlock>;
   /** Get the factoid block at the tip of the factoid chain. */
-  factoidBlockHead?: Maybe<FactoidBlock>;
+  factoidBlockHead: FactoidBlock;
   /** Factoid transaction status. */
   factoidTransactionAck: FactoidTransactionAck;
   /** Get blockchain heights. */
@@ -1631,7 +1631,7 @@ export type QueryResolvers<
     QueryAdminBlockByHeightArgs
   >;
   adminBlockHead?: Resolver<
-    Maybe<ResolversTypes["AdminBlock"]>,
+    ResolversTypes["AdminBlock"],
     ParentType,
     ContextType
   >;
@@ -1671,7 +1671,7 @@ export type QueryResolvers<
     QueryDirectoryBlockByHeightArgs
   >;
   directoryBlockHead?: Resolver<
-    Maybe<ResolversTypes["DirectoryBlock"]>,
+    ResolversTypes["DirectoryBlock"],
     ParentType,
     ContextType
   >;
@@ -1706,7 +1706,7 @@ export type QueryResolvers<
     QueryEntryCreditBlockByHeightArgs
   >;
   entryCreditBlockHead?: Resolver<
-    Maybe<ResolversTypes["EntryCreditBlock"]>,
+    ResolversTypes["EntryCreditBlock"],
     ParentType,
     ContextType
   >;
@@ -1724,7 +1724,7 @@ export type QueryResolvers<
     QueryFactoidBlockByHeightArgs
   >;
   factoidBlockHead?: Resolver<
-    Maybe<ResolversTypes["FactoidBlock"]>,
+    ResolversTypes["FactoidBlock"],
     ParentType,
     ContextType
   >;

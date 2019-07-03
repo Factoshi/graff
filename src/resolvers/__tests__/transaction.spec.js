@@ -2,6 +2,7 @@ const { transactionQueries, transactionResolvers } = require('../Transaction');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { assert } = require('chai');
+const { randomBytes } = require('crypto');
 
 describe('Transaction Resolvers', () => {
     let factomd;
@@ -15,6 +16,15 @@ describe('Transaction Resolvers', () => {
             { factomd }
         );
         assert.deepStrictEqual(transaction, { hash });
+    });
+
+    it('Should return null for a transaction that does not exist', async () => {
+        const transaction = await transactionQueries.transaction(
+            undefined,
+            { hash: randomBytes(32).toString('hex') },
+            { factomd }
+        );
+        assert.isNull(transaction);
     });
 
     it('Should resolve the timestamp', async () => {

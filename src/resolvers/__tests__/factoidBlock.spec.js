@@ -2,6 +2,7 @@ const { factoidBlockQueries, factoidBlockResolvers } = require('../FactoidBlock'
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { assert } = require('chai');
+const { randomBytes } = require('crypto');
 
 describe('FactoidBlock resolvers', () => {
     let factomd;
@@ -17,6 +18,15 @@ describe('FactoidBlock resolvers', () => {
         assert.deepStrictEqual(factoidBlock, { hash });
     });
 
+    it('Should return null for a factoidBlock that does not exist', async () => {
+        const factoidBlock = await factoidBlockQueries.factoidBlock(
+            undefined,
+            { hash: randomBytes(32).toString('hex') },
+            { factomd }
+        );
+        assert.isNull(factoidBlock);
+    });
+
     it('Should get the hash from the factoidBlockByHeight query', async () => {
         const hash = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
         const factoidBlock = await factoidBlockQueries.factoidBlockByHeight(
@@ -25,6 +35,15 @@ describe('FactoidBlock resolvers', () => {
             { factomd }
         );
         assert.deepStrictEqual(factoidBlock, { hash });
+    });
+
+    it('Should return null for a factoidBlockByHeght that does not exist', async () => {
+        const factoidBlock = await factoidBlockQueries.factoidBlockByHeight(
+            undefined,
+            { height: Number.MAX_SAFE_INTEGER },
+            { factomd }
+        );
+        assert.isNull(factoidBlock);
     });
 
     it('Should get the hash from the factoidBlockHead query', async () => {
@@ -60,6 +79,16 @@ describe('FactoidBlock resolvers', () => {
         });
     });
 
+    it('Should return null for a previousBlock that does not exist', async () => {
+        const hash = 'a164ccbb77a21904edc4f2bb753aa60635fb2b60279c06ae01aa211f37541736';
+        const previousBlock = await factoidBlockResolvers.previousBlock(
+            { hash },
+            undefined,
+            { factomd }
+        );
+        assert.isNull(previousBlock);
+    });
+
     it('Should resolve the hash for the nextBlock field', async () => {
         const hash = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
         const nextBlock = await factoidBlockResolvers.nextBlock(
@@ -70,6 +99,16 @@ describe('FactoidBlock resolvers', () => {
         assert.deepStrictEqual(nextBlock, {
             hash: '1ce2a6114650bc6695f6714526c5170e7f93def316a3ea21ab6e3fa75007b770'
         });
+    });
+
+    it('Should return null for a nextBlock that does not exist', async () => {
+        const directoryBlockHead = await cli.getDirectoryBlockHead();
+        const nextBlock = await factoidBlockResolvers.nextBlock(
+            { hash: directoryBlockHead.factoidBlockRef },
+            undefined,
+            { factomd }
+        );
+        assert.isNull(nextBlock);
     });
 
     it('Should get the entryCrediRate', async () => {

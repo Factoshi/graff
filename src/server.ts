@@ -24,14 +24,20 @@ const context = (): Context => ({
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context
+    context,
+    tracing: process.env.NODE_ENV !== 'production'
+    // formatError: error => {
+    //     if (error.message) {
+    //       return { message: error.message, statusCode: error.statusCode }
+    //     }
+    //     return { message: err.message }
+    //   }
 });
 
 // Launch server
 server.listen().then(({ url }) => console.log(`Server ready at ${url} 🚀`));
 
 // TODO: figure out how to mitigate malicious queries
-// TODO: fix sha256 validation
 // TODO: add subscriptions
 // TODO: add queries
 // TODO: set up e2e testing
