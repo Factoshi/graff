@@ -19,6 +19,8 @@ export type Scalars = {
   Height: number;
   /** Public entry credit address. */
   PublicEntryCreditAddress: string;
+  /** Any public address */
+  PublicAddress: any;
   /** Public factoid address. */
   PublicFactoidAddress: string;
 };
@@ -37,7 +39,7 @@ export enum Ack {
 
 export type AckStatus = {
   __typename?: "AckStatus";
-  timestamp?: Maybe<Scalars["Int"]>;
+  timestamp?: Maybe<Scalars["Float"]>;
   status: Ack;
 };
 
@@ -112,7 +114,7 @@ export type AddFederatedServerSigningKey = AdminEntry & {
   /** Public key to be added. */
   publicKey: Scalars["String"];
   /** The directory block height at which the change will take effect. */
-  directoryBlockHeight: Scalars["Int"];
+  directoryBlockHeight: Scalars["Height"];
 };
 
 /** Add or remove server identity.
@@ -128,7 +130,7 @@ export type AddRemoveServer = AdminEntry & {
   /** The server identity chain. */
   identityChainId: Scalars["Hash"];
   /** The directory block height at which the change will take effect. */
-  directoryBlockHeight: Scalars["Int"];
+  directoryBlockHeight: Scalars["Height"];
 };
 
 /** Public address and associated amount. */
@@ -137,16 +139,16 @@ export type Address = {
   /** Amount may be balance or output value, depending on the context. */
   amount: Scalars["Int"];
   /** Public address. */
-  address: PublicAddress;
+  address: Scalars["PublicAddress"];
 };
 
 /** Admin Block */
-export type AdminBlock = Block & {
+export type AdminBlock = {
   __typename?: "AdminBlock";
   /** The hash of the current block. */
   hash: Scalars["Hash"];
   /** Block height. */
-  height: Scalars["Int"];
+  height: Scalars["Height"];
   /** The previous block. */
   previousBlock?: Maybe<AdminBlock>;
   /** The next block. */
@@ -198,15 +200,6 @@ export type AdminEntry = {
   code: AdminCode;
 };
 
-/** Defines the fields shared by all blocks. */
-export type Block = {
-  __typename?: "Block";
-  /** The hash of the current block. */
-  hash: Scalars["Hash"];
-  /** Block height. */
-  height: Scalars["Int"];
-};
-
 /** Creates a future genesis transaction.
  * AdminIDs: [11]
  * AdminCodes: [COINBASE_DESCRIPTOR]
@@ -232,7 +225,7 @@ export type CoinbaseDescriptorCancel = AdminEntry & {
   /** The code of the admin entry. */
   code: AdminCode;
   /** An output the Descriptor at this height will not be created. */
-  descriptorHeight: Scalars["Int"];
+  descriptorHeight: Scalars["Height"];
   /** This index into the specified descriptor will not be created. */
   descriptorIndex: Scalars["Int"];
 };
@@ -300,7 +293,7 @@ export type CurrentMinute = {
 };
 
 /** Directory Block */
-export type DirectoryBlock = Block & {
+export type DirectoryBlock = {
   __typename?: "DirectoryBlock";
   /** The hash of the current block. */
   hash: Scalars["Hash"];
@@ -309,9 +302,9 @@ export type DirectoryBlock = Block & {
   /** The next block. */
   nextBlock?: Maybe<DirectoryBlock>;
   /** Block height. */
-  height: Scalars["Int"];
+  height: Scalars["Height"];
   /** Milliseconds since Unix epoch. Marks the start of the block. */
-  timestamp: Scalars["Int"];
+  timestamp: Scalars["Float"];
   /** The admin block referenced by this directory block. */
   adminBlock: AdminBlock;
   /** The entry blocks referenced by this directory block. */
@@ -352,17 +345,17 @@ export type Entry = {
   /** The chain the entry belongs to. */
   chain?: Maybe<Scalars["Hash"]>;
   /** The timestamp of the entry. */
-  timestamp?: Maybe<Scalars["Int"]>;
+  timestamp?: Maybe<Scalars["Float"]>;
   /** List of external IDs associated with the entry as base64. */
   externalIds?: Maybe<Array<Scalars["String"]>>;
   /** The content of the entry as base64. */
   content?: Maybe<Scalars["String"]>;
   /** The parent entry block of the entry. */
-  block?: Maybe<EntryBlock>;
+  entryBlock?: Maybe<EntryBlock>;
 };
 
 /** Entry Block */
-export type EntryBlock = Block & {
+export type EntryBlock = {
   __typename?: "EntryBlock";
   /** The hash of the current block. */
   hash: Scalars["Hash"];
@@ -371,9 +364,9 @@ export type EntryBlock = Block & {
   /** The ID of the parent chain. */
   chain: Scalars["Hash"];
   /** Height of entry block. Also known as sequence number. */
-  height: Scalars["Int"];
+  height: Scalars["Height"];
   /** Milliseconds since Unix epoch. Marks the start of the block. */
-  timestamp: Scalars["Int"];
+  timestamp: Scalars["Float"];
   /** Paginated entries contained within this entry block */
   entries: PaginatedEntries;
   /** Parent directory block. */
@@ -400,12 +393,12 @@ export type EntryCommitAck = {
 };
 
 /** Entry Credit Block */
-export type EntryCreditBlock = Block & {
+export type EntryCreditBlock = {
   __typename?: "EntryCreditBlock";
   /** The hash of the current block. */
   hash: Scalars["Hash"];
   /** Block height. */
-  height: Scalars["Int"];
+  height: Scalars["Height"];
   /** The previous block. */
   previousBlock?: Maybe<EntryCreditBlock>;
   /** The next block. */
@@ -423,12 +416,12 @@ export type EntryCreditBlockCommitsArgs = {
 };
 
 /** Factoid Block */
-export type FactoidBlock = Block & {
+export type FactoidBlock = {
   __typename?: "FactoidBlock";
   /** The hash of the current block. */
   hash: Scalars["Hash"];
   /** Block height. */
-  height: Scalars["Int"];
+  height: Scalars["Height"];
   /** The previous block. */
   previousBlock?: Maybe<FactoidBlock>;
   /** The next block. */
@@ -453,14 +446,12 @@ export type FactoidTransactionAck = {
   /** Transaction hash, otherwise known as transaction ID. */
   hash: Scalars["Hash"];
   /** The timestamp of the transaction. Milliseconds since Unix epoch. */
-  txTimestamp?: Maybe<Scalars["Int"]>;
+  txTimestamp?: Maybe<Scalars["Float"]>;
   /** The timestamp of the containing block. Milliseconds since Unix epoch. */
-  blockTimestamp?: Maybe<Scalars["Int"]>;
+  blockTimestamp?: Maybe<Scalars["Float"]>;
   /** The status of the factoid transaction */
   status: Ack;
 };
-
-export type HashHeight = Scalars["Hash"] | Scalars["Height"];
 
 /** Network and server heights. */
 export type Heights = {
@@ -516,20 +507,6 @@ export type MerkleNode = {
   top: Scalars["Hash"];
 };
 
-export type Mutation = {
-  __typename?: "Mutation";
-  /** Send a Chain Commit Message to factomd to create a new Chain. */
-  commitChain: CommitRevealSend;
-  /** Send an Entry Commit Message to factom to create a new Entry. */
-  commitEntry: CommitRevealSend;
-  /** Reveal a Chain to factomd after the Commit to complete the Chain creation. */
-  revealChain: CommitRevealSend;
-  /** Reveal an Entry to factomd after the Commit to complete the Entry creation. */
-  revealEntry: CommitRevealSend;
-  /** Submit a factoid transaction. */
-  sendFactoids: CommitRevealSend;
-};
-
 /** Basic pagination interface. */
 export type Paginated = {
   __typename?: "Paginated";
@@ -550,8 +527,6 @@ export type PaginatedCommits = Paginated & {
   offset: Scalars["Int"];
   /** Get pageLength x in list following offset */
   pageLength: Scalars["Int"];
-  /** Boolean to indicate whether the final page has been reached */
-  finalPage: Scalars["Boolean"];
   /** An array of commits. */
   commits: Array<Commit>;
 };
@@ -565,8 +540,6 @@ export type PaginatedEntries = Paginated & {
   offset: Scalars["Int"];
   /** Get pageLength x in list following offset */
   pageLength: Scalars["Int"];
-  /** Boolean to indicate whether the final page has been reached */
-  finalPage: Scalars["Boolean"];
   /** An array of entries. */
   entries: Array<Entry>;
 };
@@ -580,8 +553,6 @@ export type PaginatedEntryBlocks = Paginated & {
   offset: Scalars["Int"];
   /** Get pageLength x in list following offset */
   pageLength: Scalars["Int"];
-  /** Boolean to indicate whether the final page has been reached */
-  finalPage: Scalars["Boolean"];
   /** An array of entry blocks. */
   entryBlocks: Array<EntryBlock>;
 };
@@ -621,8 +592,6 @@ export type PaginatedTransactions = Paginated & {
   offset: Scalars["Int"];
   /** Get pageLength x in list following offset */
   pageLength: Scalars["Int"];
-  /** Boolean to indicate whether the final page has been reached */
-  finalPage: Scalars["Boolean"];
   /** An array of transactions. */
   transactions: Array<Transaction>;
 };
@@ -679,14 +648,12 @@ export type Properties = {
   factomdAPIVersion: Scalars["String"];
 };
 
-export type PublicAddress =
-  | Scalars["PublicFactoidAddress"]
-  | Scalars["PublicEntryCreditAddress"];
-
 export type Query = {
   __typename?: "Query";
-  /** Get an admin block by the specified block hash or height. */
+  /** Get an admin block by the specified block hash. */
   adminBlock?: Maybe<AdminBlock>;
+  /** Get an admin block by the specified block height. */
+  adminBlockByHeight?: Maybe<AdminBlock>;
   /** Get the admin block at the tip of the admin chain. */
   adminBlockHead?: Maybe<AdminBlock>;
   /** Get the balance of public entry credit or factoid addresses. */
@@ -699,6 +666,8 @@ export type Query = {
   currentMinute: CurrentMinute;
   /** Get a directory block by the specified block hash. */
   directoryBlock?: Maybe<DirectoryBlock>;
+  /** Get a directory block by the specified block height. */
+  directoryBlockByHeight?: Maybe<DirectoryBlock>;
   /** Get the directory block at the tip of the directory chain. */
   directoryBlockHead?: Maybe<DirectoryBlock>;
   /** Get an entry by its hash. */
@@ -709,12 +678,16 @@ export type Query = {
   entryBlock?: Maybe<EntryBlock>;
   /** Get an entry credit block by the specified block hash. */
   entryCreditBlock?: Maybe<EntryCreditBlock>;
+  /** Get an entry credit block by the specified block height. */
+  entryCreditBlockByHeight?: Maybe<EntryCreditBlock>;
   /** Get the entry credit block at the tip of the entry credit chain. */
   entryCreditBlockHead?: Maybe<EntryCreditBlock>;
   /** Get the EC-FCT exchange rate. */
   entryCreditRate: Scalars["Int"];
   /** Get a factoid block by the specified block hash. */
   factoidBlock?: Maybe<FactoidBlock>;
+  /** Get a factoid block by the specified block hash. */
+  factoidBlockByHeight?: Maybe<FactoidBlock>;
   /** Get the factoid block at the tip of the factoid chain. */
   factoidBlockHead?: Maybe<FactoidBlock>;
   /** Factoid transaction status. */
@@ -734,11 +707,15 @@ export type Query = {
 };
 
 export type QueryAdminBlockArgs = {
-  arg: HashHeight;
+  hash: Scalars["Hash"];
+};
+
+export type QueryAdminBlockByHeightArgs = {
+  height: Scalars["Height"];
 };
 
 export type QueryBalancesArgs = {
-  addresses: Array<PublicAddress>;
+  addresses: Array<Scalars["PublicAddress"]>;
 };
 
 export type QueryChainHeadArgs = {
@@ -750,7 +727,11 @@ export type QueryCommitAckArgs = {
 };
 
 export type QueryDirectoryBlockArgs = {
-  arg: HashHeight;
+  hash: Scalars["Hash"];
+};
+
+export type QueryDirectoryBlockByHeightArgs = {
+  height: Scalars["Height"];
 };
 
 export type QueryEntryArgs = {
@@ -767,11 +748,19 @@ export type QueryEntryBlockArgs = {
 };
 
 export type QueryEntryCreditBlockArgs = {
-  arg: HashHeight;
+  hash: Scalars["Hash"];
+};
+
+export type QueryEntryCreditBlockByHeightArgs = {
+  height: Scalars["Height"];
 };
 
 export type QueryFactoidBlockArgs = {
-  arg: HashHeight;
+  hash: Scalars["Hash"];
+};
+
+export type QueryFactoidBlockByHeightArgs = {
+  height: Scalars["Height"];
 };
 
 export type QueryFactoidTransactionAckArgs = {
@@ -801,14 +790,10 @@ export type Receipt = {
   __typename?: "Receipt";
   /** The entry this receipt is for. */
   entry: Entry;
-  /** The entry block of the entry. */
-  entryBlock: EntryBlock;
-  /** The directory block of the entry. */
-  directoryBlock: DirectoryBlock;
   /** The hash of the bitcoin transaction that anchored this entry into Bitcoin. */
-  bitcoinTransactionHash: Scalars["Hash"];
+  bitcoinTransactionHash?: Maybe<Scalars["Hash"]>;
   /** The bitcoin block where the anchored transaction was included. */
-  bitcoinBlockHash: Scalars["Hash"];
+  bitcoinBlockHash?: Maybe<Scalars["Hash"]>;
   /** The merkle proof to connect the entry to the bitcoin transaction. */
   merkleBranch: Array<MerkleNode>;
 };
@@ -826,33 +811,13 @@ export type ServerFaultHandoff = AdminEntry & {
   code: AdminCode;
 };
 
-export type Subscription = {
-  __typename?: "Subscription";
-  /** Subscribe to each new admin block. */
-  newAdminBlock: AdminBlock;
-  /** Subscribe to newly created chains. */
-  newChainsCreated: Array<PaginatedEntryBlocks>;
-  /** Subscribe to each new directory block. */
-  newDirectoryBlock: DirectoryBlock;
-  /** Subscribe to each new entry block for a specified chain. */
-  newEntryBlock: EntryBlock;
-  /** Subscribe to each new entry credit block. */
-  newEntryCreditBlock: EntryCreditBlock;
-  /** Subscribe to each new factoid block. */
-  newFactoidBlock: FactoidBlock;
-};
-
-export type SubscriptionNewEntryBlockArgs = {
-  chain: Scalars["Hash"];
-};
-
 /** Factoid Transaction included in the blockchain. */
 export type Transaction = {
   __typename?: "Transaction";
   /** The transaction hash. Also known as the transaction ID. */
   hash: Scalars["Hash"];
   /** Milliseconds since Unix epoch. */
-  timestamp: Scalars["Int"];
+  timestamp: Scalars["Float"];
   /** An array of factoid inputs. */
   inputs: Array<Address>;
   /** An array of factoid outputs */
@@ -943,18 +908,16 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Query: {};
-  HashHeight: Partial<ResolversTypes["Hash"] | ResolversTypes["Height"]>;
   Hash: Partial<Scalars["Hash"]>;
-  Height: Partial<Scalars["Height"]>;
   AdminBlock: Partial<AdminBlock>;
-  Block: Partial<Block>;
-  Int: Partial<Scalars["Int"]>;
+  Height: Partial<Scalars["Height"]>;
   AdminEntry: Partial<AdminEntry>;
+  Int: Partial<Scalars["Int"]>;
   AdminCode: Partial<AdminCode>;
   DirectoryBlock: Partial<DirectoryBlock>;
+  Float: Partial<Scalars["Float"]>;
   PaginatedEntryBlocks: Partial<PaginatedEntryBlocks>;
   Paginated: Partial<Paginated>;
-  Boolean: Partial<Scalars["Boolean"]>;
   EntryBlock: Partial<EntryBlock>;
   PaginatedEntries: Partial<PaginatedEntries>;
   Entry: Partial<Entry>;
@@ -966,18 +929,13 @@ export type ResolversTypes = ResolversObject<{
   FactoidBlock: Partial<FactoidBlock>;
   PaginatedTransactions: Partial<PaginatedTransactions>;
   Transaction: Partial<Transaction>;
-  Address: Partial<
-    Omit<Address, "address"> & { address: ResolversTypes["PublicAddress"] }
-  >;
-  PublicAddress: Partial<
-    | ResolversTypes["PublicFactoidAddress"]
-    | ResolversTypes["PublicEntryCreditAddress"]
-  >;
-  PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
+  Address: Partial<Address>;
+  PublicAddress: Partial<Scalars["PublicAddress"]>;
   EntryCommitAck: Partial<EntryCommitAck>;
   AckStatus: Partial<AckStatus>;
   Ack: Partial<Ack>;
   CurrentMinute: Partial<CurrentMinute>;
+  Boolean: Partial<Scalars["Boolean"]>;
   FactoidTransactionAck: Partial<FactoidTransactionAck>;
   Heights: Partial<Heights>;
   PaginatedPendingEntries: Partial<PaginatedPendingEntries>;
@@ -987,9 +945,8 @@ export type ResolversTypes = ResolversObject<{
   Properties: Partial<Properties>;
   Receipt: Partial<Receipt>;
   MerkleNode: Partial<MerkleNode>;
-  Mutation: {};
+  PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
   CommitRevealSend: Partial<CommitRevealSend>;
-  Subscription: {};
   DirectoryBlockSignature: Partial<DirectoryBlockSignature>;
   PreviousDirectoryBlockSignature: Partial<PreviousDirectoryBlockSignature>;
   MatryoshkaHash: Partial<MatryoshkaHash>;
@@ -1011,7 +968,7 @@ export type AckStatusResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["AckStatus"]
 > = ResolversObject<{
-  timestamp?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  timestamp?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Ack"], ParentType, ContextType>;
 }>;
 
@@ -1062,7 +1019,7 @@ export type AddFederatedServerSigningKeyResolvers<
   keyPriority?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   publicKey?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   directoryBlockHeight?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Height"],
     ParentType,
     ContextType
   >;
@@ -1076,7 +1033,7 @@ export type AddRemoveServerResolvers<
   code?: Resolver<ResolversTypes["AdminCode"], ParentType, ContextType>;
   identityChainId?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   directoryBlockHeight?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Height"],
     ParentType,
     ContextType
   >;
@@ -1095,7 +1052,7 @@ export type AdminBlockResolvers<
   ParentType = ResolversTypes["AdminBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
   previousBlock?: Resolver<
     Maybe<ResolversTypes["AdminBlock"]>,
     ParentType,
@@ -1141,23 +1098,6 @@ export type AdminEntryResolvers<
   code?: Resolver<ResolversTypes["AdminCode"], ParentType, ContextType>;
 }>;
 
-export type BlockResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["Block"]
-> = ResolversObject<{
-  __resolveType: TypeResolveFn<
-    | "AdminBlock"
-    | "DirectoryBlock"
-    | "EntryBlock"
-    | "EntryCreditBlock"
-    | "FactoidBlock",
-    ParentType,
-    ContextType
-  >;
-  hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-}>;
-
 export type CoinbaseDescriptorResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["CoinbaseDescriptor"]
@@ -1177,7 +1117,11 @@ export type CoinbaseDescriptorCancelResolvers<
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   code?: Resolver<ResolversTypes["AdminCode"], ParentType, ContextType>;
-  descriptorHeight?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  descriptorHeight?: Resolver<
+    ResolversTypes["Height"],
+    ParentType,
+    ContextType
+  >;
   descriptorIndex?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
 }>;
 
@@ -1269,8 +1213,8 @@ export type DirectoryBlockResolvers<
     ParentType,
     ContextType
   >;
-  height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   adminBlock?: Resolver<ResolversTypes["AdminBlock"], ParentType, ContextType>;
   entryBlocks?: Resolver<
     ResolversTypes["PaginatedEntryBlocks"],
@@ -1310,14 +1254,14 @@ export type EntryResolvers<
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   chain?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
-  timestamp?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  timestamp?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
   externalIds?: Resolver<
     Maybe<Array<ResolversTypes["String"]>>,
     ParentType,
     ContextType
   >;
   content?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  block?: Resolver<
+  entryBlock?: Resolver<
     Maybe<ResolversTypes["EntryBlock"]>,
     ParentType,
     ContextType
@@ -1335,8 +1279,8 @@ export type EntryBlockResolvers<
     ContextType
   >;
   chain?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   entries?: Resolver<
     ResolversTypes["PaginatedEntries"],
     ParentType,
@@ -1369,7 +1313,7 @@ export type EntryCreditBlockResolvers<
   ParentType = ResolversTypes["EntryCreditBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
   previousBlock?: Resolver<
     Maybe<ResolversTypes["EntryCreditBlock"]>,
     ParentType,
@@ -1398,7 +1342,7 @@ export type FactoidBlockResolvers<
   ParentType = ResolversTypes["FactoidBlock"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
   previousBlock?: Resolver<
     Maybe<ResolversTypes["FactoidBlock"]>,
     ParentType,
@@ -1428,9 +1372,13 @@ export type FactoidTransactionAckResolvers<
   ParentType = ResolversTypes["FactoidTransactionAck"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  txTimestamp?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  txTimestamp?: Resolver<
+    Maybe<ResolversTypes["Float"]>,
+    ParentType,
+    ContextType
+  >;
   blockTimestamp?: Resolver<
-    Maybe<ResolversTypes["Int"]>,
+    Maybe<ResolversTypes["Float"]>,
     ParentType,
     ContextType
   >;
@@ -1441,13 +1389,6 @@ export interface HashScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes["Hash"], any> {
   name: "Hash";
 }
-
-export type HashHeightResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["HashHeight"]
-> = ResolversObject<{
-  __resolveType: TypeResolveFn<"Hash" | "Height", ParentType, ContextType>;
-}>;
 
 export interface HeightScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes["Height"], any> {
@@ -1500,37 +1441,6 @@ export type MerkleNodeResolvers<
   top?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
 }>;
 
-export type MutationResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["Mutation"]
-> = ResolversObject<{
-  commitChain?: Resolver<
-    ResolversTypes["CommitRevealSend"],
-    ParentType,
-    ContextType
-  >;
-  commitEntry?: Resolver<
-    ResolversTypes["CommitRevealSend"],
-    ParentType,
-    ContextType
-  >;
-  revealChain?: Resolver<
-    ResolversTypes["CommitRevealSend"],
-    ParentType,
-    ContextType
-  >;
-  revealEntry?: Resolver<
-    ResolversTypes["CommitRevealSend"],
-    ParentType,
-    ContextType
-  >;
-  sendFactoids?: Resolver<
-    ResolversTypes["CommitRevealSend"],
-    ParentType,
-    ContextType
-  >;
-}>;
-
 export type PaginatedResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["Paginated"]
@@ -1557,7 +1467,6 @@ export type PaginatedCommitsResolvers<
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  finalPage?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   commits?: Resolver<Array<ResolversTypes["Commit"]>, ParentType, ContextType>;
 }>;
 
@@ -1568,7 +1477,6 @@ export type PaginatedEntriesResolvers<
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  finalPage?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   entries?: Resolver<Array<ResolversTypes["Entry"]>, ParentType, ContextType>;
 }>;
 
@@ -1579,7 +1487,6 @@ export type PaginatedEntryBlocksResolvers<
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  finalPage?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   entryBlocks?: Resolver<
     Array<ResolversTypes["EntryBlock"]>,
     ParentType,
@@ -1622,7 +1529,6 @@ export type PaginatedTransactionsResolvers<
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  finalPage?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   transactions?: Resolver<
     Array<ResolversTypes["Transaction"]>,
     ParentType,
@@ -1690,16 +1596,10 @@ export type PropertiesResolvers<
   >;
 }>;
 
-export type PublicAddressResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["PublicAddress"]
-> = ResolversObject<{
-  __resolveType: TypeResolveFn<
-    "PublicFactoidAddress" | "PublicEntryCreditAddress",
-    ParentType,
-    ContextType
-  >;
-}>;
+export interface PublicAddressScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["PublicAddress"], any> {
+  name: "PublicAddress";
+}
 
 export interface PublicEntryCreditAddressScalarConfig
   extends GraphQLScalarTypeConfig<
@@ -1723,6 +1623,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryAdminBlockArgs
+  >;
+  adminBlockByHeight?: Resolver<
+    Maybe<ResolversTypes["AdminBlock"]>,
+    ParentType,
+    ContextType,
+    QueryAdminBlockByHeightArgs
   >;
   adminBlockHead?: Resolver<
     Maybe<ResolversTypes["AdminBlock"]>,
@@ -1758,6 +1664,12 @@ export type QueryResolvers<
     ContextType,
     QueryDirectoryBlockArgs
   >;
+  directoryBlockByHeight?: Resolver<
+    Maybe<ResolversTypes["DirectoryBlock"]>,
+    ParentType,
+    ContextType,
+    QueryDirectoryBlockByHeightArgs
+  >;
   directoryBlockHead?: Resolver<
     Maybe<ResolversTypes["DirectoryBlock"]>,
     ParentType,
@@ -1787,6 +1699,12 @@ export type QueryResolvers<
     ContextType,
     QueryEntryCreditBlockArgs
   >;
+  entryCreditBlockByHeight?: Resolver<
+    Maybe<ResolversTypes["EntryCreditBlock"]>,
+    ParentType,
+    ContextType,
+    QueryEntryCreditBlockByHeightArgs
+  >;
   entryCreditBlockHead?: Resolver<
     Maybe<ResolversTypes["EntryCreditBlock"]>,
     ParentType,
@@ -1798,6 +1716,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryFactoidBlockArgs
+  >;
+  factoidBlockByHeight?: Resolver<
+    Maybe<ResolversTypes["FactoidBlock"]>,
+    ParentType,
+    ContextType,
+    QueryFactoidBlockByHeightArgs
   >;
   factoidBlockHead?: Resolver<
     Maybe<ResolversTypes["FactoidBlock"]>,
@@ -1843,18 +1767,16 @@ export type ReceiptResolvers<
   ParentType = ResolversTypes["Receipt"]
 > = ResolversObject<{
   entry?: Resolver<ResolversTypes["Entry"], ParentType, ContextType>;
-  entryBlock?: Resolver<ResolversTypes["EntryBlock"], ParentType, ContextType>;
-  directoryBlock?: Resolver<
-    ResolversTypes["DirectoryBlock"],
-    ParentType,
-    ContextType
-  >;
   bitcoinTransactionHash?: Resolver<
-    ResolversTypes["Hash"],
+    Maybe<ResolversTypes["Hash"]>,
     ParentType,
     ContextType
   >;
-  bitcoinBlockHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  bitcoinBlockHash?: Resolver<
+    Maybe<ResolversTypes["Hash"]>,
+    ParentType,
+    ContextType
+  >;
   merkleBranch?: Resolver<
     Array<ResolversTypes["MerkleNode"]>,
     ParentType,
@@ -1870,49 +1792,12 @@ export type ServerFaultHandoffResolvers<
   code?: Resolver<ResolversTypes["AdminCode"], ParentType, ContextType>;
 }>;
 
-export type SubscriptionResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["Subscription"]
-> = ResolversObject<{
-  newAdminBlock?: SubscriptionResolver<
-    ResolversTypes["AdminBlock"],
-    ParentType,
-    ContextType
-  >;
-  newChainsCreated?: SubscriptionResolver<
-    Array<ResolversTypes["PaginatedEntryBlocks"]>,
-    ParentType,
-    ContextType
-  >;
-  newDirectoryBlock?: SubscriptionResolver<
-    ResolversTypes["DirectoryBlock"],
-    ParentType,
-    ContextType
-  >;
-  newEntryBlock?: SubscriptionResolver<
-    ResolversTypes["EntryBlock"],
-    ParentType,
-    ContextType,
-    SubscriptionNewEntryBlockArgs
-  >;
-  newEntryCreditBlock?: SubscriptionResolver<
-    ResolversTypes["EntryCreditBlock"],
-    ParentType,
-    ContextType
-  >;
-  newFactoidBlock?: SubscriptionResolver<
-    ResolversTypes["FactoidBlock"],
-    ParentType,
-    ContextType
-  >;
-}>;
-
 export type TransactionResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["Transaction"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   inputs?: Resolver<Array<ResolversTypes["Address"]>, ParentType, ContextType>;
   factoidOutputs?: Resolver<
     Array<ResolversTypes["Address"]>,
@@ -1953,7 +1838,6 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Address?: AddressResolvers<ContextType>;
   AdminBlock?: AdminBlockResolvers<ContextType>;
   AdminEntry?: AdminEntryResolvers;
-  Block?: BlockResolvers;
   CoinbaseDescriptor?: CoinbaseDescriptorResolvers<ContextType>;
   CoinbaseDescriptorCancel?: CoinbaseDescriptorCancelResolvers<ContextType>;
   CoinbaseDescriptorOutput?: CoinbaseDescriptorOutputResolvers<ContextType>;
@@ -1969,13 +1853,11 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   FactoidBlock?: FactoidBlockResolvers<ContextType>;
   FactoidTransactionAck?: FactoidTransactionAckResolvers<ContextType>;
   Hash?: GraphQLScalarType;
-  HashHeight?: HashHeightResolvers;
   Height?: GraphQLScalarType;
   Heights?: HeightsResolvers<ContextType>;
   IncreaseServerCount?: IncreaseServerCountResolvers<ContextType>;
   MatryoshkaHash?: MatryoshkaHashResolvers<ContextType>;
   MerkleNode?: MerkleNodeResolvers<ContextType>;
-  Mutation?: MutationResolvers<ContextType>;
   Paginated?: PaginatedResolvers;
   PaginatedCommits?: PaginatedCommitsResolvers<ContextType>;
   PaginatedEntries?: PaginatedEntriesResolvers<ContextType>;
@@ -1991,13 +1873,12 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
     ContextType
   >;
   Properties?: PropertiesResolvers<ContextType>;
-  PublicAddress?: PublicAddressResolvers;
+  PublicAddress?: GraphQLScalarType;
   PublicEntryCreditAddress?: GraphQLScalarType;
   PublicFactoidAddress?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   Receipt?: ReceiptResolvers<ContextType>;
   ServerFaultHandoff?: ServerFaultHandoffResolvers<ContextType>;
-  Subscription?: SubscriptionResolvers<ContextType>;
   Transaction?: TransactionResolvers<ContextType>;
 }>;
 
