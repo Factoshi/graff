@@ -4,9 +4,10 @@ import { resolvers } from './resolvers';
 import { FactomdDataLoader } from './data_loader';
 import { cli } from './factom';
 import { Context } from './types/server';
+import { resolve } from 'path';
 
 // Create typeDefs
-const schema = importSchema('../schema.graphql');
+const schema = importSchema(resolve(__dirname, '../schema.graphql'));
 const typeDefs = gql`
     ${schema}
 `;
