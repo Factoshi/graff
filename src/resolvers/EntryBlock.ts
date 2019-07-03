@@ -12,7 +12,7 @@ export const extractEntryBlockLeaves = (entryBlock: EntryBlock) => ({
 /**
  * Root Query resolvers that return a partial EntryBlock type.
  */
-export const entryBlockRootQueries: QueryResolvers = {
+export const entryBlockQueries: QueryResolvers = {
     chainHead: async (root, { chain }, { factomd }) => {
         const chainHead = await factomd.chainHead.load(chain);
         return factomd.entryBlock

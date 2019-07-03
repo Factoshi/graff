@@ -4,9 +4,7 @@ import { testPaginationInput } from './resolver-helpers';
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
-export const factoidBlockRootQueries: QueryResolvers = {
-    factoidBlock: async (root, { arg }, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(arg);
+export const factoidBlockQueries: QueryResolvers = {
         return { hash: factoidBlock.keyMR };
     },
     factoidBlockHead: async (root, args, { factomd }) => {

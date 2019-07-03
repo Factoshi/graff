@@ -1,19 +1,22 @@
 import { QueryResolvers } from '../types/resolvers';
-import { adminBlockRootQueries } from './AdminBlock';
-import { entryBlockRootQueries } from './EntryBlock';
-import { ackRootQueries } from './EntryCommitAck';
-import { entryRootQueries } from './Entry';
-import { entryCreditBlockRootQueries } from './EntryCreditBlock';
+import { adminBlockQueries } from './AdminBlock';
+import { entryBlockQueries } from './EntryBlock';
+import { ackQueries } from './EntryCommitAck';
+import { entryQueries } from './Entry';
+import { entryCreditBlockQueries } from './EntryCreditBlock';
 import { factoidBlockRootQueries } from './FactoidBlock';
+import { directoryBlockQueries } from './DirectoryBlock';
+import { transactionQueries } from './Transaction';
 
 export const Query: QueryResolvers = {
-    ...adminBlockRootQueries,
-    ...ackRootQueries,
-    ...entryBlockRootQueries,
-    ...entryRootQueries,
-    ...entryCreditBlockRootQueries,
+    ...adminBlockQueries,
+    ...ackQueries,
+    ...directoryBlockQueries,
+    ...entryBlockQueries,
+    ...entryQueries,
+    ...entryCreditBlockQueries,
     ...factoidBlockRootQueries,
-
+    ...transactionQueries,
     balances: async (root, { addresses }, { factomd }) => {
         const balances = await factomd.balance.loadMany(addresses);
         return balances.map((balance, i) => ({
@@ -21,7 +24,6 @@ export const Query: QueryResolvers = {
             publicAddress: addresses[i]
         }));
     },
-
     currentMinute: async (root, args, { factomd }) => {
         const currentMinute = await factomd.currentMinute.load();
         return {
@@ -37,12 +39,10 @@ export const Query: QueryResolvers = {
             roundTimeout: currentMinute.roundtimeout
         };
     },
-
     entryCreditRate: async (root, args, { factomd }) => {
         const { rate } = await factomd.entryCreditRate.load();
         return rate;
     },
-
     factoidTransactionAck: async (root, { hash }, { factomd }) => {
         const factoidTransactionAck = await factomd.ack.load({ hash, chainid: 'f' });
         return {
@@ -52,7 +52,6 @@ export const Query: QueryResolvers = {
             status: factoidTransactionAck.status
         };
     },
-
     heights: async (root, args, { factomd }) => {
         const heights = await factomd.heights.load();
         return {
@@ -62,7 +61,6 @@ export const Query: QueryResolvers = {
             entryHeight: heights.entryheight
         };
     },
-
     pendingEntries: async (root, { offset = 0, first = Infinity }, { factomd }) => {
         const pendingEntries = (await factomd.pendingEntries.load()) as any[];
         const paginatedPendingEntries = pendingEntries
@@ -79,7 +77,6 @@ export const Query: QueryResolvers = {
             pendingEntries: paginatedPendingEntries
         };
     },
-
     pendingTransactions: async (root, { offset = 0, first = Infinity }, { factomd }) => {
         const pendingTransactions = (await factomd.pendingTransactions.load()) as any[];
         const mapIO = (io: any) => ({ amount: io.amount, address: io.useraddress });
@@ -107,7 +104,6 @@ export const Query: QueryResolvers = {
             pendingTransactions: paginatedPendingTransactions
         };
     },
-
     properties: async (root, args, { factomd }) => {
         const properties = await factomd.properties.load();
         return {

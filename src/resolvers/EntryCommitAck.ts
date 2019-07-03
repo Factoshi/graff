@@ -13,12 +13,11 @@ export const formatAckResponse = (ack: any) => ({
     entryStatus: ack.entrydata.status ? formatAckStatus(ack.entrydata) : null
 });
 
-export const ackRootQueries: QueryResolvers = {
+export const ackQueries: QueryResolvers = {
     commitAck: async (root, { hash }, { factomd }) => {
         const ack = await factomd.ack.load({ hash, chainid: 'c' });
         return formatAckResponse(ack);
     },
-
     entryAck: async (root, { hash, chain }, { factomd }) => {
         const ack = await factomd.ack.load({ hash, chainid: chain });
         return formatAckResponse(ack);

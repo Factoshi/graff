@@ -4,13 +4,7 @@ import { testPaginationInput, handleBlockApiError } from './resolver-helpers';
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
-export const entryCreditBlockRootQueries: QueryResolvers = {
-    entryCreditBlock: async (root, { arg }, { factomd }) => {
-        const entryCreditBlock = await factomd.entryCreditBlock.load(arg);
-        return {
-            hash: entryCreditBlock.headerHash,
-            height: entryCreditBlock.directoryBlockHeight
-        };
+export const entryCreditBlockQueries: QueryResolvers = {
     },
     entryCreditBlockHead: async (root, args, { factomd }) => {
         const directoryBlockHead = await factomd.directoryBlockHead.load();
