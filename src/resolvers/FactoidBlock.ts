@@ -5,6 +5,9 @@ import { testPaginationInput } from './resolver-helpers';
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const factoidBlockQueries: QueryResolvers = {
+    factoidBlock: async (root, { hash }) => ({ hash }),
+    factoidBlockByHeight: async (root, { height }, { factomd }) => {
+        const factoidBlock = await factomd.factoidBlock.load(height);
         return { hash: factoidBlock.keyMR };
     },
     factoidBlockHead: async (root, args, { factomd }) => {
@@ -57,8 +60,7 @@ export const factoidBlockResolvers: FactoidBlockResolvers = {
             transactions,
             totalCount: factoidBlock.transactions.length,
             offset: offset as number,
-            pageLength: transactions.length,
-            finalPage: transactions.length + offset! === factoidBlock.transactions.length
+            pageLength: transactions.length
         };
     },
     directoryBlock: async ({ hash }, args, { factomd }) => {

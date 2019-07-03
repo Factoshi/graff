@@ -1,4 +1,4 @@
-const { factoidBlockRootQueries, factoidBlockResolvers } = require('../FactoidBlock');
+const { factoidBlockQueries, factoidBlockResolvers } = require('../FactoidBlock');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { assert } = require('chai');
@@ -7,36 +7,35 @@ describe('FactoidBlock resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
 
-    it('Should get the leaves of FactoidBlock from the factoidBlock resolver using a hash.', async () => {
+    it('Should get the hash from the factoidBlock query', async () => {
         const hash = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
-        const height = 10;
-        const factoidBlock = await factoidBlockRootQueries.factoidBlock(
+        const factoidBlock = await factoidBlockQueries.factoidBlock(
             undefined,
-            { arg: hash },
+            { hash },
             { factomd }
         );
         assert.deepStrictEqual(factoidBlock, { hash });
     });
 
-    it('Should get the leaves of FactoidBlock from the factoidBlock resolver using a height.', async () => {
+    it('Should get the hash from the factoidBlockByHeight query', async () => {
         const hash = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
-        const height = 10;
-        const factoidBlock = await factoidBlockRootQueries.factoidBlock(
+        const factoidBlock = await factoidBlockQueries.factoidBlockByHeight(
             undefined,
-            { arg: height },
+            { height: 10 },
             { factomd }
         );
         assert.deepStrictEqual(factoidBlock, { hash });
     });
 
-    it('Should get the leaves of FactoidBlock from the factoidBlockHead resolver', async () => {
-        const factoidBlock = await factoidBlockRootQueries.factoidBlockHead(
+    it('Should get the hash from the factoidBlockHead query', async () => {
+        const directoryBlockHead = await cli.getDirectoryBlockHead();
+        const expected = await cli.getFactoidBlock(directoryBlockHead.factoidBlockRef);
+        const factoidBlock = await factoidBlockQueries.factoidBlockHead(
             undefined,
             undefined,
             { factomd }
         );
-        assert.hasAllKeys(factoidBlock, ['hash']);
-        assert.isString(factoidBlock.hash);
+        assert.deepStrictEqual(factoidBlock, { hash: expected.keyMR });
     });
 
     it('Should resolve the height field', async () => {
@@ -94,14 +93,12 @@ describe('FactoidBlock resolvers', () => {
             'transactions',
             'totalCount',
             'offset',
-            'pageLength',
-            'finalPage'
+            'pageLength'
         ]);
         assert.strictEqual(allTransactions.totalCount, 106);
         assert.lengthOf(allTransactions.transactions, 106);
         assert.strictEqual(allTransactions.offset, 0);
         assert.strictEqual(allTransactions.pageLength, 106);
-        assert.isTrue(allTransactions.finalPage);
         allTransactions.transactions.forEach(tx => {
             assert.hasAllKeys(tx, [
                 'hash',
@@ -144,7 +141,6 @@ describe('FactoidBlock resolvers', () => {
         assert.lengthOf(first20.transactions, 20);
         assert.strictEqual(first20.offset, 0);
         assert.strictEqual(first20.pageLength, 20);
-        assert.isFalse(first20.finalPage);
         assert.strictEqual(
             first20.transactions[0].hash,
             'a0b2399f8293d89a5c14a5bf15cc560f0dc506ba1f011a4b7f83163231acc373'
@@ -167,7 +163,6 @@ describe('FactoidBlock resolvers', () => {
         assert.lengthOf(last20.transactions, 20);
         assert.strictEqual(last20.offset, 86);
         assert.strictEqual(last20.pageLength, 20);
-        assert.isTrue(last20.finalPage);
         assert.strictEqual(
             last20.transactions[0].hash,
             '8fa12f2a4a44d1dd18b51fa1fa44c7f288896068fea8ae7dbb9e5e7e9ef3ee12'
