@@ -10,44 +10,36 @@ describe('DirectoryBlock Resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
 
-    it('Should get the leaves of DirectoryBlock from the directoryBlock resolver', async () => {
+    it('Should get the hash from the directoryBlock query', async () => {
         const hash = '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5';
-        const directoryBlock = await directoryBlockRootQueries.directoryBlock(
+        const directoryBlock = await directoryBlockQueries.directoryBlock(
             undefined,
-            { arg: hash },
+            { hash },
             { factomd }
         );
-        assert.deepStrictEqual(directoryBlock, {
-            hash,
-            height: 196398,
-            timestamp: 1560187680
+        assert.deepStrictEqual(directoryBlock, { hash });
         });
-    });
 
-    it('Should get the leaves of DirectoryBlock from the directoryBlock resolver', async () => {
+    it('Should get the hash from the directoryBlockByHeight query', async () => {
         const height = 196398;
-        const directoryBlock = await directoryBlockRootQueries.directoryBlock(
+        const directoryBlock = await directoryBlockQueries.directoryBlockByHeight(
             undefined,
-            { arg: height },
+            { height },
             { factomd }
         );
         assert.deepStrictEqual(directoryBlock, {
-            hash: '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5',
-            height,
-            timestamp: 1560187680
+            hash: '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5'
         });
     });
 
-    it('Should get the leaves of DirectoryBlock from the directoryBlockHead resolver', async () => {
-        const directoryBlock = await directoryBlockRootQueries.directoryBlockHead(
+    it('Should get the hash from the directoryBlockHead query', async () => {
+        const directoryBlock = await directoryBlockQueries.directoryBlockHead(
             undefined,
             undefined,
             { factomd }
         );
-        assert.hasAllKeys(directoryBlock, ['height', 'hash', 'timestamp']);
-        assert.isNumber(directoryBlock.height);
+        assert.hasAllKeys(directoryBlock, ['hash']);
         assert.isString(directoryBlock.hash);
-        assert.isNumber(directoryBlock.timestamp);
     });
 
     it('Should resolve the leaves of the adminBlock field', async () => {

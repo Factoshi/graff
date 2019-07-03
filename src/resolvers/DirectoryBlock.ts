@@ -11,13 +11,17 @@ export const extractDirectoryBlockLeaves = (directoryBlock: DirectoryBlock) => (
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
-export const directoryBlockRootQueries: QueryResolvers = {
-    directoryBlock: (root, { arg }, { factomd }) => {
-        return factomd.directoryBlock.load(arg).then(extractDirectoryBlockLeaves);
+export const directoryBlockQueries: QueryResolvers = {
+    directoryBlock: (root, { hash }, { factomd }) => ({ hash }),
+
+    directoryBlockByHeight: async (root, { height }, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(height);
+        return { hash: directoryBlock.keyMR };
     },
 
-    directoryBlockHead: (root, args, { factomd }) => {
-        return factomd.directoryBlockHead.load().then(extractDirectoryBlockLeaves);
+    directoryBlockHead: async (root, args, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlockHead.load();
+        return { hash: directoryBlock.keyMR };
     }
 };
 
