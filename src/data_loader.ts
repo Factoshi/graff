@@ -64,4 +64,6 @@ export class FactomdDataLoader {
     receipt = this.createDataLoader((hash: string) =>
         this.cli.factomdApi('receipt', { hash })
     );
+
+    transaction = this.createDataLoader(this.cli.getTransaction.bind(this.cli));
 }
