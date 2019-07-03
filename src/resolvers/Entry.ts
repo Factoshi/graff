@@ -8,47 +8,34 @@ export const handleEntryError = (error: Error) => {
     }
 };
 
-export const entryRootQueries: QueryResolvers = {
+export const entryQueries: QueryResolvers = {
     entry: (root, { hash }) => ({ hash })
 };
 
 export const entryResolvers: EntryResolvers = {
-    chain: ({ hash }, args, { factomd }) => {
-        return factomd.entry
-            .load(hash!)
-            .then(entry => entry.chainIdHex)
-            .catch(handleEntryError);
+    chain: async ({ hash }, args, { factomd }) => {
+        const entry = await factomd.entry.load(hash!);
+        return entry.chainIdHex;
+    },
+    timestamp: async ({ hash }, args, { factomd }) => {
+        const entry = await factomd.entry.load(hash!);
+        return entry.timestamp;
+    },
+    externalIds: async ({ hash }, args, { factomd }) => {
+        const entry = await factomd.entry.load(hash!);
+        return entry.extIds.map(id => id.toString('base64'));
+    },
+    content: async ({ hash }, args, { factomd }) => {
+        const entry = await factomd.entry.load(hash!);
+        return entry.content.toString('base64');
     },
 
-    timestamp: ({ hash }, args, { factomd }) => {
-        return factomd.entry
-            .load(hash!)
-            .then(entry => entry.timestamp)
-            .catch(handleEntryError);
-    },
-
-    externalIds: ({ hash }, args, { factomd }) => {
-        return factomd.entry
-            .load(hash!)
-            .then(entry => entry.extIds.map(id => id.toString('base64')))
-            .catch(handleEntryError);
-    },
-
-    content: ({ hash }, args, { factomd }) => {
-        return factomd.entry
-            .load(hash!)
-            .then(entry => entry.content.toString('base64'))
-            .catch(handleEntryError);
-    },
-
-    block: ({ hash }, args, { factomd }) => {
-        return factomd.entry
-            .load(hash!)
-            .then(entry => ({
-                hash: entry.blockContext.entryBlockKeyMR,
-                timestamp: entry.blockContext.entryBlockTimestamp * 1000,
-                height: entry.blockContext.entryBlockSequenceNumber
-            }))
-            .catch(handleEntryError);
+    entryBlock: async ({ hash }, args, { factomd }) => {
+        const entry = await factomd.entry.load(hash!);
+        return {
+            hash: entry.blockContext.entryBlockKeyMR,
+            timestamp: entry.blockContext.entryBlockTimestamp * 1000,
+            height: entry.blockContext.entryBlockSequenceNumber
+        };
     }
 };

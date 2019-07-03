@@ -1,7 +1,7 @@
 const { assert } = require('chai');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
-const { entryResolvers, entryRootQueries } = require('../Entry');
+const { entryResolvers, entryQueries } = require('../Entry');
 
 describe('Entry Resolvers', () => {
     let factomd;
@@ -9,7 +9,7 @@ describe('Entry Resolvers', () => {
 
     it('Should resolve an entry hash', () => {
         const hash = '135e3dc2c365cb1cf8d2343181cb2cd1fffe244d05c821ebb75774b4af637260';
-        const response = entryRootQueries.entry(undefined, { hash });
+        const response = entryQueries.entry(undefined, { hash });
         assert.deepStrictEqual(response, { hash });
     });
 
@@ -54,7 +54,7 @@ describe('Entry Resolvers', () => {
 
     it('Should resolve the leaves of the entry block context', async () => {
         const hash = '135e3dc2c365cb1cf8d2343181cb2cd1fffe244d05c821ebb75774b4af637260';
-        const entryBlock = await entryResolvers.block({ hash }, undefined, {
+        const entryBlock = await entryResolvers.entryBlock({ hash }, undefined, {
             factomd
         });
         assert.deepStrictEqual(entryBlock, {
