@@ -29,3 +29,11 @@ const server = new ApolloServer({
 
 // Launch server
 server.listen().then(({ url }) => console.log(`Server ready at ${url} 🚀`));
+
+// TODO: figure out how to mitigate malicious queries
+// TODO: fix sha256 validation
+// TODO: add subscriptions
+// TODO: add queries
+// TODO: set up e2e testing
+// TODO: User config option for FactomCli
+// TODO: User config option for pagination limit
