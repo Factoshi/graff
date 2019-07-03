@@ -1,57 +1,58 @@
 const { assert } = require('chai');
-const { adminBlockResolvers, adminBlockRootQueries } = require('../AdminBlock');
+const { adminBlockResolvers, adminBlockQueries } = require('../AdminBlock');
 const { adminEntryResolvers } = require('../AdminEntry');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { AdminCode } = require('../../types/resolvers');
+const { randomBytes } = require('crypto');
 
 describe('AdminBlock Resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
 
-    it('Should get the leaves of AdminBlock from the adminBlock resolver using a hash.', async () => {
+    it('Should return the hash field from the adminBlock query.', async () => {
         const hash = 'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';
-        const height = 10;
-        const adminBlock = await adminBlockRootQueries.adminBlock(
-            {},
-            { arg: hash },
-            { factomd }
-        );
-        assert.deepStrictEqual(adminBlock, { hash, height });
-    });
-
-    it('Should get the leaves of AdminBlock from the adminBlock resolver using a height.', async () => {
-        const hash = 'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';
-        const height = 10;
-        const adminBlock = await adminBlockRootQueries.adminBlock(
-            undefined,
-            { arg: height },
-            { factomd }
-        );
-        assert.deepStrictEqual(adminBlock, { hash, height });
+        const adminBlock = await adminBlockQueries.adminBlock({}, { hash }, { factomd });
+        assert.deepStrictEqual(adminBlock, { hash });
     });
 
     it('Should return null if an AdminBlock cannot be found.', async () => {
-        const adminBlock = await adminBlockRootQueries.adminBlock(
+        const adminBlock = await adminBlockQueries.adminBlock(
             undefined,
-            { arg: Number.MAX_SAFE_INTEGER },
+            { hash: randomBytes(32).toString('hex') },
             { factomd }
         );
         assert.isNull(adminBlock);
     });
 
-    it('Should get the leaves of AdminBlock from the adminBlockHead resolver', async () => {
-        const adminBlock = await adminBlockRootQueries.adminBlockHead(
+    it('Should resolve the hash field from the adminBlockByHeight query.', async () => {
+        const hash = 'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';
+        const adminBlock = await adminBlockQueries.adminBlockByHeight(
             undefined,
-            undefined,
+            { height: 10 },
             { factomd }
         );
-        assert.hasAllKeys(adminBlock, ['hash', 'height']);
-        assert.isString(adminBlock.hash);
-        assert.isNumber(adminBlock.height);
+        assert.deepStrictEqual(adminBlock, { hash });
     });
 
-    it('Should resolve the leaves of the previousBlock field', async () => {
+    it('Should return null if an AdminBlockByHeight cannot be found.', async () => {
+        const adminBlock = await adminBlockQueries.adminBlockByHeight(
+            undefined,
+            { height: Number.MAX_SAFE_INTEGER },
+            { factomd }
+        );
+        assert.isNull(adminBlock);
+    });
+
+    it('Should get the hash field of the adminBlockHead', async () => {
+        const directoryBlockHead = await cli.getDirectoryBlockHead();
+        const adminBlock = await adminBlockQueries.adminBlockHead(undefined, undefined, {
+            factomd
+        });
+        assert.deepStrictEqual(adminBlock, { hash: directoryBlockHead.adminBlockRef });
+    });
+
+    it('Should resolve the hash field of the previousBlock field', async () => {
         const hash = 'a1f965e4359f23371f27e6b1073ec1a84b7dc076a61c7375f21262efbe558011';
         const previousBlock = await adminBlockResolvers.previousBlock(
             { hash },
@@ -59,19 +60,17 @@ describe('AdminBlock Resolvers', () => {
             { factomd }
         );
         assert.deepStrictEqual(previousBlock, {
-            hash: 'fa8e79957c47406d2a55c2c1321ae6a22403d8998b193dea445fca7d732e2cd8',
-            height: 189104
+            hash: 'fa8e79957c47406d2a55c2c1321ae6a22403d8998b193dea445fca7d732e2cd8'
         });
     });
 
-    it('Should resolve the leaves of the nextBlock field', async () => {
+    it('Should resolve the hash field of the nextBlock field', async () => {
         const hash = 'a1f965e4359f23371f27e6b1073ec1a84b7dc076a61c7375f21262efbe558011';
         const nextBlock = await adminBlockResolvers.nextBlock({ hash }, undefined, {
             factomd
         });
         assert.deepStrictEqual(nextBlock, {
-            hash: '5f285984f186293eca7fc7944b864d16afb75c4438f755689ae1c52306b7f9ef',
-            height: 189106
+            hash: '5f285984f186293eca7fc7944b864d16afb75c4438f755689ae1c52306b7f9ef'
         });
     });
 

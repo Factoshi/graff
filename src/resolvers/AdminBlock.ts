@@ -1,29 +1,25 @@
 import { AdminBlockResolvers, QueryResolvers } from '../types/resolvers';
-import { AdminBlock } from 'factom';
 import { handleBlockApiError } from './resolver-helpers';
-
-export const extractAdminBlockLeaves = (adminBlock: AdminBlock) => ({
-    hash: adminBlock.backReferenceHash,
-    height: adminBlock.directoryBlockHeight
-});
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
-export const adminBlockRootQueries: QueryResolvers = {
-    adminBlock: (parent, { arg }, { factomd }) => {
-        return factomd.adminBlock
-            .load(arg)
-            .then(extractAdminBlockLeaves)
-            .catch(handleBlockApiError);
+export const adminBlockQueries: QueryResolvers = {
+    adminBlock: async (root, { hash }, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(hash).catch(handleBlockApiError);
+        return adminBlock && { hash: adminBlock.backReferenceHash };
     },
-
-    adminBlockHead: async (root, args, { factomd }) => {
-        const directoryBlockHead = await factomd.directoryBlockHead.load();
-        return factomd.adminBlock
-            .load(directoryBlockHead.adminBlockRef)
-            .then(extractAdminBlockLeaves)
+    adminBlockByHeight: async (root, { height }, { factomd }) => {
+        const adminBlock = await factomd.adminBlock
+            .load(height)
             .catch(handleBlockApiError);
+        return adminBlock && { hash: adminBlock.backReferenceHash };
+    },
+    adminBlockHead: async (root, args, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlockHead
+            .load()
+            .catch(handleBlockApiError);
+        return directoryBlock && { hash: directoryBlock.adminBlockRef };
     }
 };
 
