@@ -210,4 +210,21 @@ describe('Query Resolvers', () => {
         assert.hasAllKeys(properties, ['factomdVersion', 'factomdAPIVersion']);
         Object.values(properties).forEach(assert.isString);
     });
+
+    it('Should get an entry receipt', async () => {
+        const hash = 'f15aa73fbe29c9e5a6a53b4fbac16f8917bc7fb5441b32cd32453195c808fb5d';
+        const receipt = await Query.receipt(undefined, { hash }, { factomd });
+        assert.deepStrictEqual(receipt.entry, { hash });
+        assert.strictEqual(
+            receipt.bitcoinBlockHash,
+            '0000000000000000001cc4b4bbb96148080072ab215a61bd050825fcdeca4980'
+        );
+        assert.strictEqual(
+            receipt.bitcoinTransactionHash,
+            'e55bd0093be4a30d988532ac27a4544b95d6fc4e638c9a626c2ede5c87a75eae'
+        );
+        receipt.merkleBranch.forEach(branch =>
+            assert.hasAllKeys(branch, ['left', 'right', 'top'])
+        );
+    });
 });

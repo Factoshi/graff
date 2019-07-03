@@ -60,4 +60,8 @@ export class FactomdDataLoader {
     );
 
     properties = this.createMockDataLoader(() => this.cli.factomdApi('properties'));
+
+    receipt = this.createDataLoader((hash: string) =>
+        this.cli.factomdApi('receipt', { hash })
+    );
 }

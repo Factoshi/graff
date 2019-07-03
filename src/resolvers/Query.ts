@@ -114,5 +114,14 @@ export const Query: QueryResolvers = {
             factomdAPIVersion: properties.factomdapiversion,
             factomdVersion: properties.factomdversion
         };
+    },
+    receipt: async (root, { hash }, { factomd }) => {
+        const receipt = await factomd.receipt.load(hash);
+        return {
+            entry: { hash },
+            bitcoinTransactionHash: receipt.receipt.bitcointransactionhash || null,
+            bitcoinBlockHash: receipt.receipt.bitcoinblockhash || null,
+            merkleBranch: receipt.receipt.merklebranch
+        };
     }
 };
