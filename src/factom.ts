@@ -1,5 +1,20 @@
-import { FactomCli } from 'factom';
+import { FactomCli, FactomEventEmitter } from 'factom';
+import {
+    factomdPort,
+    factomdHost,
+    factomdPath,
+    factomdUser,
+    factomdPasswd,
+    factomdProto
+} from './contants';
 
-// TODO: Handle user options.
+export const cli = new FactomCli({
+    host: factomdHost,
+    port: factomdPort ? parseInt(factomdPort) : 8088,
+    path: factomdPath || '/v2',
+    user: factomdUser,
+    password: factomdPasswd,
+    protocol: factomdProto || 'http'
+});
 
-export const cli = new FactomCli();
+export const factomEmitter = new FactomEventEmitter(cli);
