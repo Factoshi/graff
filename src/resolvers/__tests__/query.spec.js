@@ -1,4 +1,4 @@
-const { Query } = require('../Query');
+const { query } = require('../Query');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { assert } = require('chai');
@@ -14,7 +14,7 @@ describe('Query Resolvers', () => {
     it('Should get an array of the leaves of Address from the balances resolver', async () => {
         ecAddress = 'EC3QVDcZ88chcKxHnatyigwq4nSZbsY56B6Q7HuyL9yUEFSoSf6Q';
         fctAddress = 'FA2MZs5wASMo9cCiKezdiQKCd8KA6Zbg2xKXKGmYEZBqon9J3ZKv';
-        const balances = await Query.balances(
+        const balances = await query.balances(
             undefined,
             { addresses: [ecAddress, fctAddress] },
             { factomd }
@@ -28,7 +28,7 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get the leaves of CurrentMinute from the currentMinute resolver', async () => {
-        const currentMinute = await Query.currentMinute(undefined, undefined, {
+        const currentMinute = await query.currentMinute(undefined, undefined, {
             factomd
         });
 
@@ -57,13 +57,13 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get the entry credit rate', async () => {
-        const ecRate = await Query.entryCreditRate(undefined, undefined, { factomd });
+        const ecRate = await query.entryCreditRate(undefined, undefined, { factomd });
         assert.isNumber(ecRate);
     });
 
     it('Should get the leaves of FactoidTransactionAck from the factoidTransactionAck resolver', async () => {
         const hash = 'b853f921bb6598b20c5054fa422a83a6a128ccd3c0fed2aaf03f0060d6805744';
-        const ack = await Query.factoidTransactionAck(undefined, { hash }, { factomd });
+        const ack = await query.factoidTransactionAck(undefined, { hash }, { factomd });
         assert.deepStrictEqual(ack, {
             hash,
             txTimestamp: 1560361379165,
@@ -73,7 +73,7 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get the leaves of Heights from the heights resolver', async () => {
-        const heights = await Query.heights(undefined, undefined, { factomd });
+        const heights = await query.heights(undefined, undefined, { factomd });
         assert.hasAllKeys(heights, [
             'leaderHeight',
             'directoryBlockHeight',
@@ -84,7 +84,7 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get paginated pending entries', async () => {
-        const pendingEntries = await Query.pendingEntries(undefined, {}, { factomd });
+        const pendingEntries = await query.pendingEntries(undefined, {}, { factomd });
         assert.hasAllKeys(pendingEntries, [
             'totalCount',
             'offset',
@@ -99,7 +99,7 @@ describe('Query Resolvers', () => {
 
     it('Should get first 20 paginated pending entries', async () => {
         const mock = generateMockPendingEntriesMethod(40);
-        const first20 = await Query.pendingEntries(
+        const first20 = await query.pendingEntries(
             undefined,
             { offset: 0, first: 20 },
             mock
@@ -112,7 +112,7 @@ describe('Query Resolvers', () => {
 
     it('Should return 0 for paginated entry values', async () => {
         const mock = generateMockPendingEntriesMethod(0);
-        const first20 = await Query.pendingEntries(
+        const first20 = await query.pendingEntries(
             undefined,
             { offset: 0, first: 20 },
             mock
@@ -125,7 +125,7 @@ describe('Query Resolvers', () => {
 
     it('Should return 0 for paginated entry values when offset is grester than 0', async () => {
         const mock = generateMockPendingEntriesMethod(0);
-        const emptyPage = await Query.pendingEntries(
+        const emptyPage = await query.pendingEntries(
             undefined,
             { offset: 20, first: 20 },
             mock
@@ -137,7 +137,7 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get paginated pending transactions', async () => {
-        const pendingTransactions = await Query.pendingTransactions(
+        const pendingTransactions = await query.pendingTransactions(
             undefined,
             {},
             { factomd }
@@ -168,7 +168,7 @@ describe('Query Resolvers', () => {
 
     it('Should get the first 20 paginated pending transactions', async () => {
         const mock = generateMockPendingTransactionsMethod(40);
-        const first20 = await Query.pendingTransactions(
+        const first20 = await query.pendingTransactions(
             undefined,
             { offset: 0, first: 20 },
             mock
@@ -181,7 +181,7 @@ describe('Query Resolvers', () => {
 
     it('Should get the last 20 paginated pending transactions', async () => {
         const mock = generateMockPendingTransactionsMethod(40);
-        const last20 = await Query.pendingTransactions(
+        const last20 = await query.pendingTransactions(
             undefined,
             { offset: 20, first: 20 },
             mock
@@ -194,7 +194,7 @@ describe('Query Resolvers', () => {
 
     it('Should return 0 for paginated transaction values', async () => {
         const mock = generateMockPendingTransactionsMethod(0);
-        const emptyPage = await Query.pendingTransactions(
+        const emptyPage = await query.pendingTransactions(
             undefined,
             { offset: 0, first: 20 },
             mock
@@ -206,14 +206,14 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get the leaves of Properties from the properties resolver', async () => {
-        const properties = await Query.properties(undefined, undefined, { factomd });
+        const properties = await query.properties(undefined, undefined, { factomd });
         assert.hasAllKeys(properties, ['factomdVersion', 'factomdAPIVersion']);
         Object.values(properties).forEach(assert.isString);
     });
 
     it('Should get an entry receipt', async () => {
         const hash = 'f15aa73fbe29c9e5a6a53b4fbac16f8917bc7fb5441b32cd32453195c808fb5d';
-        const receipt = await Query.receipt(undefined, { hash }, { factomd });
+        const receipt = await query.receipt(undefined, { hash }, { factomd });
         assert.deepStrictEqual(receipt.entry, { hash });
         assert.strictEqual(
             receipt.bitcoinBlockHash,
