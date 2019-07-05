@@ -1,12 +1,55 @@
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloServer, gql, PubSub, AuthenticationError } from 'apollo-server';
 import { importSchema } from 'graphql-import';
 import { resolvers } from './resolvers';
+import { resolve } from 'path';
+import { factomdPasswd, factomdUser } from './contants';
+import { Context } from './types/server';
+import auth from 'basic-auth';
 import { FactomdDataLoader } from './data_loader';
 import { cli } from './factom';
-import { Context } from './types/server';
-import { resolve } from 'path';
+import { compose } from 'ramda';
+import { Request } from 'express';
 
-// Create typeDefs
+// token should be a basic authorization string.
+const authorize = (token: string | undefined) => {
+    if (factomdPasswd && factomdUser) {
+        if (token === undefined) {
+            throw new AuthenticationError('Must provide authorization token.');
+        }
+        const cred = auth.parse(token);
+        if (cred === undefined) {
+            const message = `${token} is not a valid basic auth string.`;
+            throw new AuthenticationError(message);
+        }
+        if (cred.name !== factomdUser || cred.pass !== factomdPasswd) {
+            throw new AuthenticationError('Invalid credentials.');
+        }
+    }
+};
+
+/*********************
+ *  Create context   *
+ ********************/
+
+const pubsub = new PubSub();
+
+const createContextObject = (): Context => ({
+    // Caches factomd requests. New instance created per request to avoid memory leak.
+    factomd: new FactomdDataLoader(cli),
+    pubsub
+});
+
+const extractAuthHeader = (req: Request) => req.headers.authorization;
+
+const context = compose(
+    createContextObject,
+    authorize,
+    extractAuthHeader
+);
+/*********************
+ *  Create typeDefs  *
+ ********************/
+// import schema and parse
 const schema = importSchema(resolve(__dirname, '../schema.graphql'));
 const typeDefs = gql`
     ${schema}
@@ -26,20 +69,15 @@ const server = new ApolloServer({
     resolvers,
     context,
     tracing: process.env.NODE_ENV !== 'production'
-    // formatError: error => {
-    //     if (error.message) {
-    //       return { message: error.message, statusCode: error.statusCode }
-    //     }
-    //     return { message: err.message }
-    //   }
 });
 
-// Launch server
+/*******************
+ *  Launch server  *
+ ******************/
 server.listen().then(({ url }) => console.log(`Server ready at ${url} 🚀`));
 
 // TODO: figure out how to mitigate malicious queries
 // TODO: add subscriptions
 // TODO: add queries
 // TODO: set up e2e testing
-// TODO: User config option for FactomCli
 // TODO: User config option for pagination limit
