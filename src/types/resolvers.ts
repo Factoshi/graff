@@ -701,7 +701,7 @@ export type Query = {
   /** Get properties of factomd and the APIs. */
   properties: Properties;
   /** Get an entry receipt */
-  receipt?: Maybe<Receipt>;
+  receipt: Receipt;
   /** Get a transaction by its hash. */
   transaction?: Maybe<Transaction>;
 };
@@ -809,6 +809,26 @@ export type ServerFaultHandoff = AdminEntry & {
   id: Scalars["Int"];
   /** The code of the admin entry. */
   code: AdminCode;
+};
+
+export type Subscription = {
+  __typename?: "Subscription";
+  /** Subscribe to each new admin block. */
+  newAdminBlock: AdminBlock;
+  /** Subscribe to newly created chains. */
+  newChainsCreated: Array<PaginatedEntryBlocks>;
+  /** Subscribe to each new directory block. */
+  newDirectoryBlock: DirectoryBlock;
+  /** Subscribe to each new entry block for a specified chain. */
+  newEntryBlock: EntryBlock;
+  /** Subscribe to each new entry credit block. */
+  newEntryCreditBlock: EntryCreditBlock;
+  /** Subscribe to each new factoid block. */
+  newFactoidBlock: FactoidBlock;
+};
+
+export type SubscriptionNewEntryBlockArgs = {
+  chain: Scalars["Hash"];
 };
 
 /** Factoid Transaction included in the blockchain. */
@@ -945,6 +965,7 @@ export type ResolversTypes = ResolversObject<{
   Properties: Partial<Properties>;
   Receipt: Partial<Receipt>;
   MerkleNode: Partial<MerkleNode>;
+  Subscription: {};
   PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
   CommitRevealSend: Partial<CommitRevealSend>;
   DirectoryBlockSignature: Partial<DirectoryBlockSignature>;
@@ -1749,7 +1770,7 @@ export type QueryResolvers<
   >;
   properties?: Resolver<ResolversTypes["Properties"], ParentType, ContextType>;
   receipt?: Resolver<
-    Maybe<ResolversTypes["Receipt"]>,
+    ResolversTypes["Receipt"],
     ParentType,
     ContextType,
     QueryReceiptArgs
@@ -1790,6 +1811,43 @@ export type ServerFaultHandoffResolvers<
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   code?: Resolver<ResolversTypes["AdminCode"], ParentType, ContextType>;
+}>;
+
+export type SubscriptionResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["Subscription"]
+> = ResolversObject<{
+  newAdminBlock?: SubscriptionResolver<
+    ResolversTypes["AdminBlock"],
+    ParentType,
+    ContextType
+  >;
+  newChainsCreated?: SubscriptionResolver<
+    Array<ResolversTypes["PaginatedEntryBlocks"]>,
+    ParentType,
+    ContextType
+  >;
+  newDirectoryBlock?: SubscriptionResolver<
+    ResolversTypes["DirectoryBlock"],
+    ParentType,
+    ContextType
+  >;
+  newEntryBlock?: SubscriptionResolver<
+    ResolversTypes["EntryBlock"],
+    ParentType,
+    ContextType,
+    SubscriptionNewEntryBlockArgs
+  >;
+  newEntryCreditBlock?: SubscriptionResolver<
+    ResolversTypes["EntryCreditBlock"],
+    ParentType,
+    ContextType
+  >;
+  newFactoidBlock?: SubscriptionResolver<
+    ResolversTypes["FactoidBlock"],
+    ParentType,
+    ContextType
+  >;
 }>;
 
 export type TransactionResolvers<
@@ -1879,6 +1937,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   Receipt?: ReceiptResolvers<ContextType>;
   ServerFaultHandoff?: ServerFaultHandoffResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   Transaction?: TransactionResolvers<ContextType>;
 }>;
 

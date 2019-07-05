@@ -93,20 +93,20 @@ type Query {
     transaction(hash: Hash!): Transaction
 }
 
-# type Subscription {
-#     "Subscribe to each new admin block."
-#     newAdminBlock: AdminBlock!
-#     "Subscribe to newly created chains."
-#     newChainsCreated: [PaginatedEntryBlocks!]!
-#     "Subscribe to each new directory block."
-#     newDirectoryBlock: DirectoryBlock!
-#     "Subscribe to each new entry block for a specified chain."
-#     newEntryBlock(chain: Hash!): EntryBlock!
-#     "Subscribe to each new entry credit block."
-#     newEntryCreditBlock: EntryCreditBlock!
-#     "Subscribe to each new factoid block."
-#     newFactoidBlock: FactoidBlock!
-# }
+type Subscription {
+    "Subscribe to each new admin block."
+    newAdminBlock: AdminBlock!
+    "Subscribe to newly created chains."
+    newChainsCreated: [PaginatedEntryBlocks!]!
+    "Subscribe to each new directory block."
+    newDirectoryBlock: DirectoryBlock!
+    "Subscribe to each new entry block for a specified chain."
+    newEntryBlock(chain: Hash!): EntryBlock!
+    "Subscribe to each new entry credit block."
+    newEntryCreditBlock: EntryCreditBlock!
+    "Subscribe to each new factoid block."
+    newFactoidBlock: FactoidBlock!
+}
 
 # type Mutation {
 #     "Send a Chain Commit Message to factomd to create a new Chain."
