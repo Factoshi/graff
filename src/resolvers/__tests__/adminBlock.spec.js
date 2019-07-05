@@ -46,10 +46,11 @@ describe('AdminBlock Resolvers', () => {
 
     it('Should get the hash field of the adminBlockHead', async () => {
         const directoryBlockHead = await cli.getDirectoryBlockHead();
+        const adminBlockHead = await cli.getAdminBlock(directoryBlockHead.adminBlockRef);
         const adminBlock = await adminBlockQueries.adminBlockHead(undefined, undefined, {
             factomd
         });
-        assert.deepStrictEqual(adminBlock, { hash: directoryBlockHead.adminBlockRef });
+        assert.deepStrictEqual(adminBlock, { hash: adminBlockHead.backReferenceHash });
     });
 
     it('Should resolve the hash field of the previousBlock field', async () => {

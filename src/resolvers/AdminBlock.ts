@@ -1,6 +1,5 @@
 import { AdminBlockResolvers, QueryResolvers } from '../types/resolvers';
 import { handleBlockError } from './resolver-helpers';
-import factom = require('factom');
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
@@ -16,7 +15,8 @@ export const adminBlockQueries: QueryResolvers = {
     },
     adminBlockHead: async (root, args, { factomd }) => {
         const directoryBlock = await factomd.directoryBlockHead.load();
-        return { hash: directoryBlock.adminBlockRef };
+        const adminBlock = await factomd.adminBlock.load(directoryBlock.adminBlockRef);
+        return { hash: adminBlock.backReferenceHash };
     }
 };
 
