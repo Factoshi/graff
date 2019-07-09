@@ -5,10 +5,10 @@ import { testPaginationInput, handleBlockError } from './resolver-helpers';
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const directoryBlockQueries: QueryResolvers = {
-    directoryBlock: async (root, { hash }, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock
-            .load(hash)
-            .catch(handleBlockError);
+    directoryBlock: async (root, { hash }, { dataSources }) => {
+        console.time('fetch directory block');
+        const directoryBlock = await dataSources.factomd.getDirectoryBlock(hash);
+        console.timeEnd('fetch directory block');
         return directoryBlock && { hash: directoryBlock.keyMR };
     },
     directoryBlockByHeight: async (root, { height }, { factomd }) => {
@@ -17,7 +17,7 @@ export const directoryBlockQueries: QueryResolvers = {
             .catch(handleBlockError);
         return directoryBlock && { hash: directoryBlock.keyMR };
     },
-    directoryBlockHead: async (root, args, { factomd }) => {
+    directoryBlockHead: async (root, args, { factomd, dataSources }) => {
         const directoryBlock = await factomd.directoryBlockHead.load();
         return { hash: directoryBlock.keyMR };
     }

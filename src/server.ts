@@ -1,14 +1,16 @@
 import { ApolloServer, gql, PubSub, AuthenticationError } from 'apollo-server';
+import { RedisCache } from 'apollo-server-cache-redis';
 import { importSchema } from 'graphql-import';
 import { resolvers } from './resolvers';
 import { resolve } from 'path';
 import { factomdPasswd, factomdUser } from './contants';
-import { Context } from './types/server';
 import auth from 'basic-auth';
 import { FactomdDataLoader } from './data_loader';
 import { cli } from './factom';
 import { compose } from 'ramda';
 import { Request } from 'express';
+import { Context } from 'apollo-server-core';
+import { FactomdDataSource } from './datasource';
 
 // token should be a basic authorization string.
 const authorize = (token: string | undefined) => {
@@ -80,7 +82,11 @@ const server = new ApolloServer({
     // by the subscription lifecycle methods below.
     context: ({ req }) => (req !== undefined ? context(req) : createContextObject()),
     subscriptions: { onConnect },
-    tracing: process.env.NODE_ENV !== 'production'
+    cache: new RedisCache(),
+    dataSources: () => ({
+        factomd: new FactomdDataSource(cli)
+    }),
+    tracing: true
 });
 
 /*******************
@@ -90,6 +96,6 @@ server.listen().then(({ url }) => console.log(`Server ready at ${url} 🚀`));
 
 // TODO: figure out how to mitigate malicious queries
 // TODO: add subscriptions
-// TODO: add queries
+// TODO: add mutations
 // TODO: set up e2e testing
 // TODO: User config option for pagination limit

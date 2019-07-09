@@ -64,11 +64,13 @@
         "@types/basic-auth": "^1.1.2",
         "@types/graphql": "^14.2.2",
         "@types/ramda": "^0.26.15",
+        "apollo-datasource": "^0.5.0",
         "apollo-server": "^2.6.7",
+        "apollo-server-cache-redis": "^1.0.0",
         "basic-auth": "^2.0.1",
         "dataloader": "^1.4.0",
         "factom": "^1.2.4",
-        "graphql": "^14.4.0",
+        "graphql": "^14.4.2",
         "graphql-import": "^0.7.1",
         "ramda": "^0.26.1"
     }
