@@ -9,6 +9,7 @@ import { entryCreditBlockResolvers } from './EntryCreditBlock';
 import { factoidBlockResolvers } from './FactoidBlock';
 import { transactionResolvers } from './Transaction';
 import { entryResolvers } from './Entry';
+import { subscription } from './Subscription';
 
 export const resolvers: Resolvers = {
     //Queries
@@ -20,6 +21,7 @@ export const resolvers: Resolvers = {
     EntryCreditBlock: entryCreditBlockResolvers,
     FactoidBlock: factoidBlockResolvers,
     Query: query,
+    Subscription: subscription,
     Transaction: transactionResolvers,
     // Scalars
     Hash,
