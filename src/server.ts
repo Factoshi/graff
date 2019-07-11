@@ -2,7 +2,7 @@ import { ApolloServer, gql, PubSub, AuthenticationError } from 'apollo-server';
 import { importSchema } from 'graphql-import';
 import { resolvers } from './resolvers';
 import { resolve } from 'path';
-import { factomdPasswd, factomdUser } from './contants';
+import { FACTOMD_PASSWD, FACTOMD_USER } from './contants';
 import { Context } from './types/server';
 import auth from 'basic-auth';
 import { FactomdDataLoader } from './data_loader';
@@ -12,7 +12,7 @@ import { Request } from 'express';
 
 // token should be a basic authorization string.
 const authorize = (token: string | undefined) => {
-    if (factomdPasswd && factomdUser) {
+    if (FACTOMD_PASSWD && FACTOMD_USER) {
         if (token === undefined) {
             throw new AuthenticationError('Must provide authorization token.');
         }
@@ -21,7 +21,7 @@ const authorize = (token: string | undefined) => {
             const message = `${token} is not a valid basic auth string.`;
             throw new AuthenticationError(message);
         }
-        if (cred.name !== factomdUser || cred.pass !== factomdPasswd) {
+        if (cred.name !== FACTOMD_USER || cred.pass !== FACTOMD_PASSWD) {
             throw new AuthenticationError('Invalid credentials.');
         }
     }
@@ -73,7 +73,7 @@ const typeDefs = gql`
  *  Create server  *
  ******************/
 // bring it all together
-const server = new ApolloServer({
+export const server = new ApolloServer({
     typeDefs,
     resolvers,
     // If req is undefined then this is a subscription and thus auth will be handled
@@ -82,14 +82,3 @@ const server = new ApolloServer({
     subscriptions: { onConnect },
     tracing: process.env.NODE_ENV !== 'production'
 });
-
-/*******************
- *  Launch server  *
- ******************/
-server.listen().then(({ url }) => console.log(`Server ready at ${url} 🚀`));
-
-// TODO: figure out how to mitigate malicious queries
-// TODO: add subscriptions
-// TODO: add queries
-// TODO: set up e2e testing
-// TODO: User config option for pagination limit
