@@ -2,9 +2,9 @@
  * Environment variables.
  */
 // factomd
-export const factomdHost = process.env.FACTOMD_HOST;
-export const factomdPort = process.env.FACTOMD_PORT;
-export const factomdPath = process.env.FACTOMD_PATH;
-export const factomdUser = process.env.FACTOMD_USER;
-export const factomdPasswd = process.env.FACTOMD_PASSWD;
-export const factomdProto = process.env.FACTOM_PROTOCOL;
+export const FACTOMD_HOST = process.env.FACTOMD_HOST;
+export const FACTOMD_PORT = process.env.FACTOMD_PORT;
+export const FACTOMD_PATH = process.env.FACTOMD_PATH;
+export const FACTOMD_USER = process.env.FACTOMD_USER;
+export const FACTOMD_PASSWD = process.env.FACTOMD_PASSWD;
+export const FACTOMD_PROTO = process.env.FACTOM_PROTOCOL;
