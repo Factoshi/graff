@@ -5,21 +5,21 @@ import { testPaginationInput, handleBlockError } from './resolver-helpers';
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const directoryBlockQueries: QueryResolvers = {
-    directoryBlock: async (root, { hash }, { factomd }) => {
+    directoryBlock: async (_, { hash }, { factomd }) => {
         const directoryBlock = await factomd.directoryBlock
             .load(hash)
             .catch(handleBlockError);
-        return directoryBlock && { hash: directoryBlock.keyMR };
+        return directoryBlock && { keyMR: directoryBlock.keyMR };
     },
-    directoryBlockByHeight: async (root, { height }, { factomd }) => {
+    directoryBlockByHeight: async (_, { height }, { factomd }) => {
         const directoryBlock = await factomd.directoryBlock
             .load(height)
             .catch(handleBlockError);
-        return directoryBlock && { hash: directoryBlock.keyMR };
+        return directoryBlock && { keyMR: directoryBlock.keyMR };
     },
-    directoryBlockHead: async (root, args, { factomd }) => {
+    directoryBlockHead: async (parent, args, { factomd }) => {
         const directoryBlock = await factomd.directoryBlockHead.load();
-        return { hash: directoryBlock.keyMR };
+        return { keyMR: directoryBlock.keyMR };
     }
 };
 
@@ -27,23 +27,24 @@ export const directoryBlockQueries: QueryResolvers = {
  * AdminBlock type resolvers.
  */
 export const directoryBlockResolvers: DirectoryBlockResolvers = {
-    adminBlock: async ({ hash }, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(hash!);
-        return { hash: directoryBlock.adminBlockRef };
+    adminBlock: async ({ keyMR }, _, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(keyMR!);
+        // The adminBlockRef is the lookupHash, but the adminBlock resolvers are all expecting
+        // the backReferencehash.
+        const adminBlock = await factomd.adminBlock.load(directoryBlock.adminBlockRef);
+        return { backReferenceHash: adminBlock.backReferenceHash };
     },
-    entryCreditBlock: async ({ hash }, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(hash!);
-        return { hash: directoryBlock.entryCreditBlockRef };
+    entryCreditBlock: async ({ keyMR }, _, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(keyMR!);
+        return { headerHash: directoryBlock.entryCreditBlockRef };
     },
-    entryBlocks: async ({ hash }, { offset = 0, first = Infinity }, { factomd }) => {
+    entryBlockPage: async ({ keyMR }, { offset = 0, first = Infinity }, { factomd }) => {
         testPaginationInput(offset!, first!);
-        const directoryBlock = await factomd.directoryBlock.load(hash!);
-        const entryBlocks = directoryBlock.entryBlockRefs
-            .slice(offset!, offset! + first!)
-            .map(({ chainId, keyMR }) => ({
-                chain: chainId,
-                hash: keyMR
-            })) as EntryBlock[];
+        const directoryBlock = await factomd.directoryBlock.load(keyMR!);
+        const entryBlocks = directoryBlock.entryBlockRefs.slice(
+            offset!,
+            offset! + first!
+        ) as EntryBlock[];
         return {
             entryBlocks,
             totalCount: directoryBlock.entryBlockRefs.length,
@@ -51,30 +52,30 @@ export const directoryBlockResolvers: DirectoryBlockResolvers = {
             pageLength: entryBlocks.length
         };
     },
-    factoidBlock: async ({ hash }, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(hash!);
-        return { hash: directoryBlock.factoidBlockRef };
+    factoidBlock: async ({ keyMR }, _, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(keyMR!);
+        return { keyMR: directoryBlock.factoidBlockRef };
     },
-    height: async ({ hash }, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(hash!);
+    height: async ({ keyMR }, _, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(keyMR!);
         return directoryBlock.height;
     },
-    nextBlock: async ({ hash }, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(hash!);
+    nextBlock: async ({ keyMR }, _, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(keyMR!);
         const nextBlock = await factomd.directoryBlock
             .load(directoryBlock.height + 1)
             .catch(handleBlockError);
-        return nextBlock && { hash: nextBlock.keyMR };
+        return nextBlock && { keyMR: nextBlock.keyMR };
     },
-    previousBlock: async ({ hash }, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(hash!);
+    previousBlock: async ({ keyMR }, _, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(keyMR!);
         const previousBlock = await factomd.directoryBlock
             .load(directoryBlock.previousBlockKeyMR)
             .catch(handleBlockError);
-        return previousBlock && { hash: previousBlock.keyMR };
+        return previousBlock && { keyMR: previousBlock.keyMR };
     },
-    timestamp: async ({ hash }, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlock.load(hash!);
+    timestamp: async ({ keyMR }, _, { factomd }) => {
+        const directoryBlock = await factomd.directoryBlock.load(keyMR!);
         // convert to ms
         return directoryBlock.timestamp * 1000;
     }

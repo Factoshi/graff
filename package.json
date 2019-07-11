@@ -4,32 +4,12 @@
     "description": "GraphQL translation layer for the factomd RPC API.",
     "main": "index.js",
     "scripts": {
-        "start": "ts-node src/server.js",
-        "start-watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.js' --exec 'ts-node' src/server.ts",
+        "start": "ts-node src",
+        "start-watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.js' --exec 'ts-node' src",
         "build": "tsc",
-        "test": "nyc mocha src/**/*.spec.js",
+        "test": "jest",
         "generate": "graphql-codegen --config codegen.yml",
         "generate-init": "graphql-codegen init"
-    },
-    "nyc": {
-        "include": [
-            "src/**/*.ts",
-            "src/**/*.tsx"
-        ],
-        "extension": [
-            ".ts",
-            ".tsx"
-        ],
-        "require": [
-            "ts-node/register",
-            "source-map-support/register"
-        ],
-        "reporter": [
-            "text",
-            "html"
-        ],
-        "sourceMap": true,
-        "instrument": true
     },
     "repository": {
         "type": "git",
@@ -51,21 +31,24 @@
         "@graphql-codegen/typescript": "1.2.0",
         "@graphql-codegen/typescript-resolvers": "1.2.0",
         "@types/chai": "^4.1.7",
-        "@types/mocha": "^5.2.7",
+        "@types/jest": "^24.0.15",
+        "apollo-server-testing": "^2.6.8",
         "chai": "^4.2.0",
-        "mocha": "^6.1.4",
+        "graphql-tag": "^2.10.1",
+        "jest": "^24.8.0",
         "nodemon": "^1.19.1",
-        "nyc": "^14.1.1",
-        "source-map-support": "^0.5.12",
+        "ts-jest": "^24.0.2",
         "ts-node": "^8.3.0",
         "typescript": "^3.5.2"
     },
     "dependencies": {
         "@types/basic-auth": "^1.1.2",
+        "@types/bluebird": "^3.5.27",
         "@types/graphql": "^14.2.2",
         "@types/ramda": "^0.26.15",
         "apollo-server": "^2.6.7",
         "basic-auth": "^2.0.1",
+        "bluebird": "^3.5.5",
         "dataloader": "^1.4.0",
         "factom": "^1.2.4",
         "graphql": "^14.4.0",

@@ -118,9 +118,11 @@ describe('Transaction Resolvers', () => {
 
     it('Should resolve the factoid block hash', async () => {
         const hash = '648452235ac39cf4fdaf674d5ff8039ea77d75df62f5e7605fab6d2f143973d7';
-        const block = await transactionResolvers.block({ hash }, undefined, { factomd });
+        const block = await transactionResolvers.factoidBlock({ hash }, undefined, {
+            factomd
+        });
         assert.deepStrictEqual(block, {
-            hash: '93e67cf0a9a6b473d9433457a083442c3a2d14dd811f00a3a1191338026c7dc3'
+            keyMR: '93e67cf0a9a6b473d9433457a083442c3a2d14dd811f00a3a1191338026c7dc3'
         });
     });
 });

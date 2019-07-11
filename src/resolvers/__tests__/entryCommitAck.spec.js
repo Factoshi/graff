@@ -26,11 +26,17 @@ describe('EntryAck Resolvers', () => {
     });
 
     it('Should get the leaves of EntryCommitAck from the entryAck resolver', async () => {
-        const hash = '2346db420b35ee2c8e811305c36ea140ff47c59af70221be41ef3285e324d264';
-        const chain = '9b5c6dbec96faef4f855182fa8d1475427eed27fc18f4c8deec588d1c252b7f8';
-        const ack = await ackQueries.entryAck(undefined, { hash, chain }, { factomd });
+        const entryHash =
+            '2346db420b35ee2c8e811305c36ea140ff47c59af70221be41ef3285e324d264';
+        const chainId =
+            '9b5c6dbec96faef4f855182fa8d1475427eed27fc18f4c8deec588d1c252b7f8';
+        const ack = await ackQueries.entryAck(
+            undefined,
+            { entryHash, chainId },
+            { factomd }
+        );
         assert.deepStrictEqual(ack, {
-            entryHash: hash,
+            entryHash,
             commitHash:
                 '66555bb630cfad18702104c3af62cda8cb1d4b247f15e885c27109987816bcc2',
             commitStatus: {

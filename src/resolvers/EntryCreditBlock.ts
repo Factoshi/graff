@@ -5,50 +5,61 @@ import { testPaginationInput, handleBlockError } from './resolver-helpers';
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const entryCreditBlockQueries: QueryResolvers = {
-    entryCreditBlock: async (root, { hash }, { factomd }) => {
+    entryCreditBlock: async (_, { hash }, { factomd }) => {
         const entryCreditBlock = await factomd.entryCreditBlock
             .load(hash)
             .catch(handleBlockError);
-        return entryCreditBlock && { hash: entryCreditBlock.headerHash };
+        return entryCreditBlock && { headerHash: entryCreditBlock.headerHash };
     },
-
-    entryCreditBlockByHeight: async (root, { height }, { factomd }) => {
+    entryCreditBlockByHeight: async (_, { height }, { factomd }) => {
         const entryCreditBlock = await factomd.entryCreditBlock
             .load(height!)
             .catch(handleBlockError);
-        return entryCreditBlock && { hash: entryCreditBlock.headerHash };
+        return entryCreditBlock && { headerHash: entryCreditBlock.headerHash };
     },
     entryCreditBlockHead: async (root, args, { factomd }) => {
         const directoryBlockHead = await factomd.directoryBlockHead.load();
-        return { hash: directoryBlockHead.entryCreditBlockRef };
+        return { headerHash: directoryBlockHead.entryCreditBlockRef };
     }
 };
 
 /**
- * AdminBlock type resolvers.
+ * AdminBlock type resolvers. All resolvers expect the parent to provide the headerHash.
  */
 export const entryCreditBlockResolvers: EntryCreditBlockResolvers = {
-    height: async ({ hash }, args, { factomd }) => {
-        const entryCreditBlock = await factomd.entryCreditBlock.load(hash!);
-        return entryCreditBlock.directoryBlockHeight;
+    fullHash: async ({ headerHash }, _, { factomd }) => {
+        const entryCreditBlock = await factomd.entryCreditBlock.load(headerHash!);
+        return entryCreditBlock.fullHash;
     },
-    previousBlock: async ({ hash }, args, { factomd }) => {
-        const entryCreditBlock = await factomd.entryCreditBlock.load(hash!);
+    bodyHash: async ({ headerHash }, _, { factomd }) => {
+        const entryCreditBlock = await factomd.entryCreditBlock.load(headerHash!);
+        return entryCreditBlock.bodyHash;
+    },
+    bodySize: async ({ headerHash }, _, { factomd }) => {
+        const entryCreditBlock = await factomd.entryCreditBlock.load(headerHash!);
+        return entryCreditBlock.bodySize;
+    },
+    objectCount: async ({ headerHash }, _, { factomd }) => {
+        const entryCreditBlock = await factomd.entryCreditBlock.load(headerHash!);
+        return entryCreditBlock.objectCount;
+    },
+    previousBlock: async ({ headerHash }, _, { factomd }) => {
+        const entryCreditBlock = await factomd.entryCreditBlock.load(headerHash!);
         const previousBlock = await factomd.entryCreditBlock
             .load(entryCreditBlock.previousHeaderHash)
             .catch(handleBlockError);
-        return previousBlock && { hash: previousBlock.headerHash };
+        return previousBlock && { headerHash: previousBlock.headerHash };
     },
-    nextBlock: async ({ hash }, args, { factomd }) => {
-        const entryCreditBlock = await factomd.entryCreditBlock.load(hash!);
+    nextBlock: async ({ headerHash }, _, { factomd }) => {
+        const entryCreditBlock = await factomd.entryCreditBlock.load(headerHash!);
         const nextBlock = await factomd.entryCreditBlock
             .load(entryCreditBlock.directoryBlockHeight + 1)
             .catch(handleBlockError);
-        return nextBlock && { hash: nextBlock.headerHash };
+        return nextBlock && { headerHash: nextBlock.headerHash };
     },
-    commits: async ({ hash }, { offset = 0, first = Infinity }, { factomd }) => {
+    commitPage: async ({ headerHash }, { offset = 0, first = Infinity }, { factomd }) => {
         testPaginationInput(offset!, first!);
-        const entryCreditBlock = await factomd.entryCreditBlock.load(hash!);
+        const entryCreditBlock = await factomd.entryCreditBlock.load(headerHash!);
         const commits = entryCreditBlock.commits
             .slice(offset!, offset! + first!)
             .map(commit => ({
@@ -56,7 +67,7 @@ export const entryCreditBlockResolvers: EntryCreditBlockResolvers = {
                 entry: { hash: commit.entryHash },
                 credits: commit.credits,
                 paymentAddress: commit.ecPublicKey,
-                block: { hash }
+                entryCreditBlock: { headerHash: headerHash }
             })) as Commit[];
         return {
             commits,
@@ -65,11 +76,11 @@ export const entryCreditBlockResolvers: EntryCreditBlockResolvers = {
             pageLength: commits.length
         };
     },
-    directoryBlock: async ({ hash }, args, { factomd }) => {
-        const entryCreditBlock = await factomd.entryCreditBlock.load(hash!);
+    directoryBlock: async ({ headerHash }, _, { factomd }) => {
+        const entryCreditBlock = await factomd.entryCreditBlock.load(headerHash!);
         const directoryBlock = await factomd.directoryBlock.load(
             entryCreditBlock.directoryBlockHeight
         );
-        return { hash: directoryBlock.keyMR };
+        return { keyMR: directoryBlock.keyMR };
     }
 };

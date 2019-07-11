@@ -46,8 +46,8 @@ export const transactionResolvers: TransactionResolvers = {
         const transaction = await factomd.transaction.load(hash!);
         return transaction.feesPaid;
     },
-    block: async ({ hash }, args, { factomd }) => {
+    factoidBlock: async ({ hash }, args, { factomd }) => {
         const transaction = await factomd.transaction.load(hash!);
-        return { hash: transaction.blockContext.factoidBlockKeyMR };
+        return { keyMR: transaction.blockContext.factoidBlockKeyMR };
     }
 };

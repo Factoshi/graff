@@ -31,7 +31,7 @@ type Query {
     "Get the balance of public entry credit or factoid addresses."
     balances(addresses: [PublicAddress!]!): [Address!]!
     "Get the entry block at the tip of the specified chain."
-    chainHead(chain: Hash!): EntryBlock
+    chainHead(chainId: Hash!): EntryBlock
     "Entry status."
     commitAck(hash: Hash!): EntryCommitAck!
     "Get protocol time state."
@@ -47,9 +47,9 @@ type Query {
     "Entry status."
     entryAck(
         "Entry hash."
-        hash: Hash!
+        entryHash: Hash!
         "The chain where the entry was revealed."
-        chain: Hash!
+        chainId: Hash!
     ): EntryCommitAck!
     "Get an entry block by the specified block hash."
     entryBlock(hash: Hash!): EntryBlock
@@ -97,15 +97,17 @@ type Subscription {
     "Subscribe to each new admin block."
     newAdminBlock: AdminBlock!
     "Subscribe to newly created chains."
-    newChainsCreated: [PaginatedEntryBlocks!]!
+    newChains: [EntryBlock!]!
     "Subscribe to each new directory block."
     newDirectoryBlock: DirectoryBlock!
     "Subscribe to each new entry block for a specified chain."
-    newEntryBlock(chain: Hash!): EntryBlock!
+    newEntryBlock(chains: [Hash!]!): [EntryBlock!]!
     "Subscribe to each new entry credit block."
     newEntryCreditBlock: EntryCreditBlock!
     "Subscribe to each new factoid block."
     newFactoidBlock: FactoidBlock!
+    "Subscribe to new Factoid transactions involving a given address"
+    newFactoidTransaction(addresses: [PublicFactoidAddress!]!): [Transaction!]!
 }
 
 # type Mutation {
@@ -127,13 +129,15 @@ type Subscription {
 
 "Admin Block"
 type AdminBlock {
-    "The hash of the current block."
-    hash: Hash!
-    "Block height."
-    height: Height!
-    "The previous block."
+    "The top 256 bits of a SHA512 checksum of the previous Admin Block."
+    backReferenceHash: Hash!
+    "Hash used by the directory block to reference this admin block."
+    lookupHash: Hash!
+    "The number of bytes the body of this block contains. Big endian."
+    bodySize: Int!
+    "The previous block. Will be null if current block is height 0."
     previousBlock: AdminBlock
-    "The next block."
+    "The next block. Will be null if current block is tip of chain."
     nextBlock: AdminBlock
     "Array of admin entries contained within this admin block."
     entries: [AdminEntry!]!
@@ -143,11 +147,11 @@ type AdminBlock {
 
 "Directory Block"
 type DirectoryBlock {
-    "The hash of the current block."
-    hash: Hash!
-    "The previous block."
+    "The key merkle root of the current block."
+    keyMR: Hash!
+    "The previous block. Will be null if current block is height 0."
     previousBlock: DirectoryBlock
-    "The next block."
+    "The next block. Will be null if current block is tip of chain."
     nextBlock: DirectoryBlock
     "Block height."
     height: Height!
@@ -156,7 +160,7 @@ type DirectoryBlock {
     "The admin block referenced by this directory block."
     adminBlock: AdminBlock!
     "The entry blocks referenced by this directory block."
-    entryBlocks(
+    entryBlockPage(
         "Number of entries to return. Defaults to infinity."
         first: Int
         "Index of the pageLength PaginatedEntryBlock to return. Defaults to 0."
@@ -170,18 +174,18 @@ type DirectoryBlock {
 
 "Entry Block"
 type EntryBlock {
-    "The hash of the current block."
-    hash: Hash!
-    "The previous block."
-    previousBlock: EntryBlock
+    "The key merkle root of the current block."
+    keyMR: Hash!
     "The ID of the parent chain."
-    chain: Hash!
+    chainId: Hash!
     "Height of entry block. Also known as sequence number."
-    height: Height!
+    sequenceNumber: Height!
     "Milliseconds since Unix epoch. Marks the start of the block."
     timestamp: Float!
+    "The previous block. Will be null if current block is sequence number 0."
+    previousBlock: EntryBlock
     "Paginated entries contained within this entry block"
-    entries(
+    entryPage(
         "Number of entries to return. Defaults to infinity."
         first: Int
         "Index of the pageLength PaginatedEntryBlock to return. Defaults to 0."
@@ -193,16 +197,22 @@ type EntryBlock {
 
 "Entry Credit Block"
 type EntryCreditBlock {
-    "The hash of the current block."
-    hash: Hash!
-    "Block height."
-    height: Height!
-    "The previous block."
+    "The SHA256 hash of the serialized header."
+    headerHash: Hash!
+    "The SHA256 checksum of the entire Entry Credit Block"
+    fullHash: Hash!
+    "The SHA256 hash of the serialized body."
+    bodyHash: Hash!
+    "The number of bytes the body of this block contains. Big endian."
+    bodySize: Int!
+    "The number of objects this block contains. Big endian."
+    objectCount: Int!
+    "The previous block. Will be null if current block is height 0."
     previousBlock: EntryCreditBlock
-    "The next block."
+    "The next block. Will be null if current block is tip of chain."
     nextBlock: EntryCreditBlock
     "Paginated commits contained within the entry credit block"
-    commits(
+    commitPage(
         "Number of commits to return. Defaults to infinity."
         first: Int
         "Index of the pageLength PaginatedCommit to return. Defaults to 0."
@@ -214,18 +224,20 @@ type EntryCreditBlock {
 
 "Factoid Block"
 type FactoidBlock {
-    "The hash of the current block."
-    hash: Hash!
-    "Block height."
-    height: Height!
-    "The previous block."
+    "The key merkle root of the current block."
+    keyMR: Hash!
+    "The Merkle root of the Factoid transactions which accompany this block"
+    bodyMR: Hash!
+    "Data structure which allows proofs of only the value transfers."
+    ledgerKeyMR: Hash!
+    "The previous block. Will be null if current block is height 0."
     previousBlock: FactoidBlock
-    "The next block."
+    "The next block. Will be null if current block is tip of chain."
     nextBlock: FactoidBlock
     "EC-FCT exchange rate."
     entryCreditRate: Int!
     "Paginated transactions contained within the factoid block"
-    transactions(
+    transactionPage(
         "Number of transactions to return. Defaults to infinity."
         first: Int
         "Index of the pageLength PaginatedTransaction to return. Defaults to 0."
@@ -301,7 +313,7 @@ type Entry {
     "The hash of the entry"
     hash: Hash!
     "The chain the entry belongs to."
-    chain: Hash
+    chainId: Hash
     "The timestamp of the entry."
     timestamp: Float
     "List of external IDs associated with the entry as base64."
@@ -322,8 +334,10 @@ type Commit {
     credits: Int!
     "The entry credit address that paid for the entry."
     paymentAddress: PublicEntryCreditAddress!
+    "The signature of this Entry Commit by the payment address."
+    signature: String!
     "The parent entry credit block of the commit."
-    block: EntryCreditBlock!
+    entryCreditBlock: EntryCreditBlock!
 }
 
 "Factoid Transaction included in the blockchain."
@@ -346,8 +360,12 @@ type Transaction {
     totalEntryCreditOutputs: Int!
     "The fees burned for the transaction. Denominated in factoshis."
     fees: Int!
+    "Redeem Condition Datastructures"
+    rcds: [String!]!
+    "The signature needed to satisfy RCD"
+    signatures: [String!]!
     "The parent factoid block of the transaction."
-    block: FactoidBlock!
+    factoidBlock: FactoidBlock!
 }
 
 "Factoid transaction not yet included in the blockchain."

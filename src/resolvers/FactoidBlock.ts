@@ -5,53 +5,57 @@ import { testPaginationInput, handleBlockError } from './resolver-helpers';
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const factoidBlockQueries: QueryResolvers = {
-    factoidBlock: async (root, { hash }, { factomd }) => {
+    factoidBlock: async (_, { hash }, { factomd }) => {
         const factoidBlock = await factomd.factoidBlock
             .load(hash)
             .catch(handleBlockError);
-        return factoidBlock && { hash: factoidBlock.keyMR };
+        return factoidBlock && { keyMR: factoidBlock.keyMR };
     },
-    factoidBlockByHeight: async (root, { height }, { factomd }) => {
+    factoidBlockByHeight: async (_, { height }, { factomd }) => {
         const factoidBlock = await factomd.factoidBlock
             .load(height)
             .catch(handleBlockError);
-        return factoidBlock && { hash: factoidBlock.keyMR };
+        return factoidBlock && { keyMR: factoidBlock.keyMR };
     },
     factoidBlockHead: async (root, args, { factomd }) => {
         const directoryBlockHead = await factomd.directoryBlockHead.load();
         const factoidBlockHead = await factomd.factoidBlock.load(
             directoryBlockHead.factoidBlockRef
         );
-        return { hash: factoidBlockHead.keyMR };
+        return { keyMR: factoidBlockHead.keyMR };
     }
 };
 
 export const factoidBlockResolvers: FactoidBlockResolvers = {
-    height: async ({ hash }, args, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(hash!);
-        return factoidBlock.directoryBlockHeight;
+    bodyMR: async ({ keyMR }, _, { factomd }) => {
+        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
+        return factoidBlock.bodyMR;
     },
-    previousBlock: async ({ hash }, args, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(hash!);
+    ledgerKeyMR: async ({ keyMR }, _, { factomd }) => {
+        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
+        return factoidBlock.ledgerKeyMR;
+    },
+    entryCreditRate: async ({ keyMR }, _, { factomd }) => {
+        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
+        return factoidBlock.entryCreditRate;
+    },
+    previousBlock: async ({ keyMR }, _, { factomd }) => {
+        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
         const previousBlock = await factomd.factoidBlock
             .load(factoidBlock.previousBlockKeyMR)
             .catch(handleBlockError);
-        return previousBlock && { hash: previousBlock.keyMR };
+        return previousBlock && { keyMR: previousBlock.keyMR };
     },
-    nextBlock: async ({ hash }, args, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(hash!);
+    nextBlock: async ({ keyMR }, _, { factomd }) => {
+        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
         const nextBlock = await factomd.factoidBlock
             .load(factoidBlock.directoryBlockHeight + 1)
             .catch(handleBlockError);
-        return nextBlock && { hash: nextBlock.keyMR };
+        return nextBlock && { keyMR: nextBlock.keyMR };
     },
-    entryCreditRate: async ({ hash }, args, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(hash!);
-        return factoidBlock.entryCreditRate;
-    },
-    transactions: async ({ hash }, { offset = 0, first = Infinity }, { factomd }) => {
+    transactionPage: async ({ keyMR }, { offset = 0, first = Infinity }, { factomd }) => {
         testPaginationInput(offset!, first!);
-        const factoidBlock = await factomd.factoidBlock.load(hash as string);
+        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
         const transactions = factoidBlock.transactions
             .slice(offset!, offset! + first!)
             .map(tx => ({
@@ -64,7 +68,9 @@ export const factoidBlockResolvers: FactoidBlockResolvers = {
                 totalFactoidOutputs: tx.totalFactoidOutputs,
                 totalEntryCreditOutputs: tx.totalEntryCreditOutputs,
                 fees: tx.feesPaid,
-                block: { hash }
+                rcds: tx.rcds.map(rcd => rcd.toString('hex')),
+                signatures: tx.signatures.map(signature => signature.toString('hex')),
+                factoidBlock: { keyMR }
             })) as Transaction[];
         return {
             transactions,
@@ -73,11 +79,11 @@ export const factoidBlockResolvers: FactoidBlockResolvers = {
             pageLength: transactions.length
         };
     },
-    directoryBlock: async ({ hash }, args, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(hash!);
+    directoryBlock: async ({ keyMR }, _, { factomd }) => {
+        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
         const directoryBlock = await factomd.directoryBlock.load(
             factoidBlock.directoryBlockHeight
         );
-        return { hash: directoryBlock.keyMR };
+        return { keyMR: directoryBlock.keyMR };
     }
 };

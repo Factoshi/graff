@@ -4,21 +4,20 @@ const {
 } = require('../EntryCreditBlock');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
-const { assert } = require('chai');
 const { randomBytes } = require('crypto');
 
 describe('EntryCreditBlock resolvers', () => {
     let factomd;
     beforeEach(() => (factomd = new FactomdDataLoader(cli)));
 
-    it('Should get the hash from the entryCreditBlock query', async () => {
+    it('Should resolve the headerHash from the entryCreditBlock query', async () => {
         const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
         const entryCreditBlock = await entryCreditBlockQueries.entryCreditBlock(
             undefined,
             { hash },
             { factomd }
         );
-        assert.deepStrictEqual(entryCreditBlock, { hash });
+        expect(entryCreditBlock).toEqual({ headerHash: hash });
     });
 
     it('Should return null for an entryCreditBlock that does not exist', async () => {
@@ -27,17 +26,17 @@ describe('EntryCreditBlock resolvers', () => {
             { hash: randomBytes(32).toString('hex') },
             { factomd }
         );
-        assert.isNull(entryCreditBlock);
+        expect(entryCreditBlock).toBeNull();
     });
 
-    it('Should get the hash from the entryCreditBlockByHeight query', async () => {
+    it('Should resolve the headerHash from the entryCreditBlockByHeight query', async () => {
         const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
         const entryCreditBlock = await entryCreditBlockQueries.entryCreditBlockByHeight(
             undefined,
             { height: 10 },
             { factomd }
         );
-        assert.deepStrictEqual(entryCreditBlock, { hash });
+        expect(entryCreditBlock).toEqual({ headerHash: hash });
     });
 
     it('Should return null for an entryCreditBlockByHeight that does not exist', async () => {
@@ -46,10 +45,10 @@ describe('EntryCreditBlock resolvers', () => {
             { height: Number.MAX_SAFE_INTEGER },
             { factomd }
         );
-        assert.isNull(entryCreditBlock);
+        expect(entryCreditBlock).toBeNull();
     });
 
-    it('Should get the hash from the entryCreditBlockHead resolver', async () => {
+    it('Should resolve the headerHash from the entryCreditBlockHead resolver', async () => {
         const directoryBlockHead = await cli.getDirectoryBlockHead();
         const expected = await cli.getEntryCreditBlock(
             directoryBlockHead.entryCreditBlockRef
@@ -59,141 +58,179 @@ describe('EntryCreditBlock resolvers', () => {
             undefined,
             { factomd }
         );
-        assert.deepStrictEqual(entryCreditBlock, { hash: expected.headerHash });
+        expect(entryCreditBlock).toEqual({ headerHash: expected.headerHash });
     });
 
-    it('Should resolve the height field', async () => {
-        const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
-        const entryCreditHeight = await entryCreditBlockResolvers.height(
-            { hash },
+    it('Should resolve the fullHash field', async () => {
+        const headerHash =
+            '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
+        const fullHash = await entryCreditBlockResolvers.fullHash(
+            { headerHash },
             undefined,
             { factomd }
         );
-        assert.strictEqual(entryCreditHeight, 10);
+        expect(fullHash).toBe(
+            '298121b6bd1aa048b4b7fc3a48488a1f3de7681e94fd40608dc4b2b13f4595c0'
+        );
+    });
+
+    it('Should resolve the bodyHash field', async () => {
+        const headerHash =
+            '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
+        const bodyHash = await entryCreditBlockResolvers.bodyHash(
+            { headerHash },
+            undefined,
+            { factomd }
+        );
+        expect(bodyHash).toBe(
+            '898b0672bb93057a2dec036ee99ef1a2cae3fcea76733b0f3272e2f5c69bd0e8'
+        );
+    });
+
+    it('Should resolve the bodySize field', async () => {
+        const headerHash =
+            '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
+        const bodySize = await entryCreditBlockResolvers.bodySize(
+            { headerHash },
+            undefined,
+            { factomd }
+        );
+        expect(bodySize).toBe(433);
+    });
+
+    it('Should resolve the objectCount field', async () => {
+        const headerHash =
+            '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
+        const objectCount = await entryCreditBlockResolvers.objectCount(
+            { headerHash },
+            undefined,
+            { factomd }
+        );
+        expect(objectCount).toBe(14);
     });
 
     it('Should resolve the previousBlock field', async () => {
-        const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
+        const headerHash =
+            '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
         const previousBlock = await entryCreditBlockResolvers.previousBlock(
-            { hash },
+            { headerHash },
             undefined,
             { factomd }
         );
-        assert.deepStrictEqual(previousBlock, {
-            hash: 'b88eb7b3fc0c1899e1e4603b04ce0820f2a14b754df75587164d6dfb577b0d19'
+        expect(previousBlock).toEqual({
+            headerHash: 'b88eb7b3fc0c1899e1e4603b04ce0820f2a14b754df75587164d6dfb577b0d19'
         });
     });
 
     it('Should return null for a previousBlock that does not exist', async () => {
         // Genesis block
-        const hash = '66fb49a15b68a2a0ce2382e6aa6970c835497c6074bec9794ccf84bb331ad135';
+        const headerHash =
+            '66fb49a15b68a2a0ce2382e6aa6970c835497c6074bec9794ccf84bb331ad135';
         const previousBlock = await entryCreditBlockResolvers.previousBlock(
-            { hash },
+            { headerHash },
             undefined,
             { factomd }
         );
-        assert.isNull(previousBlock);
+        expect(previousBlock).toBeNull();
     });
 
     it('Should resolve the nextBlock field', async () => {
-        const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
-        const nextBlock = await entryCreditBlockResolvers.nextBlock({ hash }, undefined, {
-            factomd
-        });
-        assert.deepStrictEqual(nextBlock, {
-            hash: 'f294cd012b3c088740aa90b1fa8feead006c5a35176f57dd0bc7aac19c88f409'
+        const headerHash =
+            '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
+        const nextBlock = await entryCreditBlockResolvers.nextBlock(
+            { headerHash },
+            undefined,
+            { factomd }
+        );
+        expect(nextBlock).toEqual({
+            headerHash: 'f294cd012b3c088740aa90b1fa8feead006c5a35176f57dd0bc7aac19c88f409'
         });
     });
 
     it('Should return null for a nextBlock that does not exist', async () => {
         const directoryBlockHead = await cli.getDirectoryBlockHead();
         const nextBlock = await entryCreditBlockResolvers.nextBlock(
-            { hash: directoryBlockHead.entryCreditBlockRef },
+            { headerHash: directoryBlockHead.entryCreditBlockRef },
             undefined,
             { factomd }
         );
-        assert.isNull(nextBlock);
+        expect(nextBlock).toBeNull();
     });
 
-    it('Should get all the commits in an entryCredit block', async () => {
-        const hash = '7d6bfb96050ed1351b01f297ec53e0371e9ad0edd825528abbf06524b05dc0f2';
-        const allCommits = await entryCreditBlockResolvers.commits(
-            { hash },
+    it('Should resolve all the commits in an entryCredit block', async () => {
+        const headerHash =
+            '7d6bfb96050ed1351b01f297ec53e0371e9ad0edd825528abbf06524b05dc0f2';
+        const allCommits = await entryCreditBlockResolvers.commitPage(
+            { headerHash },
             {},
             { factomd }
         );
-        assert.hasAllKeys(allCommits, ['commits', 'totalCount', 'offset', 'pageLength']);
-        assert.strictEqual(allCommits.totalCount, 70);
-        assert.lengthOf(allCommits.commits, 70);
-        assert.strictEqual(allCommits.offset, 0);
-        assert.strictEqual(allCommits.pageLength, 70);
+
+        expect(allCommits.commits).toHaveLength(70);
+        expect(allCommits.pageLength).toBe(70);
+        expect(allCommits.totalCount).toBe(70);
+        expect(allCommits.offset).toBe(0);
         allCommits.commits.forEach(commit => {
-            assert.hasAllKeys(commit, [
-                'timestamp',
-                'entry',
-                'credits',
-                'paymentAddress',
-                'block'
-            ]);
-            assert.hasAllKeys(commit.block, ['hash']);
-            assert.hasAllKeys(commit.entry, ['hash']);
-            assert.isNumber(commit.credits);
-            assert.isString(commit.paymentAddress);
-            assert.isNumber(commit.timestamp);
+            expect(typeof commit.timestamp).toBe('number');
+            expect(typeof commit.credits).toBe('number');
+            expect(typeof commit.paymentAddress).toBe('string');
+            expect(commit.entry).not.toBeUndefined();
+            expect(typeof commit.entry.hash).toBe('string');
+            expect(commit.entryCreditBlock).not.toBeUndefined();
+            expect(commit.entryCreditBlock.headerHash).toBe(headerHash);
         });
     });
 
-    it('Should get the last 20 paginated commits in an entryCredit block', async () => {
-        const hash = '7d6bfb96050ed1351b01f297ec53e0371e9ad0edd825528abbf06524b05dc0f2';
-        const first20 = await entryCreditBlockResolvers.commits(
-            { hash },
+    it('Should resolve the last 20 paginated commits in an entryCredit block', async () => {
+        const headerHash =
+            '7d6bfb96050ed1351b01f297ec53e0371e9ad0edd825528abbf06524b05dc0f2';
+        const first20 = await entryCreditBlockResolvers.commitPage(
+            { headerHash },
             { offset: 0, first: 20 },
             { factomd }
         );
-        assert.strictEqual(first20.totalCount, 70);
-        assert.lengthOf(first20.commits, 20);
-        assert.strictEqual(first20.offset, 0);
-        assert.strictEqual(first20.pageLength, 20);
-        assert.strictEqual(
-            first20.commits[0].entry.hash,
+        expect(first20.commits).toHaveLength(20);
+        expect(first20.pageLength).toBe(20);
+        expect(first20.totalCount).toBe(70);
+        expect(first20.offset).toBe(0);
+        expect(first20.commits[0].entry.hash).toBe(
             'c3777ad5e9335d1edb967b1657e586da38614e3bc3678040895a33ce8060e09a'
         );
-        assert.strictEqual(
-            first20.commits[19].entry.hash,
+        expect(first20.commits[19].entry.hash).toBe(
             '7731f7abe4939c161eb2fc167112bb9b12d37f88e3b453ce58c3290f4feefc84'
         );
     });
 
-    it('Should get the last 20 paginated commits in an entryCredit block with bad first input', async () => {
-        const hash = '7d6bfb96050ed1351b01f297ec53e0371e9ad0edd825528abbf06524b05dc0f2';
-        const entryCommits = await entryCreditBlockResolvers.commits(
-            { hash },
+    it('Should resolve the last 20 paginated commits in an entryCredit block with bad first input', async () => {
+        const headerHash =
+            '7d6bfb96050ed1351b01f297ec53e0371e9ad0edd825528abbf06524b05dc0f2';
+        const last20 = await entryCreditBlockResolvers.commitPage(
+            { headerHash },
             { offset: 50, first: 30 },
             { factomd }
         );
-        assert.strictEqual(entryCommits.totalCount, 70);
-        assert.lengthOf(entryCommits.commits, 20);
-        assert.strictEqual(entryCommits.offset, 50);
-        assert.strictEqual(entryCommits.pageLength, 20);
-        assert.strictEqual(
-            entryCommits.commits[0].entry.hash,
+        expect(last20.commits).toHaveLength(20);
+        expect(last20.pageLength).toBe(20);
+        expect(last20.totalCount).toBe(70);
+        expect(last20.offset).toBe(50);
+        expect(last20.commits[0].entry.hash).toBe(
             '11ebac7db84c20f40dee4aaadddfd3eb8f94af493befc812f8a16474aa9581ec'
         );
-        assert.strictEqual(
-            entryCommits.commits[19].entry.hash,
+        expect(last20.commits[19].entry.hash).toBe(
             '59a2410684621980a119271456d89c998301475028abc08913f3806575735aef'
         );
     });
 
     it('Should resolve the directoryBlock field', async () => {
-        const hash = '7d6bfb96050ed1351b01f297ec53e0371e9ad0edd825528abbf06524b05dc0f2';
+        const headerHash =
+            '7d6bfb96050ed1351b01f297ec53e0371e9ad0edd825528abbf06524b05dc0f2';
         const directoryBlock = await entryCreditBlockResolvers.directoryBlock(
-            { hash },
+            { headerHash },
             {},
             { factomd }
         );
-        assert.deepStrictEqual(directoryBlock, {
-            hash: '857b10ef53a83d9b29d93ce1e8e72e65ea3ce3a39273565ac01727963ee49636'
+        expect(directoryBlock).toEqual({
+            keyMR: '857b10ef53a83d9b29d93ce1e8e72e65ea3ce3a39273565ac01727963ee49636'
         });
     });
 });

@@ -5,56 +5,60 @@ import { handleBlockError } from './resolver-helpers';
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const adminBlockQueries: QueryResolvers = {
-    adminBlock: async (root, { hash }, { factomd }) => {
+    adminBlock: async (_, { hash }, { factomd }) => {
         const adminBlock = await factomd.adminBlock.load(hash).catch(handleBlockError);
-        return adminBlock && { hash: adminBlock.backReferenceHash };
+        return adminBlock && { backReferenceHash: adminBlock.backReferenceHash };
     },
-    adminBlockByHeight: async (root, { height }, { factomd }) => {
+    adminBlockByHeight: async (_, { height }, { factomd }) => {
         const adminBlock = await factomd.adminBlock.load(height).catch(handleBlockError);
-        return adminBlock && { hash: adminBlock.backReferenceHash };
+        return adminBlock && { backReferenceHash: adminBlock.backReferenceHash };
     },
-    adminBlockHead: async (root, args, { factomd }) => {
+    adminBlockHead: async (_, args, { factomd }) => {
         const directoryBlock = await factomd.directoryBlockHead.load();
         const adminBlock = await factomd.adminBlock.load(directoryBlock.adminBlockRef);
-        return { hash: adminBlock.backReferenceHash };
+        return { backReferenceHash: adminBlock.backReferenceHash };
     }
 };
 
 /**
- * AdminBlock type resolvers.
+ * AdminBlock type resolvers. All resolvers expect the parent to provide the backReferenceHash.
  */
 export const adminBlockResolvers: AdminBlockResolvers = {
-    previousBlock: async ({ hash }, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(hash!);
+    previousBlock: async ({ backReferenceHash }, _, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(backReferenceHash!);
         const previousBlock = await factomd.adminBlock
             .load(adminBlock.previousBackReferenceHash)
             .catch(handleBlockError);
-        return previousBlock && { hash: previousBlock.backReferenceHash };
+        return previousBlock && { backReferenceHash: previousBlock.backReferenceHash };
     },
-    nextBlock: async ({ hash }, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(hash!);
+    nextBlock: async ({ backReferenceHash }, _, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(backReferenceHash!);
         const nextBlock = await factomd.adminBlock
             .load(adminBlock.directoryBlockHeight + 1)
             .catch(handleBlockError);
-        return nextBlock && { hash: nextBlock.backReferenceHash };
+        return nextBlock && { backReferenceHash: nextBlock.backReferenceHash };
     },
-    entries: async ({ hash }, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(hash!);
+    entries: async ({ backReferenceHash }, _, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(backReferenceHash!);
         // Return each entry with renamed adminId and adminCode
         return adminBlock.entries.map((entry: any) => {
             const { adminId: id, adminCode: code, ...rest } = entry;
             return { id, code, ...rest };
         });
     },
-    directoryBlock: async ({ hash }, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(hash!);
+    directoryBlock: async ({ backReferenceHash }, _, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(backReferenceHash!);
         const directoryBlock = await factomd.directoryBlock.load(
             adminBlock.directoryBlockHeight
         );
-        return { hash: directoryBlock.keyMR };
+        return { keyMR: directoryBlock.keyMR };
     },
-    height: async ({ hash }, args, { factomd }) => {
-        const adminBlock = await factomd.adminBlock.load(hash!);
-        return adminBlock.directoryBlockHeight;
+    lookupHash: async ({ backReferenceHash }, _, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(backReferenceHash!);
+        return adminBlock.lookupHash;
+    },
+    bodySize: async ({ backReferenceHash }, _, { factomd }) => {
+        const adminBlock = await factomd.adminBlock.load(backReferenceHash!);
+        return adminBlock.bodySize;
     }
 };
