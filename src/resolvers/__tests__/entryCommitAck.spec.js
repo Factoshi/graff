@@ -1,7 +1,6 @@
 const { ackQueries } = require('../EntryCommitAck');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
-const { assert } = require('chai');
 const { Ack } = require('../../types/resolvers');
 
 describe('EntryAck Resolvers', () => {
@@ -11,7 +10,7 @@ describe('EntryAck Resolvers', () => {
     it('Should get the leaves of EntryCommitAck from the commitAck resolver', async () => {
         const hash = '5f3599d372e9dfe9dd7fe5f2a72743496e99209b0a5776c1e34622fcb3c78e0b';
         const ack = await ackQueries.commitAck(undefined, { hash }, { factomd });
-        assert.deepStrictEqual(ack, {
+        expect(ack).toEqual({
             entryHash: '6501bcfb818c5d24130c9ecd520071163a8692942f7fc11d48ea44e340c14904',
             commitHash: hash,
             commitStatus: {
@@ -35,7 +34,7 @@ describe('EntryAck Resolvers', () => {
             { entryHash, chainId },
             { factomd }
         );
-        assert.deepStrictEqual(ack, {
+        expect(ack).toEqual({
             entryHash,
             commitHash:
                 '66555bb630cfad18702104c3af62cda8cb1d4b247f15e885c27109987816bcc2',

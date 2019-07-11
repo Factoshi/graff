@@ -1,7 +1,6 @@
 const { transactionQueries, transactionResolvers } = require('../Transaction');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
-const { assert } = require('chai');
 const { randomBytes } = require('crypto');
 
 describe('Transaction Resolvers', () => {
@@ -15,7 +14,7 @@ describe('Transaction Resolvers', () => {
             { hash },
             { factomd }
         );
-        assert.deepStrictEqual(transaction, { hash });
+        expect(transaction).toEqual({ hash });
     });
 
     it('Should return null for a transaction that does not exist', async () => {
@@ -24,7 +23,7 @@ describe('Transaction Resolvers', () => {
             { hash: randomBytes(32).toString('hex') },
             { factomd }
         );
-        assert.isNull(transaction);
+        expect(transaction).toBeNull();
     });
 
     it('Should resolve the timestamp', async () => {
@@ -32,7 +31,7 @@ describe('Transaction Resolvers', () => {
         const timestamp = await transactionResolvers.timestamp({ hash }, undefined, {
             factomd
         });
-        assert.strictEqual(timestamp, 1562054448339);
+        expect(timestamp).toBe(1562054448339);
     });
 
     it('Should resolve the inputs', async () => {
@@ -40,7 +39,7 @@ describe('Transaction Resolvers', () => {
         const inputs = await transactionResolvers.inputs({ hash }, undefined, {
             factomd
         });
-        assert.deepStrictEqual(inputs, [
+        expect(inputs).toEqual([
             {
                 address: 'FA3QMfvva5GeTBiVRJCWk22Pj7mUcGA3vV5gQCm8TSad18yzGQzh',
                 amount: 322899000000
@@ -59,7 +58,7 @@ describe('Transaction Resolvers', () => {
             undefined,
             { factomd }
         );
-        assert.deepStrictEqual(factoidOutputs, [
+        expect(factoidOutputs).toEqual([
             {
                 address: 'FA2MZs5wASMo9cCiKezdiQKCd8KA6Zbg2xKXKGmYEZBqon9J3ZKv',
                 amount: 322899000000
@@ -74,7 +73,7 @@ describe('Transaction Resolvers', () => {
             undefined,
             { factomd }
         );
-        assert.deepStrictEqual(entryCreditOutputs, [
+        expect(entryCreditOutputs).toEqual([
             {
                 address: 'EC3QVDcZ88chcKxHnatyigwq4nSZbsY56B6Q7HuyL9yUEFSoSf6Q',
                 amount: 24450000000
@@ -87,7 +86,7 @@ describe('Transaction Resolvers', () => {
         const totalInputs = await transactionResolvers.totalInputs({ hash }, undefined, {
             factomd
         });
-        assert.strictEqual(totalInputs, 322899214500);
+        expect(totalInputs).toBe(322899214500);
     });
 
     it('Should resolve the total factoid outputs', async () => {
@@ -97,7 +96,7 @@ describe('Transaction Resolvers', () => {
             undefined,
             { factomd }
         );
-        assert.strictEqual(totalFactoidOutputs, 322899000000);
+        expect(totalFactoidOutputs).toBe(322899000000);
     });
 
     it('Should resolve the total entry credit outputs', async () => {
@@ -107,21 +106,23 @@ describe('Transaction Resolvers', () => {
             undefined,
             { factomd }
         );
-        assert.strictEqual(totalEntryCreditOutputs, 24450000000);
+        expect(totalEntryCreditOutputs).toBe(24450000000);
     });
 
     it('Should resolve the fees', async () => {
         const hash = '648452235ac39cf4fdaf674d5ff8039ea77d75df62f5e7605fab6d2f143973d7';
         const fees = await transactionResolvers.fees({ hash }, undefined, { factomd });
-        assert.strictEqual(fees, 214500);
+        expect(fees).toBe(214500);
     });
 
     it('Should resolve the factoid block hash', async () => {
         const hash = '648452235ac39cf4fdaf674d5ff8039ea77d75df62f5e7605fab6d2f143973d7';
-        const block = await transactionResolvers.factoidBlock({ hash }, undefined, {
-            factomd
-        });
-        assert.deepStrictEqual(block, {
+        const factoidBlock = await transactionResolvers.factoidBlock(
+            { hash },
+            undefined,
+            { factomd }
+        );
+        expect(factoidBlock).toEqual({
             keyMR: '93e67cf0a9a6b473d9433457a083442c3a2d14dd811f00a3a1191338026c7dc3'
         });
     });
