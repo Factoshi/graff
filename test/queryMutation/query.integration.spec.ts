@@ -183,7 +183,6 @@ describe('Integration Test Queries', () => {
     it('Should query an entry credit block', async () => {
         const hash = '22d7ed3e6007bf59c0faa8d018f7998f08cfbc8310228155ba5ff7dacbca4ed0';
         const queryResponse = await query({ query: QUERY_ECBLOCK, variables: { hash } });
-        console.log(queryResponse);
         expect(queryResponse.data).toMatchSnapshot();
     });
 
