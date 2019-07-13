@@ -457,3 +457,112 @@ export const QUERY_ECRATE = gql`
         entryCreditRate
     }
 `;
+
+export const QUERY_FBLOCK = gql`
+    query GetFactoidBlock($hash: Hash!) {
+        factoidBlock(hash: $hash) {
+            keyMR
+            bodyMR
+            ledgerKeyMR
+            previousBlock {
+                bodyMR
+            }
+            nextBlock {
+                entryCreditRate
+            }
+            entryCreditRate
+            transactionPage(first: 5, offset: 0) {
+                totalCount
+                pageLength
+                offset
+                transactions {
+                    inputs {
+                        amount
+                        address
+                    }
+                    factoidOutputs {
+                        amount
+                        address
+                    }
+                    entryCreditOutputs {
+                        amount
+                        address
+                    }
+                    totalInputs
+                    totalFactoidOutputs
+                    totalEntryCreditOutputs
+                    rcds
+                    signatures
+                    fees
+                    timestamp
+                    hash
+                    factoidBlock {
+                        bodyMR
+                    }
+                }
+            }
+            directoryBlock {
+                height
+            }
+        }
+    }
+`;
+
+export const QUERY_FBLOCK_HEIGHT = gql`
+    query GetFactoidBlockByHeight($height: Height!) {
+        factoidBlockByHeight(height: $height) {
+            keyMR
+            bodyMR
+            ledgerKeyMR
+            previousBlock {
+                bodyMR
+            }
+            nextBlock {
+                entryCreditRate
+            }
+            entryCreditRate
+            transactionPage(first: 5, offset: 0) {
+                totalCount
+                pageLength
+                offset
+                transactions {
+                    inputs {
+                        amount
+                        address
+                    }
+                    factoidOutputs {
+                        amount
+                        address
+                    }
+                    entryCreditOutputs {
+                        amount
+                        address
+                    }
+                    totalInputs
+                    totalFactoidOutputs
+                    totalEntryCreditOutputs
+                    rcds
+                    signatures
+                    fees
+                    timestamp
+                    hash
+                    factoidBlock {
+                        bodyMR
+                    }
+                }
+            }
+            directoryBlock {
+                height
+            }
+        }
+    }
+`;
+
+export const QUERY_FBLOCK_HEAD = gql`
+    query GetFactoidBlockHead {
+        factoidBlockHead {
+            keyMR
+            bodyMR
+        }
+    }
+`;

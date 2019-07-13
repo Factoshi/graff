@@ -105,6 +105,170 @@ Object {
 }
 `;
 
+exports[`Integration Test Queries Should query a factoid block by hash 1`] = `
+Object {
+  "data": Object {
+    "factoidBlock": Object {
+      "bodyMR": "927de854a4e4b8a82098ebf83c6afbfa6e5d1b9efd0c644d77da7adf522768b7",
+      "directoryBlock": Object {
+        "height": 201141,
+      },
+      "entryCreditRate": 22000,
+      "keyMR": "8519c32c9ed474f54ee95a63b679373015bc23db29f164a69eba0048783f2ccf",
+      "ledgerKeyMR": "1304bb800677fe53e5f4401cac77e0dedb76c88fae8ea8985a77dd904b6a3706",
+      "nextBlock": Object {
+        "entryCreditRate": 22000,
+      },
+      "previousBlock": Object {
+        "bodyMR": "b7b967521172dee6ab221fd04c850750ec32e52955363f9740ecfc3f99ca45fa",
+      },
+      "transactionPage": Object {
+        "offset": 0,
+        "pageLength": 3,
+        "totalCount": 3,
+        "transactions": Array [
+          Object {
+            "entryCreditOutputs": Array [],
+            "factoidBlock": Object {
+              "bodyMR": "927de854a4e4b8a82098ebf83c6afbfa6e5d1b9efd0c644d77da7adf522768b7",
+            },
+            "factoidOutputs": Array [],
+            "fees": 0,
+            "hash": "3890a8a4b9fd5295775522a85893b90de31a05def0e84286cbf70e0c5219889c",
+            "inputs": Array [],
+            "rcds": Array [],
+            "signatures": Array [],
+            "timestamp": 1563037560605,
+            "totalEntryCreditOutputs": 0,
+            "totalFactoidOutputs": 0,
+            "totalInputs": 0,
+          },
+          Object {
+            "entryCreditOutputs": Array [],
+            "factoidBlock": Object {
+              "bodyMR": "927de854a4e4b8a82098ebf83c6afbfa6e5d1b9efd0c644d77da7adf522768b7",
+            },
+            "factoidOutputs": Array [
+              Object {
+                "address": "FA29eyMVJaZ2tbGqJ3M49gANaXMXCjgfKcJGe5mx8p4iQFCvFDAC",
+                "amount": 100000,
+              },
+            ],
+            "fees": 264000,
+            "hash": "0e7df81ca237f87efaa5beb61fe0a6b70071dc42554a19260d187cc5fd28df0f",
+            "inputs": Array [
+              Object {
+                "address": "FA29eyMVJaZ2tbGqJ3M49gANaXMXCjgfKcJGe5mx8p4iQFCvFDAC",
+                "amount": 364000,
+              },
+            ],
+            "rcds": Array [
+              "01495dc8d0389078e68dc616112311bab456af73c264becf295da1ec8f55184b86",
+            ],
+            "signatures": Array [
+              "3bf459049a475660d548d247f04ba8cdbf512d6806b8cd6accc2da415d085ad20ad3dbe222ad3177671c1cf2b5366203655692cbbf0576b1e9aee12c517bda01",
+            ],
+            "timestamp": 1563038056082,
+            "totalEntryCreditOutputs": 0,
+            "totalFactoidOutputs": 100000,
+            "totalInputs": 364000,
+          },
+          Object {
+            "entryCreditOutputs": Array [
+              Object {
+                "address": "EC3b6ph71PXiXorFnStNNPNP8mF4YkZMQwQxH4oNs52HvXiXgjar",
+                "amount": 2200000,
+              },
+            ],
+            "factoidBlock": Object {
+              "bodyMR": "927de854a4e4b8a82098ebf83c6afbfa6e5d1b9efd0c644d77da7adf522768b7",
+            },
+            "factoidOutputs": Array [],
+            "fees": 264000,
+            "hash": "92e9d62ceef0d8fb3d22e1fc0b4faff68d7849bddb2fd8fa8c91ff463f55fb33",
+            "inputs": Array [
+              Object {
+                "address": "FA29eyMVJaZ2tbGqJ3M49gANaXMXCjgfKcJGe5mx8p4iQFCvFDAC",
+                "amount": 2464000,
+              },
+            ],
+            "rcds": Array [
+              "01495dc8d0389078e68dc616112311bab456af73c264becf295da1ec8f55184b86",
+            ],
+            "signatures": Array [
+              "1882325adc827a18d11fe5e029e945ee1fa313ede57485f7471d5c9ac32bfa71486255629808c9146cea8c57a694f2999c7572e89b8a81cde81d916d2173d705",
+            ],
+            "timestamp": 1563038056059,
+            "totalEntryCreditOutputs": 2200000,
+            "totalFactoidOutputs": 0,
+            "totalInputs": 2464000,
+          },
+        ],
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query a factoid block by height 1`] = `
+Object {
+  "data": Object {
+    "factoidBlockByHeight": Object {
+      "bodyMR": "bd99abfabe12023b57c933bbb8a54dce5e3fe03ec048c9d47279615dc6ab7853",
+      "directoryBlock": Object {
+        "height": 10,
+      },
+      "entryCreditRate": 666600,
+      "keyMR": "05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3",
+      "ledgerKeyMR": "27f86c84c7793465cb18f93a844c981e6d977e3f57d913e9180e2a54383a1875",
+      "nextBlock": Object {
+        "entryCreditRate": 666600,
+      },
+      "previousBlock": Object {
+        "bodyMR": "90080b8a6073033c811aaeba64c911ec7a3907d61332328d1833364567754faf",
+      },
+      "transactionPage": Object {
+        "offset": 0,
+        "pageLength": 1,
+        "totalCount": 1,
+        "transactions": Array [
+          Object {
+            "entryCreditOutputs": Array [],
+            "factoidBlock": Object {
+              "bodyMR": "bd99abfabe12023b57c933bbb8a54dce5e3fe03ec048c9d47279615dc6ab7853",
+            },
+            "factoidOutputs": Array [],
+            "fees": 0,
+            "hash": "e096f83392fc0d1dabf812c339679bf82ad6c085b3c976429de3de8dd3dad089",
+            "inputs": Array [],
+            "rcds": Array [],
+            "signatures": Array [],
+            "timestamp": 1441143000608,
+            "totalEntryCreditOutputs": 0,
+            "totalFactoidOutputs": 0,
+            "totalInputs": 0,
+          },
+        ],
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration Test Queries Should query an admin block by hash. 1`] = `
 Object {
   "adminBlock": Object {

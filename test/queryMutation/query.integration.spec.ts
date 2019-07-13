@@ -16,6 +16,9 @@ import {
     QUERY_ECBLOCK_HEIGHT,
     QUERY_ECBLOCK_HEAD,
     QUERY_ECRATE,
+    QUERY_FBLOCK,
+    QUERY_FBLOCK_HEIGHT,
+    QUERY_FBLOCK_HEAD
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -226,5 +229,40 @@ describe('Integration Test Queries', () => {
             query({ query: QUERY_ECRATE })
         ]);
         expect(actualRate.data!.entryCreditRate).toBe(expectedRate.rate);
+    });
+
+    it('Should query a factoid block by hash', async () => {
+        const hash = '8519c32c9ed474f54ee95a63b679373015bc23db29f164a69eba0048783f2ccf';
+        const fblock = await query({ query: QUERY_FBLOCK, variables: { hash } });
+        expect(fblock).toMatchSnapshot();
+    });
+
+    it('Should return null when querying missing factoid block by hash', async () => {
+        const hash = randomBytes(32).toString('hex');
+        const fblock = await query({ query: QUERY_FBLOCK, variables: { hash } });
+        expect(fblock.data!.factoidBlock).toBeNull();
+    });
+
+    it('Should query a factoid block by height', async () => {
+        const fblock = await query({
+            query: QUERY_FBLOCK_HEIGHT,
+            variables: { height: 10 }
+        });
+        expect(fblock).toMatchSnapshot();
+    });
+
+    it('Should return null when querying missing factoid block by height', async () => {
+        const fblock = await query({
+            query: QUERY_FBLOCK_HEIGHT,
+            variables: { height: Number.MAX_SAFE_INTEGER }
+        });
+        expect(fblock.data!.factoidBlockByHeight).toBeNull();
+    });
+
+    it('Should query the factoid block head', async () => {
+        const dblockHead = await cli.getDirectoryBlockHead();
+        const fBlockHead = await cli.getFactoidBlock(dblockHead.factoidBlockRef);
+        const fBlock = await query({ query: QUERY_FBLOCK_HEAD });
+        expect(fBlock.data!.factoidBlockHead.bodyMR).toBe(fBlockHead.bodyMR);
     });
 });
