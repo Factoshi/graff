@@ -282,6 +282,22 @@ export const QUERY_DBLOCK_HEAD = gql`
     }
 `;
 
+export const QUERY_ENTRY = gql`
+    query GetEntry($hash: Hash!) {
+        entry(hash: $hash) {
+            hash
+            chainId
+            timestamp
+            externalIds
+            content
+            entryBlock {
+                sequenceNumber
+                timestamp
+            }
+        }
+    }
+`;
+
 export const QUERY_ENTRY_ACK = gql`
     query GetCommitAck($hash: Hash!, $chainId: Hash!) {
         entryAck(hash: $hash, chainId: $chainId) {

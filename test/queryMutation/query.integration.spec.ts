@@ -9,7 +9,8 @@ import {
     QUERY_CHAIN_HEAD,
     QUERY_COMMIT_ACK,
     QUERY_ENTRY_ACK,
-    QUERY_CURRENT_MINUTE
+    QUERY_CURRENT_MINUTE,
+    QUERY_ENTRY
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -130,6 +131,12 @@ describe('Integration Test Queries', () => {
         const dBlock = res.data.directoryBlockHead;
         expect(dBlock.keyMR).toBe(expected.keyMR);
         expect(dBlock.nextBlock).toBeNull();
+    });
+
+    it('Should query an entry', async () => {
+        const hash = '086c77c9e6a98191bcd828f099787402fa6fb7c880797c6489a49cb3cb31cdaf';
+        const queryResponse = await query({ query: QUERY_ENTRY, variables: { hash } });
+        expect(queryResponse.data).toMatchSnapshot();
     });
 
     it('Should get the ack of a known entry', async () => {

@@ -688,6 +688,28 @@ Object {
 }
 `;
 
+exports[`Integration Test Queries Should query an entry 1`] = `
+Object {
+  "entry": Object {
+    "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+    "content": "eyJlbnRyeV9kYXRlIjoxNTYzMDIyMDM1LCJwb3N0X2RhdGEiOnsiZWRpdF9jb3VudCI6MCwibGFzdF9lZGl0X2RhdGUiOjAsImxhc3RfZWRpdF91c2VyX2lkIjowLCJtZXNzYWdlX3NoYTUxMiI6ImUyZTE3MzVmOGMwNTNlNWYyOTI5YWY4MTNjNGYzMzM1YzA5YmMwYjhhZDg2MzFiNjBjYTMyYWU3NTg0MWFmODA1YTUwOTkwNTBmYzNkNjMxYmFhNzRhY2FkZGFkMzM3ZGYxZjgzNWUxNjcxOTU2MmRkNjBjMmFjN2EzYWI0MzY3Iiwibm9kZV9pZCI6MzEsInBvc3RfZGF0ZSI6MTMyNTEyNTU3NSwidGhyZWFkX2lkIjozMDQxMiwidGl0bGVfc2hhNTEyIjoiNTY4NTRlOWJlYWM4ZjIxOTQyMzMzZTEzZTI3OGQ2Y2Q5ZjNlYjQ4NzlhMjJjNTRhOWFjOTk5MDc3ZTZlMjM4NjA2YzAzZDc1ODhlM2RhY2I1N2M5MzliNDg1MWI4OTJmNTVmYzI0NjE3MzIxODc5MmVjNzdlOTE3OWU0MjdkMGEiLCJ1c2VyX2lkIjoxfSwicG9zdF9pZCI6Mzg2OTIyfQ==",
+    "entryBlock": Object {
+      "sequenceNumber": 1,
+      "timestamp": 1563021960,
+    },
+    "externalIds": Array [
+      "UlNBLVNIQTUxMg==",
+      "nI6NH2Nv39YEeNmBdlNYasPPo58o9bb+UhvA61tc3sG/mOn2RF3lsHuR5Pfcg42g4OBE2JnWFP2imGUQN468AkFt0/5XSoiNQM6/mFC3aflzvnHzFezuWC6hzIm9OYnhpZXjTdVGFTFALudZlC2VfMCc2UrEQTFeRpesh4vrhD9h+sReV0hUUPYwjOTBvlsERm+a+KorDujEOSuh7dJyTSH+wFwpbshqiRjxXgPOhMclxYG5Kn4YV3PaFCqkRoMWQ00Ib2bGW8KqERp9o9ishEiBZvWd3chjDq3g1CPg0bdVxc6fewuLPBlg/i75CUSw1vH7Xai4gI//pQWIz7OnAbjZLwlEYPdKSgaE21KhqENg/mFZUJiliF/kLEI/iF+QsixdzbT/i2EnmxLUciRm+fqK6h4MbYYQCzk8KcGVwe1nPxQF68hThFvYWZP1Kv0OZUSSThvC+GOBDP3FK9Q42fWofED7t9A8Z53a5pYMWnbRHCEYkdSs5a0Sv7EZPp0ndexnCxtEbuJeUakNDirOQydEGE43FJTufeSy81cAV5Qg3oMnHU8BWvGeXLBeoHQ6z0nGWnwtNFb5r/l1SILZn13CHSWottPVdUJrN2OZCiqA+AQszvv4tW2JccZU+FwQGQW4Qzsr/tu8tShfUfTYT+JJzHhL0xEoVept7pr+f70=",
+      "SWRlbnRpdHlDaGFpbklEPWFmMDQyM2ZjMmFlNDFhOGFjMmFlMjNhYjJlY2JkMWM4MzI2NGM1Y2ZkYmNiYTRlYmRhZmVjMTYwOGZlZGQ4Njk=",
+      "Rm9ydW0gUG9zdA==",
+      "djEuMC4w",
+    ],
+    "hash": "086c77c9e6a98191bcd828f099787402fa6fb7c880797c6489a49cb3cb31cdaf",
+    "timestamp": 1563022140000,
+  },
+}
+`;
+
 exports[`Integration Test Queries Should query the ack of a legit commit 1`] = `
 Object {
   "commitAck": Object {
