@@ -577,3 +577,14 @@ export const QUERY_TX_ACK = gql`
         }
     }
 `;
+
+export const QUERY_HEIGHTS = gql`
+    query GetHeight {
+        heights {
+            leaderHeight
+            directoryBlockHeight
+            entryBlockHeight
+            entryHeight
+        }
+    }
+`;

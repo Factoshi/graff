@@ -19,12 +19,14 @@ import {
     QUERY_FBLOCK,
     QUERY_FBLOCK_HEIGHT,
     QUERY_FBLOCK_HEAD,
-    QUERY_TX_ACK
+    QUERY_TX_ACK,
+    QUERY_HEIGHTS
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
 import { cli } from './factom';
 import { randomBytes } from 'crypto';
+import { objectTypeAnnotation } from '@babel/types';
 
 const { query } = createTestClient(server as any);
 
@@ -278,5 +280,12 @@ describe('Integration Test Queries', () => {
         const fake = '92e9d62ceef0d8fb3d22e1fc0b4faff68d7849bddb2fd8fa8c91ff463f55fb32';
         const ack = await query({ query: QUERY_TX_ACK, variables: { hash: fake } });
         expect(ack).toMatchSnapshot();
+    });
+
+    it('Should query heights', async () => {
+        const heights = await query({ query: QUERY_HEIGHTS });
+        Object.entries(heights.data!.heights).forEach(height =>
+            expect(height[1]).toBeGreaterThan(0)
+        );
     });
 });
