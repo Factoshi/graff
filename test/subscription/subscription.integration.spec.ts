@@ -9,7 +9,7 @@ import {
     SUBSCRIBE_NEW_EBLOCK,
     SUBSCRIBE_NEW_TX
 } from './subscriptionHelpers';
-import { server } from '../src/server';
+import { server } from '../../src/server';
 import { WebSocketLink } from 'apollo-link-ws';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
