@@ -79,6 +79,5 @@ export const server = new ApolloServer({
     // If req is undefined then this is a subscription and thus auth will be handled
     // by the subscription lifecycle methods below.
     context: ({ req }) => (req !== undefined ? context(req) : createContextObject()),
-    subscriptions: { onConnect },
-    tracing: process.env.NODE_ENV !== 'production'
+    subscriptions: { onConnect }
 });
