@@ -588,3 +588,18 @@ export const QUERY_HEIGHTS = gql`
         }
     }
 `;
+
+export const QUERY_PENDING_ENTRIES = gql`
+    query GetPendingEntries {
+        pendingEntries(first: 5, offset: 0) {
+            totalCount
+            offset
+            pageLength
+            pendingEntries {
+                hash
+                status
+                chain
+            }
+        }
+    }
+`;

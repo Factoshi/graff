@@ -20,7 +20,8 @@ import {
     QUERY_FBLOCK_HEIGHT,
     QUERY_FBLOCK_HEAD,
     QUERY_TX_ACK,
-    QUERY_HEIGHTS
+    QUERY_HEIGHTS,
+    QUERY_PENDING_ENTRIES
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -287,5 +288,10 @@ describe('Integration Test Queries', () => {
         Object.entries(heights.data!.heights).forEach(height =>
             expect(height[1]).toBeGreaterThan(0)
         );
+    });
+
+    it('Should query pending entries', async () => {
+        const pendingEntries = await query({ query: QUERY_PENDING_ENTRIES });
+        expect(pendingEntries.data!.pendingEntries).toBeDefined();
     });
 });
