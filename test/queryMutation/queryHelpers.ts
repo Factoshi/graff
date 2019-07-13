@@ -642,3 +642,21 @@ export const QUERY_PROPS = gql`
         }
     }
 `;
+
+export const QUERY_RECEIPT = gql`
+    query GetReceipt($hash: Hash!) {
+        receipt(hash: $hash) {
+            entry {
+                chainId
+                content
+            }
+            bitcoinTransactionHash
+            bitcoinBlockHash
+            merkleBranch {
+                top
+                left
+                right
+            }
+        }
+    }
+`;

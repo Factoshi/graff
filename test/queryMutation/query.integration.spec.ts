@@ -24,6 +24,7 @@ import {
     QUERY_PENDING_ENTRIES,
     QUERY_PENDING_TXS,
     QUERY_PROPS,
+    QUERY_RECEIPT,
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -306,4 +307,17 @@ describe('Integration Test Queries', () => {
         expect(properties.data!.properties.factomdVersion).toBeDefined();
         expect(properties.data!.properties.factomdAPIVersion).toBeDefined();
     });
+
+    it('Should query entry receipt', async () => {
+        const hash = 'cb2c8c3403f758e5288656e82c965dd45e41d573efe3fb8ee58d50649a4ba2b3';
+        const receipt = await query({ query: QUERY_RECEIPT, variables: { hash } });
+        expect(receipt.data).toMatchSnapshot();
+    });
+
+    it('Should return null for receipt of missing entry', async () => {
+        const hash = randomBytes(32).toString('hex');
+        const receipt = await query({ query: QUERY_RECEIPT, variables: { hash } });
+        expect(receipt.data!.receipt).toBeNull();
+    });
+
 });
