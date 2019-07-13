@@ -603,3 +603,33 @@ export const QUERY_PENDING_ENTRIES = gql`
         }
     }
 `;
+
+export const QUERY_PENDING_TXS = gql`
+    query GetPendingEntries {
+        pendingTransactions(first: 5, offset: 0) {
+            totalCount
+            offset
+            pageLength
+            pendingTransactions {
+                hash
+                status
+                inputs {
+                    amount
+                    address
+                }
+                factoidOutputs {
+                    amount
+                    address
+                }
+                entryCreditOutputs {
+                    amount
+                    address
+                }
+                totalInputs
+                totalFactoidOutputs
+                totalEntryCreditOutputs
+                fees
+            }
+        }
+    }
+`;
