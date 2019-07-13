@@ -1,0 +1,672 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration Test Queries Should query a directory block by hash. 1`] = `
+Object {
+  "directoryBlock": Object {
+    "adminBlock": Object {
+      "lookupHash": "fe16b62bdda11b1a7ba558373ba05560051e685ae904fd66743a974cd4a379e6",
+    },
+    "entryBlockPage": Object {
+      "entryBlocks": Array [
+        Object {
+          "chainId": "04e8e1ba1d9bf5e0ed848912a4daec9a861848aac6005850341a2a930a4f5ce0",
+        },
+        Object {
+          "chainId": "0773f67c4901739231574bb93879fb06bbe7ccbc441222cbdc7cd50880d3b02d",
+        },
+        Object {
+          "chainId": "4a35522c834022a4153c4ac92f61f22fad640647f91a21a65cf632f738717966",
+        },
+        Object {
+          "chainId": "6e4540d08d5ac6a1a394e982fb6a2ab8b516ee751c37420055141b94fe070bfe",
+        },
+        Object {
+          "chainId": "9005bb7dd69fb9910ee0b0db7b8a01198f03623eab6dadf1eba01f9dbc207577",
+        },
+      ],
+    },
+    "entryCreditBlock": Object {
+      "fullHash": "8831e32853528b4f6dffaeabfff3626a70aa86e89a9d9b4e803efd6e7ba40ccf",
+    },
+    "factoidBlock": Object {
+      "bodyMR": "b966e16d8c8253ab7298bf428a2901d4e7d12fd625a06af2cd631fcd942cdd0b",
+    },
+    "height": 200361,
+    "keyMR": "e9b52c4b48325c83de601c022cb314d819c911ae24bda0ca4a17476562622bd0",
+    "nextBlock": Object {
+      "height": 200362,
+    },
+    "previousBlock": Object {
+      "height": 200360,
+    },
+    "timestamp": 1562569320000,
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query a directory block by height. 1`] = `
+Object {
+  "directoryBlockByHeight": Object {
+    "adminBlock": Object {
+      "lookupHash": "fe16b62bdda11b1a7ba558373ba05560051e685ae904fd66743a974cd4a379e6",
+    },
+    "entryBlockPage": Object {
+      "entryBlocks": Array [
+        Object {
+          "chainId": "04e8e1ba1d9bf5e0ed848912a4daec9a861848aac6005850341a2a930a4f5ce0",
+        },
+        Object {
+          "chainId": "0773f67c4901739231574bb93879fb06bbe7ccbc441222cbdc7cd50880d3b02d",
+        },
+        Object {
+          "chainId": "4a35522c834022a4153c4ac92f61f22fad640647f91a21a65cf632f738717966",
+        },
+        Object {
+          "chainId": "6e4540d08d5ac6a1a394e982fb6a2ab8b516ee751c37420055141b94fe070bfe",
+        },
+        Object {
+          "chainId": "9005bb7dd69fb9910ee0b0db7b8a01198f03623eab6dadf1eba01f9dbc207577",
+        },
+      ],
+    },
+    "entryCreditBlock": Object {
+      "fullHash": "8831e32853528b4f6dffaeabfff3626a70aa86e89a9d9b4e803efd6e7ba40ccf",
+    },
+    "factoidBlock": Object {
+      "bodyMR": "b966e16d8c8253ab7298bf428a2901d4e7d12fd625a06af2cd631fcd942cdd0b",
+    },
+    "height": 200361,
+    "keyMR": "e9b52c4b48325c83de601c022cb314d819c911ae24bda0ca4a17476562622bd0",
+    "nextBlock": Object {
+      "height": 200362,
+    },
+    "previousBlock": Object {
+      "height": 200360,
+    },
+    "timestamp": 1562569320000,
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query an admin block by hash. 1`] = `
+Object {
+  "adminBlock": Object {
+    "backReferenceHash": "643389830972e29c06a7602c1858aeab8d6077b22ac6ce9db3be3568873b98c3",
+    "bodySize": 3943,
+    "directoryBlock": Object {
+      "height": 200727,
+    },
+    "entries": Array [
+      Object {
+        "code": "ADD_AUDIT_SERVER",
+        "directoryBlockHeight": 200728,
+        "id": 6,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "bc2ec61c6270a9c89f38e54acbd2bb46bf54c0f1ae08f159e0a143e73e342e9b75d0f055cee97ad5924f67ad6a67080fe915cdecce5601e9fc23c14a8c07b507",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "a99a738ac25b999e7883e400216d1632d32cac7f02e1c882ce366f03e1056fd9d4163ca43411c0182bab3ae535fc774f3032e914ddf6788544b3329710be7208",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "6db47078511d7a4987a115c32180c13adb2cf443c34e9711749cda2f43600cc8cead7863be305c618a826bed4f0cf18d9e23f44912a0c1d565114551f0322c02",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "3bbf531776fa440627245213965632fa753b79ef4d2a350b75bcdd9b43502c71f30923a0ef4e5ebfcb8a8d91e70de68546a7f99eba9007bc56df2cd02cc0d908",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "33a956bb72b5fab7dd4a12c35ca475e7415898acfefe50094b3c30796893b117f7da6eace7ac91766fe5353aa1030bcceddff056da42ec0981d22ae69cf61604",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "42e6831d6d27a314a9ce7d2cd987bb3df7dd8768008c0f237070459b7e3554bcb076dad28c30f763a19f1968457b6c92140abe0145f1288e1c29c4f9d6266e02",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "87aeb8a275b15973e3b3fd1fdf0f823ff52b3d535666ed1a89f2137f51feaf4a0fa46eaa45a86f89ea078656e1110b7c9b9226ebd14ae1648a889397ecf2dc04",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "b9321933a38509902342632fe50870edb88b743095e075f647cdb6416104ca840080b64520ca3c93de1c6ec2f5346ce731513115bd6f034e3c1310988e853b0a",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "ff1b898091e5aa038ee1d370d7e01fa4b1a45feaffea8ed037f4f3efd98e2940f8c17f1cb94898fb997c3e910364d24f725e087729524077bfb7497fdb47390c",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "12a2f46932411763a121f32bd182e29ea08f0407cc27574594e576f1b032e27459f17bb085f03e58a8a3960244e9a536a63deb1a2479dfd97934c45a819f8d09",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "9ed98ea240c5ac3365adb54226e3df621848153b5270dfe4858687b1b5fc0dddeeb8b0666204d0315fcd958f6a163983396c28ceaff0b91426ef1fc255c04101",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "d9df22c158aef833accceb489718779ab4e32170751f80c45cc6275c5e5fe8e8b3add3c85dd7f186c093773386751451057e8c279f3788becdaf5d895f9aed0b",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "e0bc489ae7b3741349a3931d07d99fcb92956470c469870f40069ad10c6484e565756936dca0becd8018b73058d1cc2b6baec575bf685b19e0ed3a2103b2ac02",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "8296d1118df2213bdf4d5c4ffe2d7f2dc17dc55f0b4bab4fc3ebeadc877267ad8ebf1c77e469d380b396acc7417d936af6fb56b0829917c1127484df0bedb401",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "282537eea37d003f107b8699eb9c1868871dd63f7ab32e71f28925cbb0d41765b37bcfadb6323d3dedf8db2311c74c7d0cace72cf689e70c04e822640e6d9e0e",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "8c5c4a3a2fedde33edc6d482b4971b0577290a88069b32b5b41896f4d3d8917049325ad5e7b500d4be5a8b96b99ea9881b190f6f12ccfef91c311238c8517c09",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "50e7e2b4e25b6857de211c6c3f1f6c003d95c796d5919e0f7ee22e1547892be00a36ccfd5f0cd9b1605a0121f282468cf6a7141397fe0f0aa53a55491d60f302",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "ddf4b0edff5a1cfbd2acd154920513066707eb2a4a2265ad22f9152644e4f2c5b8da7378ef9b01a1588aed1d2493a8e56cebd26b97d6fb262945280f99bd4202",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "0b0c4f6ceff72a78a16a43f277d7673c83ce97b184856dff3ba664142862b3d2c9c5502e9ff89a99e1cdb9efbd70fb216d4a2a1145d18a2e192dbeab89ae9c04",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "61cce8a10f07132ebe20583b7130ba78e985d770fff67e69093f0e0072014f9e5bd32487ab63f1f4a3e5f419ab95632aa8c6d5b242d9e749074b7cdaf2bd910e",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "349bd263e787eb7bfa4eb42ff79207a5676ce2176e6e0e30cec10c465e1237658747837a83b2dd7ed5310a8fa87e1dda41f941e973709c8e97bf478aedae760b",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "126454ecab437fc6c0c98588277217cb0f8c6f8a009e78eb1dea4f35a38d1b547941859ad174d28cfc7b6e3b6ff73ba0520a8c0b75a5a46e74e36eeaa3b5fd05",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "e22f6731159975375c825a4d6cb114e0a921dc35e5e28614b1ae9eca3bf287cc19a513ecb75c99414c8efcde674c7254724b275f55ae7442ebe16fbf1a80850c",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "e2f074355bfb1f8009dc928317b393b3d55cdb1c5d2269cfd86b305205a4be59dac5f44a7581c8f69edeee59e09ba34d2f0a2ab6b91c0b2f6ed90fc7b7401907",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "8fb978cad0989089faf67260bbd589c30364feea39589bc2f99de3077c53c828c589c4e03acc477fe1638ab3d28c7ffcbdce2228fb3a61257a4a1a664e78a701",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "02db62dc107b00f9c38330fa40bc7aad8924d137f4b79855f0cd9cf39d29ec9f887f901bd1d2f09e6f54d5c5989bbbd4e6bb54dc7ef019474e5fe81d91949300",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "ba596022be74b584c5c0e2dc9636db107d16b3f055ea3760287b8eda0a0f31443e877065a6625888a6642fd062aa64f613216f46c45906b57f80a38a29d6680d",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "324b0d96253630fc1ce39b62f940c9060cac5c4b4c4a23bd5b740b9c77677be764e5c83f9c1aa041ab647fba6ba60ff4735b4200fa9034624e853ddc35b9c508",
+        },
+      },
+      Object {
+        "code": "ADD_REPLACE_MATRYOSHKA_HASH",
+        "id": 3,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+        "matryoshkaHash": "6239f7101dcf426e5c2ab8289dd41704ddd9d6781a6f54bde3d9cb1a65da9168",
+      },
+      Object {
+        "code": "ADD_FEDERATED_SERVER_SIGNING_KEY",
+        "directoryBlockHeight": 200728,
+        "id": 8,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+        "keyPriority": 0,
+        "publicKey": "f12b3c19570dbed86c3d3d2a3d095963975c17cd1738a0453dd8468a59d23a9d",
+      },
+      Object {
+        "code": "ADD_FEDERATED_SERVER_BITCOIN_ANCHOR_KEY",
+        "ecdsaPublicKey": "d3374b7ad2f506c7ebcf8ac8a6264572599aeaff",
+        "id": 9,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+        "keyPriority": 0,
+        "keyType": "0",
+      },
+      Object {
+        "code": "ADD_AUTHORITY_FACTOID_ADDRESS",
+        "factoidAddress": "FA2Fk7LUtcXKLQ2tWhHs3JuqkqAfLsyGw2fEBoYLnrjLSmeo9yoE",
+        "id": 13,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+        "rcdHash": "25d6d8ea3d5e821466d2613a09dd1acf87e21afccaff95ebdbb199d349fdafdb",
+      },
+      Object {
+        "code": "ADD_AUTHORITY_EFFICIENCY",
+        "efficiency": 60,
+        "id": 14,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+      },
+    ],
+    "lookupHash": "f8e211a95158df9bf01b1bd74517c6985891dbcba397d24995f95e0ce5fca778",
+    "nextBlock": Object {
+      "lookupHash": "26f78b4161c5c456d89bd5012eeb026f6544023cc2ee795b97b5f96e0bcb44d5",
+    },
+    "previousBlock": Object {
+      "bodySize": 3943,
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query an admin block by height. 1`] = `
+Object {
+  "adminBlockByHeight": Object {
+    "backReferenceHash": "cb43441dc8e69bce217cd52c60a30683c7e1cea42829d486f0b219330e169471",
+    "bodySize": 5597,
+    "directoryBlock": Object {
+      "height": 201100,
+    },
+    "entries": Array [
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {
+        "code": "COINBASE_DESCRIPTOR",
+        "id": 11,
+        "outputs": Array [
+          Object {
+            "address": "FA2zGvyrRyjK9AkChEucBmoXadJsNd19Co2ijBQMT4x65Gw998Ht",
+            "amount": 320000000,
+            "rcdHash": "866979181e13233484298c4905c5a579fb4a973f210116d5424b74b72daa88a2",
+          },
+          Object {
+            "address": "FA2j6Puy4tLPRBtc9dEit925eeBjjRyMJVhT42rhpoq6HJLLsnRV",
+            "amount": 512000000,
+            "rcdHash": "63f0b1cacc72017f31a5658357b4df7520efe8ea977e41412be00f127c261e61",
+          },
+          Object {
+            "address": "FA2b8xEUnvv8TwZEUx4mCZQioQpkuwdAtL4AetzRLAtaxWwhhMhc",
+            "amount": 320000000,
+            "rcdHash": "51e016b124af5ec5e8e4f4afca8c75d5f53b548526e56e8e8ad9991caa9a4bbb",
+          },
+          Object {
+            "address": "FA3NCo9KzPQpP3HRmPsFy9pAVj2fWgHBwjuu7oFH96FsyQ5Z4PWe",
+            "amount": 320000000,
+            "rcdHash": "b8342cf774e25f1eda172772fcfee87951131c5b2464725ef14fbd26d1297596",
+          },
+          Object {
+            "address": "FA3RqGvKruW9BPTPHqRGAop76HgJm4fHoit7wW4aqmPyHtrjCy1M",
+            "amount": 320000000,
+            "rcdHash": "c0719b6ed37ab9200e912568acb0e9167ed35bb77138f90065da56d87dae6d86",
+          },
+          Object {
+            "address": "FA2AfaeWXYG4mQkfhQfACLtu3Ad2m1QFk1VGLtZsGa62Aa7geYS5",
+            "amount": 192000000,
+            "rcdHash": "1a4f0f4216d9618e848a75fdc802c9db462907d547595885cc5c46ae2ebb7d03",
+          },
+          Object {
+            "address": "FA3Qt7GgiNVo3xmq7b7rviJFiHtRUb1bVRWsZBAGamruEK99ppY8",
+            "amount": 576000000,
+            "rcdHash": "be48ba0ae1b09fd0153d6428dc95730e5881a5e05875dd5444f0c293e5be995e",
+          },
+          Object {
+            "address": "FA2kLWxAXX1mRCch6fTwS8pckrR4dDUJGbMq1DAtA6U9kTmZD1y9",
+            "amount": 416000000,
+            "rcdHash": "66c37fac65f52fe296ec90f53c81c60c6a72ae9fc2de70337cdb679a32560c92",
+          },
+          Object {
+            "address": "FA1yNkC81cVXfUL578K6HLySGssv76uW8N9AMJZBvCnPFPsqyBRU",
+            "amount": 480000000,
+            "rcdHash": "00ac42ef5e784dad4446b6e150912c0f2d6ae3df3aa1b54374cee05f064e9691",
+          },
+          Object {
+            "address": "FA2HBeH9XGgAkYapAyeD6styij39rhaJDKgCCoqr1M1L3NmUcvjL",
+            "amount": 480000000,
+            "rcdHash": "291c065662824dc0d70146407398d5e71aedecfbc1c997f3247a91c0e7bcf0e0",
+          },
+          Object {
+            "address": "FA2AfaeWXYG4mQkfhQfACLtu3Ad2m1QFk1VGLtZsGa62Aa7geYS5",
+            "amount": 192000000,
+            "rcdHash": "1a4f0f4216d9618e848a75fdc802c9db462907d547595885cc5c46ae2ebb7d03",
+          },
+          Object {
+            "address": "FA3nSCfSD9G3c8DZGsZCq36PrbFRw1pBgLxNyu4SQ5kb4x3x1wF5",
+            "amount": 256000000,
+            "rcdHash": "ef393adf35a741b900afa3f1869e69ff33e64be3c336a5f86f77b4300466e6d7",
+          },
+          Object {
+            "address": "FA29VaCpxTnnrQs8U2H8ujFSguB77Xt5QBYvSNRNxKU2f5ybf6L7",
+            "amount": 320000000,
+            "rcdHash": "17a57bb3029686ff0e324cd705720ccb0fa51be5ff51717f6b889ce19328c684",
+          },
+          Object {
+            "address": "FA3SREn3QSBQ9TNzu9RmxA6CPsXDHhxyZDm7LAuT1a2kd6QdVMMB",
+            "amount": 256000000,
+            "rcdHash": "c1c5fca15e38a7d3bc75acf189372c171f4a181848a2b660f478f97076f97481",
+          },
+          Object {
+            "address": "FA3HSuFo9Soa5ZnG82JHqyKiRi4Pw17LxPTo9AsCaFNLCGkXkgsu",
+            "amount": 640000000,
+            "rcdHash": "ad6724d6a15a16292a012211e38ccc8efff44dce85a53c6bb5e61d38897b29a1",
+          },
+          Object {
+            "address": "FA2cQhPNrQZRjUpr4hpt3WeUSWaBJDyzBzLrpUhQzdiwnmV4ApBs",
+            "amount": 384000000,
+            "rcdHash": "54c327ccd5959a6c18593ec4bcbc6eb462fcc97a308344077ad5863e2378f3ec",
+          },
+          Object {
+            "address": "FA3mAX5HpMaPAUuLopTWgjaB6pm9PeHoyD6r9cCRwcpaqWbuW8Fz",
+            "amount": 256000000,
+            "rcdHash": "ec56c7731179d9cd6a00f0cdd8f56e19ab6757ab4106055dcd0d1daf877c334e",
+          },
+          Object {
+            "address": "FA3NCo9KzPQpP3HRmPsFy9pAVj2fWgHBwjuu7oFH96FsyQ5Z4PWe",
+            "amount": 320000000,
+            "rcdHash": "b8342cf774e25f1eda172772fcfee87951131c5b2464725ef14fbd26d1297596",
+          },
+          Object {
+            "address": "FA2j6Puy4tLPRBtc9dEit925eeBjjRyMJVhT42rhpoq6HJLLsnRV",
+            "amount": 512000000,
+            "rcdHash": "63f0b1cacc72017f31a5658357b4df7520efe8ea977e41412be00f127c261e61",
+          },
+          Object {
+            "address": "FA3KmpnDD56WX91ninPGKV9uHhybcfZW2mm727wp5X4JMp7VJk2e",
+            "amount": 256000000,
+            "rcdHash": "b2af5927c37c34722a7e28551f34829d8706f83162b5b88184345c818fc9d1dc",
+          },
+          Object {
+            "address": "FA2SdYu74EFg9E9KLZfDrGwTETavGqJr935vauesticqxHFvQRYn",
+            "amount": 192000000,
+            "rcdHash": "3e8f2eb59607166b95652765aa5a6866da8f525f4e93030f68d1f8d36bc014a2",
+          },
+          Object {
+            "address": "FA2pSDKCUkE84kQ9Kt3nphbS1QviHez2JjcmPsQSLaX7p95rtBha",
+            "amount": 256000000,
+            "rcdHash": "7011b361819920b88bb25a3df396eb6817022b9796e26ac1c041d47d8d63937c",
+          },
+          Object {
+            "address": "FA3X1crrWJWtMR26K719kLo3fNauLRymr5cKvPfsnRbEGvxFkr5G",
+            "amount": 320000000,
+            "rcdHash": "cc33ab7bc13f7ca5026f2e550d597c73abba1fd5557d127326fa02b1fdc8d48b",
+          },
+          Object {
+            "address": "FA3RQmdJ7FsZaeMXgZYnrz3nRjW1u11W47y8Whe6V13qUpj4KqA1",
+            "amount": 320000000,
+            "rcdHash": "bf7c041a04933c10732130f5222154bc952fe0287b5de2433b9adb8db450d92e",
+          },
+          Object {
+            "address": "FA32ChVPaHjQ6L1Ypi88bF5t9vBNuJSRxeBBM43PgQWVqJ3P7JsX",
+            "amount": 320000000,
+            "rcdHash": "8ac99cc05065bed87ffd8b7b8e7b5acaec8b4f9d6d298c8ae4f142e67859321d",
+          },
+          Object {
+            "address": "FA36bdk4n23sQzZYLmt2p2CVZ7UxhxUhTqE5T8sU7A6PsAS6Bovt",
+            "amount": 512000000,
+            "rcdHash": "94c496e58d4ced91da9f0be168c346e15cb70943ee554ad7f8564a0ec3209d06",
+          },
+          Object {
+            "address": "FA2KA6uNfQhtUgh5kjYFBNjaAgDUKd1JetoU354DZemN9irwRKYc",
+            "amount": 480000000,
+            "rcdHash": "2d9723cd1d4f288ba4ab4f03974255f402913a8ebd7bb71b009481b08e566159",
+          },
+          Object {
+            "address": "FA3Qt7GgiNVo3xmq7b7rviJFiHtRUb1bVRWsZBAGamruEK99ppY8",
+            "amount": 576000000,
+            "rcdHash": "be48ba0ae1b09fd0153d6428dc95730e5881a5e05875dd5444f0c293e5be995e",
+          },
+          Object {
+            "address": "FA3nsSjUy5uSkqMEug8t3VcehZn5w2ciSMpgqFEEsMRwMrHoa9k3",
+            "amount": 512000000,
+            "rcdHash": "f036366b3fd56d2db477e6100c901b89fe7f619844c13ce538cdfc6dde6905a4",
+          },
+          Object {
+            "address": "FA2R7rcs554iRaNQevKopeTm9UzeJXGkQGgWnYgAndttSRSmCymG",
+            "amount": 256000000,
+            "rcdHash": "3b204da73d058497d2a673c2effa56b965ea34b6fe9df31992af5c128edbf3cc",
+          },
+          Object {
+            "address": "FA3RQmdJ7FsZaeMXgZYnrz3nRjW1u11W47y8Whe6V13qUpj4KqA1",
+            "amount": 320000000,
+            "rcdHash": "bf7c041a04933c10732130f5222154bc952fe0287b5de2433b9adb8db450d92e",
+          },
+          Object {
+            "address": "FA2Fk7LUtcXKLQ2tWhHs3JuqkqAfLsyGw2fEBoYLnrjLSmeo9yoE",
+            "amount": 256000000,
+            "rcdHash": "25d6d8ea3d5e821466d2613a09dd1acf87e21afccaff95ebdbb199d349fdafdb",
+          },
+          Object {
+            "address": "FA2HBeH9XGgAkYapAyeD6styij39rhaJDKgCCoqr1M1L3NmUcvjL",
+            "amount": 480000000,
+            "rcdHash": "291c065662824dc0d70146407398d5e71aedecfbc1c997f3247a91c0e7bcf0e0",
+          },
+          Object {
+            "address": "FA3LDEA5fcskV6ZoFpKE84qPcjd7GYjEnswGHMZXL1V9d14wmgh3",
+            "amount": 320000000,
+            "rcdHash": "b3adf069a630b8e2a8b8aec1a8839e3eb8b52ab28f3105a2302746d0d590446f",
+          },
+          Object {
+            "address": "FA3nSCfSD9G3c8DZGsZCq36PrbFRw1pBgLxNyu4SQ5kb4x3x1wF5",
+            "amount": 256000000,
+            "rcdHash": "ef393adf35a741b900afa3f1869e69ff33e64be3c336a5f86f77b4300466e6d7",
+          },
+          Object {
+            "address": "FA2B6MwDRShpbizxLurzt6mtQPr8brLA8roxTBowEUYWPY4XgVeE",
+            "amount": 416000000,
+            "rcdHash": "1b476a1b26f4099a875db26e2ab3d264a3497b7a1eff6e8adef0cea413bf81e0",
+          },
+          Object {
+            "address": "FA3ng8sPtUESh97yy6MzeLmT4Azqj8PVYyg6CLxYfQnS3QC3ytKL",
+            "amount": 384000000,
+            "rcdHash": "efc4e21af7d3c1989d3eebf8730d5fe73877c182f4c8415ce2b9d55be5802dec",
+          },
+          Object {
+            "address": "FA29VaCpxTnnrQs8U2H8ujFSguB77Xt5QBYvSNRNxKU2f5ybf6L7",
+            "amount": 320000000,
+            "rcdHash": "17a57bb3029686ff0e324cd705720ccb0fa51be5ff51717f6b889ce19328c684",
+          },
+          Object {
+            "address": "FA36bdk4n23sQzZYLmt2p2CVZ7UxhxUhTqE5T8sU7A6PsAS6Bovt",
+            "amount": 512000000,
+            "rcdHash": "94c496e58d4ced91da9f0be168c346e15cb70943ee554ad7f8564a0ec3209d06",
+          },
+          Object {
+            "address": "FA21gMnPtu8ijR1kzUmQBxpuGJFL9S6c9kR7oaL515MeuaZun8Fz",
+            "amount": 320000000,
+            "rcdHash": "05e758503609b92db885575207e134364cd5330013fde64bc0970130a2f5396c",
+          },
+          Object {
+            "address": "FA2ttAh8PHwHa2ES56GkSmD6Vp4SCZxLWVL8f4E625oWZaPxTCLG",
+            "amount": 320000000,
+            "rcdHash": "7a2af03bd03ecd3136208d82c86aee01032171d3c5ceec3e8b1c581672208b5f",
+          },
+          Object {
+            "address": "FA3TWvyAC8oEerab1LDNzhTjmNtPjszcvS331esrEYLPAtgq1pGo",
+            "amount": 480000000,
+            "rcdHash": "c44452424b0477438748a3978b9dea8009ca00a20737cb320788df2698e61123",
+          },
+          Object {
+            "address": "FA2aaCy9HXYtwHgyiJXVXbEv4t5nE8KwSUnrkNuH5hKiRhHdgf1b",
+            "amount": 256000000,
+            "rcdHash": "5097e82f7802e085698730e1a05bdfce13d8ebff179af278e324466bbbc289db",
+          },
+          Object {
+            "address": "FA3LDEA5fcskV6ZoFpKE84qPcjd7GYjEnswGHMZXL1V9d14wmgh3",
+            "amount": 320000000,
+            "rcdHash": "b3adf069a630b8e2a8b8aec1a8839e3eb8b52ab28f3105a2302746d0d590446f",
+          },
+          Object {
+            "address": "FA2dzMdzbv9frenUCCRcnwo8j5m69zqa2a8ivcTvkwtW4KeXRfeN",
+            "amount": 256000000,
+            "rcdHash": "5859c5bba6de80a36a6edb3234bf91f2dbef1f44b1c07a59b34a5cf7a0a2cc5d",
+          },
+          Object {
+            "address": "FA3mAX5HpMaPAUuLopTWgjaB6pm9PeHoyD6r9cCRwcpaqWbuW8Fz",
+            "amount": 256000000,
+            "rcdHash": "ec56c7731179d9cd6a00f0cdd8f56e19ab6757ab4106055dcd0d1daf877c334e",
+          },
+          Object {
+            "address": "FA2zGvyrRyjK9AkChEucBmoXadJsNd19Co2ijBQMT4x65Gw998Ht",
+            "amount": 320000000,
+            "rcdHash": "866979181e13233484298c4905c5a579fb4a973f210116d5424b74b72daa88a2",
+          },
+          Object {
+            "address": "FA3nsSjUy5uSkqMEug8t3VcehZn5w2ciSMpgqFEEsMRwMrHoa9k3",
+            "amount": 512000000,
+            "rcdHash": "f036366b3fd56d2db477e6100c901b89fe7f619844c13ce538cdfc6dde6905a4",
+          },
+          Object {
+            "address": "FA3HSuFo9Soa5ZnG82JHqyKiRi4Pw17LxPTo9AsCaFNLCGkXkgsu",
+            "amount": 640000000,
+            "rcdHash": "ad6724d6a15a16292a012211e38ccc8efff44dce85a53c6bb5e61d38897b29a1",
+          },
+          Object {
+            "address": "FA3KmpnDD56WX91ninPGKV9uHhybcfZW2mm727wp5X4JMp7VJk2e",
+            "amount": 256000000,
+            "rcdHash": "b2af5927c37c34722a7e28551f34829d8706f83162b5b88184345c818fc9d1dc",
+          },
+          Object {
+            "address": "FA2dzMdzbv9frenUCCRcnwo8j5m69zqa2a8ivcTvkwtW4KeXRfeN",
+            "amount": 288000000,
+            "rcdHash": "5859c5bba6de80a36a6edb3234bf91f2dbef1f44b1c07a59b34a5cf7a0a2cc5d",
+          },
+          Object {
+            "address": "FA2pSDKCUkE84kQ9Kt3nphbS1QviHez2JjcmPsQSLaX7p95rtBha",
+            "amount": 256000000,
+            "rcdHash": "7011b361819920b88bb25a3df396eb6817022b9796e26ac1c041d47d8d63937c",
+          },
+          Object {
+            "address": "FA3RqGvKruW9BPTPHqRGAop76HgJm4fHoit7wW4aqmPyHtrjCy1M",
+            "amount": 320000000,
+            "rcdHash": "c0719b6ed37ab9200e912568acb0e9167ed35bb77138f90065da56d87dae6d86",
+          },
+          Object {
+            "address": "FA2svZ8yzBMQ4bbuM8b1uA8j2V5ApYWRjk4N75PFnk8CU9taWUkr",
+            "amount": 480000000,
+            "rcdHash": "77fd94eacd8191bef2b42cef6108eaeae28d1674354e169e88a9e6f0eefa29e8",
+          },
+        ],
+      },
+    ],
+    "lookupHash": "f81ca2896a3602b322c94378119ed085b75af3464d02abb423452c6337c339a3",
+    "nextBlock": Object {
+      "lookupHash": "a8e393b2353114c1d7d79492e73c7fbc65951f7e8e808d912b3134d79799d088",
+    },
+    "previousBlock": Object {
+      "bodySize": 3612,
+    },
+  },
+}
+`;
