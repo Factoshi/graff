@@ -25,6 +25,7 @@ import {
     QUERY_PENDING_TXS,
     QUERY_PROPS,
     QUERY_RECEIPT,
+    QUERY_TX
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -320,4 +321,15 @@ describe('Integration Test Queries', () => {
         expect(receipt.data!.receipt).toBeNull();
     });
 
+    it('Should query a transaction', async () => {
+        const hash = '5ba30e3bdb7fd826a2a7316fb488a7df472171feb8d4fc1827f58736155f8e17';
+        const tx = await query({ query: QUERY_TX, variables: { hash } });
+        expect(tx.data).toMatchSnapshot();
+    });
+
+    it('Should return null for missing transaction query', async () => {
+        const hash = randomBytes(32).toString('hex');
+        const tx = await query({ query: QUERY_TX, variables: { hash } });
+        expect(tx.data!.transaction).toBeNull();
+    });
 });

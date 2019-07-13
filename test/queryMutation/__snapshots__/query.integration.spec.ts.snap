@@ -309,6 +309,41 @@ Object {
 }
 `;
 
+exports[`Integration Test Queries Should query a transaction 1`] = `
+Object {
+  "transaction": Object {
+    "entryCreditOutputs": Array [],
+    "factoidBlock": Object {
+      "bodyMR": "b73317cc983c9e6938d6df519bab245899b16d165c404ebb3e79f3d7319b22aa",
+    },
+    "factoidOutputs": Array [
+      Object {
+        "address": "FA21T29QvNGRen1T4edQ3pMBL5jKSuWWJGfcCuuGHjmhPFtJZAz1",
+        "amount": 10000000000,
+      },
+    ],
+    "fees": 264000,
+    "hash": "5ba30e3bdb7fd826a2a7316fb488a7df472171feb8d4fc1827f58736155f8e17",
+    "inputs": Array [
+      Object {
+        "address": "FA2tUk6LNzNsdzCbxmac1Kx9wpU9wS7GSoME5BTosK4zAUBM1gEC",
+        "amount": 10000264000,
+      },
+    ],
+    "rcds": Array [
+      "012886331a62282efb09fbd60b29e3c5d3f34963a3d6574fb266b67715ff42cb96",
+    ],
+    "signatures": Array [
+      "714c3ee97041fa0942f48e4bf58be1ee6806d6f333904a173e07820ad234577acb7dc77028a29d76fb60c8f4072f3771de17b42b753736af84f6a88358e47e02",
+    ],
+    "timestamp": 1563042293448,
+    "totalEntryCreditOutputs": 0,
+    "totalFactoidOutputs": 10000000000,
+    "totalInputs": 10000264000,
+  },
+}
+`;
+
 exports[`Integration Test Queries Should query an admin block by hash. 1`] = `
 Object {
   "adminBlock": Object {

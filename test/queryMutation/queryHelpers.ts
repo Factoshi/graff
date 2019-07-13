@@ -660,3 +660,33 @@ export const QUERY_RECEIPT = gql`
         }
     }
 `;
+
+export const QUERY_TX = gql`
+    query GetTransactions($hash: Hash!) {
+        transaction(hash: $hash) {
+            hash
+            timestamp
+            inputs {
+                address
+                amount
+            }
+            factoidOutputs {
+                amount
+                address
+            }
+            entryCreditOutputs {
+                amount
+                address
+            }
+            totalInputs
+            totalFactoidOutputs
+            totalEntryCreditOutputs
+            fees
+            rcds
+            signatures
+            factoidBlock {
+                bodyMR
+            }
+        }
+    }
+`;
