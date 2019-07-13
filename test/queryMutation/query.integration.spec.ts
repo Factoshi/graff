@@ -12,7 +12,9 @@ import {
     QUERY_CURRENT_MINUTE,
     QUERY_ENTRY,
     QUERY_EBLOCK,
-    QUERY_ECBLOCK
+    QUERY_ECBLOCK,
+    QUERY_ECBLOCK_HEIGHT,
+    QUERY_ECBLOCK_HEAD,
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -191,4 +193,30 @@ describe('Integration Test Queries', () => {
         const queryResponse = await query({ query: QUERY_ECBLOCK, variables: { hash } });
         expect(queryResponse.data!.entryCreditBlock).toBeNull();
     });
+
+    it('Should query an entry credit block by height', async () => {
+        const queryResponse = await query({
+            query: QUERY_ECBLOCK_HEIGHT,
+            variables: { height: 10 }
+        });
+        expect(queryResponse).toMatchSnapshot();
+    });
+
+    it('Should return null when querying an entry credit block height that does not exist.', async () => {
+        const queryResponse = await query({
+            query: QUERY_ECBLOCK_HEIGHT,
+            variables: { height: Number.MAX_SAFE_INTEGER }
+        });
+        expect(queryResponse.data!.entryCreditBlockByHeight).toBeNull();
+    });
+
+    it('Should query an entry credit block head', async () => {
+        const dblockHead = await cli.getDirectoryBlockHead();
+        const ecBlockHead = await cli.getEntryCreditBlock(dblockHead.entryCreditBlockRef);
+        const queryResponse = await query({ query: QUERY_ECBLOCK_HEAD });
+        expect(queryResponse.data!.entryCreditBlockHead.headerHash).toBe(
+            ecBlockHead.headerHash
+        );
+    });
+
 });

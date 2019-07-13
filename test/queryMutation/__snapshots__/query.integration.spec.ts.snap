@@ -889,6 +889,76 @@ Object {
 }
 `;
 
+exports[`Integration Test Queries Should query an entry credit block by height 1`] = `
+Object {
+  "data": Object {
+    "entryCreditBlockByHeight": Object {
+      "bodyHash": "898b0672bb93057a2dec036ee99ef1a2cae3fcea76733b0f3272e2f5c69bd0e8",
+      "bodySize": 433,
+      "commitPage": Object {
+        "commits": Array [
+          Object {
+            "credits": 1,
+            "entry": Object {
+              "content": "eyJBbmNob3JSZWNvcmRWZXIiOjEsIkRCSGVpZ2h0Ijo4LCJLZXlNUiI6IjYzN2I2MDEwY2I2MTIxZjc2YzY1YjIwMGE2Y2Y5NGNiNjY1NTg4MWZiNGNhYzQ4OTc5Zjg5NTBlN2EzNDlkYTEiLCJSZWNvcmRIZWlnaHQiOjksIkJpdGNvaW4iOnsiQWRkcmVzcyI6IjFLMlNYZ0FwbW85dVpveWFodnNiU2FucFZXYnpaV1ZWTUYiLCJUWElEIjoiYjczYjM4YjhhZjQzZjRkYmFlYjA2MWYxNThkNGJmNTAwNGI0MDIxNmIzMGFjZDNiZWNhNDNmYWUxYmE2ZDFiNyIsIkJsb2NrSGVpZ2h0IjozNzI1NzksIkJsb2NrSGFzaCI6IjAwMDAwMDAwMDAwMDAwMDAwNTg5NTQwZmRhYWNmNGY2YmEzNzUxM2FlZGMxMDMzZTY4YTY0OWZmZGUwNTczYWQiLCJPZmZzZXQiOjExODV9fTg2YzZhNDE0OWRmOWIzNTU1YmI0MDFhZjc4NzMzMjg3NTU4ZTE1MTNlZjg4N2JiNGIxMmY5MmIzNGM5ODQ0MjVjZjYxOTRlOGY1YmU3MGQ3Yjg1NTRlZTg4ZDdjNmY4MGI2YzU0YTUwNTU3NjkzYTcxM2JjN2U3NjMxODUzODA2",
+            },
+            "entryCreditBlock": Object {
+              "fullHash": "298121b6bd1aa048b4b7fc3a48488a1f3de7681e94fd40608dc4b2b13f4595c0",
+            },
+            "signature": "0bb90cd75fa38d6669deb8a23c31ed04524cdee8574b4bb2576e5a1b7768855e1a07e89c62ebfb6abee3bf4d9e5cdee3b91c2390ab400c37f0f5f40201509d0d",
+            "timestamp": 1441143156109,
+          },
+          Object {
+            "credits": 1,
+            "entry": Object {
+              "content": "eyJBbmNob3JSZWNvcmRWZXIiOjEsIkRCSGVpZ2h0Ijo5LCJLZXlNUiI6IjI2ZDg0ZmE5ZDYzYTUyYTIwMjJjM2QxZDkwZDc1MGZlMWVmNzdjNWI3YWFmMDk2MzgzOGRlODRiNmU5ZjA3MzMiLCJSZWNvcmRIZWlnaHQiOjksIkJpdGNvaW4iOnsiQWRkcmVzcyI6IjFLMlNYZ0FwbW85dVpveWFodnNiU2FucFZXYnpaV1ZWTUYiLCJUWElEIjoiMzJlMzk2OGZlMDhmYWE3OGE1MTFlN2MxMWQ5NzMxZThiZDFhZjM5ZDk1NzY4ZDZiYTJmNjU1OWMzZWM4ZGUwOSIsIkJsb2NrSGVpZ2h0IjozNzI1NzksIkJsb2NrSGFzaCI6IjAwMDAwMDAwMDAwMDAwMDAwNTg5NTQwZmRhYWNmNGY2YmEzNzUxM2FlZGMxMDMzZTY4YTY0OWZmZGUwNTczYWQiLCJPZmZzZXQiOjExOTB9fWE5MmUxYTllNjVhYTRkMDNjNDdhOWMxYTJiYzBiMGQ4ZGRhZTk5ODQyMmQyMDMwYjViOTkzYWExZmY0MjJiZTFjNmZkNTM2ODEyN2VmOTExMjM4NjA4ZDIwMmVlN2VhYTlkZjNiMDI1ZTM1YTMyODRhOWQzZjA4MjJmMjE3NTA0",
+            },
+            "entryCreditBlock": Object {
+              "fullHash": "298121b6bd1aa048b4b7fc3a48488a1f3de7681e94fd40608dc4b2b13f4595c0",
+            },
+            "signature": "cac9dc9364259903c19f99f4f65c407e3345e9f4a45336c366947ca7dbc6ff5ac474a061030922d625f2af03bedf8f812032e2647fa9c7a4d7de34481eef4a00",
+            "timestamp": 1441143156111,
+          },
+          Object {
+            "credits": 1,
+            "entry": Object {
+              "content": "eyJBbmNob3JSZWNvcmRWZXIiOjEsIkRCSGVpZ2h0Ijo3LCJLZXlNUiI6IjNhMzhmZWM4MmIyNmVlOTE2ODkxZGFiM2RkN2E3ZTEwMWFiNjQzYWZmNGE2NDFkODk1MTM3YTdhN2M5Y2FjNTUiLCJSZWNvcmRIZWlnaHQiOjksIkJpdGNvaW4iOnsiQWRkcmVzcyI6IjFLMlNYZ0FwbW85dVpveWFodnNiU2FucFZXYnpaV1ZWTUYiLCJUWElEIjoiMzg0NjRiOThmZmU0NGM3MWYwNjNmZjNiZWRmODBkYjVlOGJiNmZlMzg0ODMyMmEwOTY2ZTUwYTYwYTY1Y2ZjNSIsIkJsb2NrSGVpZ2h0IjozNzI1NzksIkJsb2NrSGFzaCI6IjAwMDAwMDAwMDAwMDAwMDAwNTg5NTQwZmRhYWNmNGY2YmEzNzUxM2FlZGMxMDMzZTY4YTY0OWZmZGUwNTczYWQiLCJPZmZzZXQiOjExOTF9fTE2NzU1MDc5YTg5ZWU5YzBkNjhhNDU4NWE1NWQ1NjQyMjgxMDk1ZTlhYjNjOWY3ZTBjMzAxNDkwMzJhMWE4YzU0ZDcxNTIxZjc1YjUzZDNkMWIyOGFiOWQxY2E4N2NhMzIxNWQyZjBlNTkzZmFjZjkyMTBlOTE5MzYzMmRhYjA3",
+            },
+            "entryCreditBlock": Object {
+              "fullHash": "298121b6bd1aa048b4b7fc3a48488a1f3de7681e94fd40608dc4b2b13f4595c0",
+            },
+            "signature": "8d4d4ce70cc7e699d1a49269228d5c058002337962d0440d0cd2b9d4b8f196a750b703928a61160f45072757305fec2db9a5f670a44f0509b69d6ad2fc0fdd00",
+            "timestamp": 1441143156112,
+          },
+        ],
+        "offset": 0,
+        "pageLength": 3,
+        "totalCount": 3,
+      },
+      "directoryBlock": Object {
+        "height": 10,
+      },
+      "fullHash": "298121b6bd1aa048b4b7fc3a48488a1f3de7681e94fd40608dc4b2b13f4595c0",
+      "headerHash": "96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68",
+      "nextBlock": Object {
+        "bodyHash": "f739576e337103e1b93dcd2f59e23b8d0e43f482734f186dadce222c6537e7a5",
+      },
+      "objectCount": 14,
+      "previousBlock": Object {
+        "objectCount": 11,
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration Test Queries Should query the ack of a legit commit 1`] = `
 Object {
   "commitAck": Object {

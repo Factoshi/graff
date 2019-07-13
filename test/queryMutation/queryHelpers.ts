@@ -377,3 +377,77 @@ export const QUERY_ECBLOCK = gql`
         }
     }
 `;
+
+export const QUERY_ECBLOCK_HEIGHT = gql`
+    query GetEntryCreditBlockByHeight($height: Height!) {
+        entryCreditBlockByHeight(height: $height) {
+            headerHash
+            fullHash
+            bodyHash
+            bodySize
+            objectCount
+            previousBlock {
+                objectCount
+            }
+            nextBlock {
+                bodyHash
+            }
+            commitPage(first: 5, offset: 0) {
+                pageLength
+                totalCount
+                offset
+                commits {
+                    timestamp
+                    signature
+                    credits
+                    entry {
+                        content
+                    }
+                    entryCreditBlock {
+                        fullHash
+                    }
+                }
+            }
+            directoryBlock {
+                height
+            }
+        }
+    }
+`;
+
+export const QUERY_ECBLOCK_HEAD = gql`
+    query GetEntryCreditBlockHead {
+        entryCreditBlockHead {
+            headerHash
+            fullHash
+            bodyHash
+            bodySize
+            objectCount
+            previousBlock {
+                objectCount
+            }
+            nextBlock {
+                bodyHash
+            }
+            commitPage(first: 5, offset: 0) {
+                pageLength
+                totalCount
+                offset
+                commits {
+                    timestamp
+                    signature
+                    credits
+                    entry {
+                        content
+                    }
+                    entryCreditBlock {
+                        fullHash
+                    }
+                }
+            }
+            directoryBlock {
+                height
+            }
+        }
+    }
+`;
