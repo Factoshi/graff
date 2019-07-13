@@ -280,12 +280,12 @@ export type CurrentMinute = {
   directoryBlockHeight: Scalars["Height"];
   /** The minute number of the open entry block. */
   minute: Scalars["Int"];
-  /** The start time of the current block in nano seconds encoded as a string. */
-  currentBlockStartTime: Scalars["String"];
-  /** The start time of the current minute in nano seconds encoded as a string. */
-  currentMinuteStartTime: Scalars["String"];
-  /** The time as understood by factomd in nano seconds encoded as a string. */
-  currentTime: Scalars["String"];
+  /** The start time of the current block in nano seconds */
+  currentBlockStartTime: Scalars["Float"];
+  /** The start time of the current minute in nano seconds */
+  currentMinuteStartTime: Scalars["Float"];
+  /** The time as understood by factomd in nano seconds */
+  currentTime: Scalars["Float"];
   /** The number of seconds per block. */
   directoryBlockInSeconds: Scalars["Int"];
   /** Boolean to determine whether factomd thinks it is stalled. */
@@ -1215,16 +1215,16 @@ export type CurrentMinuteResolvers<
   >;
   minute?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   currentBlockStartTime?: Resolver<
-    ResolversTypes["String"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
   currentMinuteStartTime?: Resolver<
-    ResolversTypes["String"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
-  currentTime?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  currentTime?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   directoryBlockInSeconds?: Resolver<
     ResolversTypes["Int"],
     ParentType,

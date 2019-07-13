@@ -685,12 +685,12 @@ type CurrentMinute {
     directoryBlockHeight: Height!
     "The minute number of the open entry block."
     minute: Int!
-    "The start time of the current block in nano seconds encoded as a string."
-    currentBlockStartTime: String!
-    "The start time of the current minute in nano seconds encoded as a string."
-    currentMinuteStartTime: String!
-    "The time as understood by factomd in nano seconds encoded as a string."
-    currentTime: String!
+    "The start time of the current block in nano seconds"
+    currentBlockStartTime: Float!
+    "The start time of the current minute in nano seconds"
+    currentMinuteStartTime: Float!
+    "The time as understood by factomd in nano seconds"
+    currentTime: Float!
     "The number of seconds per block."
     directoryBlockInSeconds: Int!
     "Boolean to determine whether factomd thinks it is stalled."
