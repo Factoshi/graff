@@ -136,7 +136,7 @@ export type AddRemoveServer = AdminEntry & {
 /** Public address and associated amount. */
 export type Address = {
   __typename?: "Address";
-  /** Amount may be balance or output value, depending on the context. */
+  /** Amount may be balance or transaction input/output value, depending on the context. */
   amount: Scalars["Float"];
   /** Public address. */
   address: Scalars["PublicAddress"];
@@ -740,7 +740,7 @@ export type QueryEntryArgs = {
 };
 
 export type QueryEntryAckArgs = {
-  entryHash: Scalars["Hash"];
+  hash: Scalars["Hash"];
   chainId: Scalars["Hash"];
 };
 

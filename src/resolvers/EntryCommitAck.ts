@@ -18,8 +18,8 @@ export const ackQueries: QueryResolvers = {
         const ack = await factomd.ack.load({ hash, chainid: 'c' });
         return formatAckResponse(ack);
     },
-    entryAck: async (root, { entryHash, chainId }, { factomd }) => {
-        const ack = await factomd.ack.load({ hash: entryHash, chainid: chainId });
+    entryAck: async (root, { hash, chainId }, { factomd }) => {
+        const ack = await factomd.ack.load({ hash, chainid: chainId });
         return formatAckResponse(ack);
     }
 };

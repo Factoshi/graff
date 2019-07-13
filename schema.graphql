@@ -47,7 +47,7 @@ type Query {
     "Entry status."
     entryAck(
         "Entry hash."
-        entryHash: Hash!
+        hash: Hash!
         "The chain where the entry was revealed."
         chainId: Hash!
     ): EntryCommitAck!
