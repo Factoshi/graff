@@ -7,6 +7,7 @@ import { entryCreditBlockQueries } from './EntryCreditBlock';
 import { factoidBlockQueries } from './FactoidBlock';
 import { directoryBlockQueries } from './DirectoryBlock';
 import { transactionQueries } from './Transaction';
+import { handleEntryError } from './resolver-helpers';
 
 export const query: QueryResolvers = {
     ...adminBlockQueries,
@@ -112,12 +113,14 @@ export const query: QueryResolvers = {
         };
     },
     receipt: async (root, { hash }, { factomd }) => {
-        const receipt = await factomd.receipt.load(hash);
-        return {
-            entry: { hash },
-            bitcoinTransactionHash: receipt.receipt.bitcointransactionhash || null,
-            bitcoinBlockHash: receipt.receipt.bitcoinblockhash || null,
-            merkleBranch: receipt.receipt.merklebranch
-        };
+        const receipt = await factomd.receipt.load(hash).catch(handleEntryError);
+        return (
+            receipt && {
+                entry: { hash },
+                bitcoinTransactionHash: receipt.receipt.bitcointransactionhash || null,
+                bitcoinBlockHash: receipt.receipt.bitcoinblockhash || null,
+                merkleBranch: receipt.receipt.merklebranch
+            }
+        );
     }
 };

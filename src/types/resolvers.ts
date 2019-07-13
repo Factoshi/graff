@@ -702,7 +702,7 @@ export type Query = {
   /** Get properties of factomd and the APIs. */
   properties: Properties;
   /** Get an entry receipt */
-  receipt: Receipt;
+  receipt?: Maybe<Receipt>;
   /** Get a transaction by its hash. */
   transaction?: Maybe<Transaction>;
 };

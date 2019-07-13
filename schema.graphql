@@ -88,7 +88,7 @@ type Query {
     "Get properties of factomd and the APIs."
     properties: Properties!
     "Get an entry receipt"
-    receipt(hash: Hash!): Receipt!
+    receipt(hash: Hash!): Receipt
     "Get a transaction by its hash."
     transaction(hash: Hash!): Transaction
 }
