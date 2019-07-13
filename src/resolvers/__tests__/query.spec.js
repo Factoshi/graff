@@ -65,9 +65,9 @@ describe('Query Resolvers', () => {
         expect(typeof currentMinute.leaderHeight).toBe('number');
         expect(typeof currentMinute.directoryBlockHeight).toBe('number');
         expect(typeof currentMinute.minute).toBe('number');
-        expect(typeof currentMinute.currentBlockStartTime).toBe('number');
-        expect(typeof currentMinute.currentMinuteStartTime).toBe('number');
-        expect(typeof currentMinute.currentTime).toBe('number');
+        expect(typeof currentMinute.currentBlockStartTime).toBe('string');
+        expect(typeof currentMinute.currentMinuteStartTime).toBe('string');
+        expect(typeof currentMinute.currentTime).toBe('string');
         expect(typeof currentMinute.directoryBlockInSeconds).toBe('number');
         expect(typeof currentMinute.faultTimeout).toBe('number');
         expect(typeof currentMinute.roundTimeout).toBe('number');
