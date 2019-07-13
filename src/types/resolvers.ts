@@ -626,7 +626,7 @@ export type PendingTransaction = {
   /** The total value of all factoid outputs. Denominated in factoshis. */
   totalFactoidOutputs: Scalars["Float"];
   /** The total value of all entry credit outputs. Denominated in entry credits. */
-  totalEntryCreditOutputs: Scalars["Int"];
+  totalEntryCreditOutputs: Scalars["Float"];
   /** The fees burned for the transaction. Denominated in factoshis. */
   fees: Scalars["Float"];
 };
@@ -852,13 +852,13 @@ export type Transaction = {
   /** An array of entry credit outputs. */
   entryCreditOutputs: Array<Address>;
   /** The total value of all inputs. Denominated in factoshis. */
-  totalInputs: Scalars["Int"];
+  totalInputs: Scalars["Float"];
   /** The total value of all factoid outputs. Denominated in factoshis. */
-  totalFactoidOutputs: Scalars["Int"];
+  totalFactoidOutputs: Scalars["Float"];
   /** The total value of all entry credit outputs. Denominated in entry credits. */
-  totalEntryCreditOutputs: Scalars["Int"];
+  totalEntryCreditOutputs: Scalars["Float"];
   /** The fees burned for the transaction. Denominated in factoshis. */
-  fees: Scalars["Int"];
+  fees: Scalars["Float"];
   /** Redeem Condition Datastructures */
   rcds: Array<Scalars["String"]>;
   /** The signature needed to satisfy RCD */
@@ -1591,7 +1591,7 @@ export type PendingTransactionResolvers<
     ContextType
   >;
   totalEntryCreditOutputs?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
@@ -1771,7 +1771,7 @@ export type QueryResolvers<
   >;
   properties?: Resolver<ResolversTypes["Properties"], ParentType, ContextType>;
   receipt?: Resolver<
-    ResolversTypes["Receipt"],
+    Maybe<ResolversTypes["Receipt"]>,
     ParentType,
     ContextType,
     QueryReceiptArgs
@@ -1874,18 +1874,18 @@ export type TransactionResolvers<
     ParentType,
     ContextType
   >;
-  totalInputs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  totalInputs?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   totalFactoidOutputs?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
   totalEntryCreditOutputs?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
-  fees?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  fees?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   rcds?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
   signatures?: Resolver<
     Array<ResolversTypes["String"]>,
