@@ -566,3 +566,14 @@ export const QUERY_FBLOCK_HEAD = gql`
         }
     }
 `;
+
+export const QUERY_TX_ACK = gql`
+    query GetFactoidTransactionAck($hash: Hash!) {
+        factoidTransactionAck(hash: $hash) {
+            hash
+            txTimestamp
+            blockTimestamp
+            status
+        }
+    }
+`;

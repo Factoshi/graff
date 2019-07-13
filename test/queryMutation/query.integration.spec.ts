@@ -18,7 +18,8 @@ import {
     QUERY_ECRATE,
     QUERY_FBLOCK,
     QUERY_FBLOCK_HEIGHT,
-    QUERY_FBLOCK_HEAD
+    QUERY_FBLOCK_HEAD,
+    QUERY_TX_ACK
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -264,5 +265,18 @@ describe('Integration Test Queries', () => {
         const fBlockHead = await cli.getFactoidBlock(dblockHead.factoidBlockRef);
         const fBlock = await query({ query: QUERY_FBLOCK_HEAD });
         expect(fBlock.data!.factoidBlockHead.bodyMR).toBe(fBlockHead.bodyMR);
+    });
+
+    it('Should query a factoid transaction ack', async () => {
+        const hash = '92e9d62ceef0d8fb3d22e1fc0b4faff68d7849bddb2fd8fa8c91ff463f55fb33';
+        const ack = await query({ query: QUERY_TX_ACK, variables: { hash } });
+        expect(ack).toMatchSnapshot();
+    });
+
+    it('Should query a missing factoid transaction ack', async () => {
+        // last char is different to above hash
+        const fake = '92e9d62ceef0d8fb3d22e1fc0b4faff68d7849bddb2fd8fa8c91ff463f55fb32';
+        const ack = await query({ query: QUERY_TX_ACK, variables: { hash: fake } });
+        expect(ack).toMatchSnapshot();
     });
 });

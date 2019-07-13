@@ -269,6 +269,46 @@ Object {
 }
 `;
 
+exports[`Integration Test Queries Should query a factoid transaction ack 1`] = `
+Object {
+  "data": Object {
+    "factoidTransactionAck": Object {
+      "blockTimestamp": 1563037560000,
+      "hash": "92e9d62ceef0d8fb3d22e1fc0b4faff68d7849bddb2fd8fa8c91ff463f55fb33",
+      "status": "DBlockConfirmed",
+      "txTimestamp": 1563038056059,
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query a missing factoid transaction ack 1`] = `
+Object {
+  "data": Object {
+    "factoidTransactionAck": Object {
+      "blockTimestamp": null,
+      "hash": "92e9d62ceef0d8fb3d22e1fc0b4faff68d7849bddb2fd8fa8c91ff463f55fb32",
+      "status": "Unknown",
+      "txTimestamp": null,
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration Test Queries Should query an admin block by hash. 1`] = `
 Object {
   "adminBlock": Object {
