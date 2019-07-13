@@ -1,5 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Integration Test Queries Should get the ack of a known entry 1`] = `
+Object {
+  "entryAck": Object {
+    "commitHash": "c3d5ff23e70ee345dad983d01912a3d3ddabc8cfe8b07a078bb7f1e2d44ee9de",
+    "commitStatus": Object {
+      "status": "DBlockConfirmed",
+      "timestamp": null,
+    },
+    "entryHash": "5d8870cdcef3ab5fc05b6d94ff8c0f0f8a8ec4b2eb5643fe3a72e0f8c5c0a708",
+    "entryStatus": Object {
+      "status": "DBlockConfirmed",
+      "timestamp": 1563022560000,
+    },
+  },
+}
+`;
+
 exports[`Integration Test Queries Should query a directory block by hash. 1`] = `
 Object {
   "directoryBlock": Object {

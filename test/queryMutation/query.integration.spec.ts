@@ -8,10 +8,12 @@ import {
     QUERY_BALANCES,
     QUERY_CHAIN_HEAD,
     QUERY_COMMIT_ACK,
+    QUERY_ENTRY_ACK,
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
 import { cli } from './factom';
+import { randomBytes } from 'crypto';
 
 const { query } = createTestClient(server as any);
 
@@ -121,5 +123,26 @@ describe('Integration Test Queries', () => {
         const dBlock = res.data.directoryBlockHead;
         expect(dBlock.keyMR).toBe(expected.keyMR);
         expect(dBlock.nextBlock).toBeNull();
+    });
+
+    it('Should get the ack of a known entry', async () => {
+        const hash = '5d8870cdcef3ab5fc05b6d94ff8c0f0f8a8ec4b2eb5643fe3a72e0f8c5c0a708';
+        const chainId =
+            '5ff8793f2aadba003adcc52cf6de55c2780b16cce5bb264d417f48c5f8c2913b';
+        const queryResponse = await query({
+            query: QUERY_ENTRY_ACK,
+            variables: { hash, chainId }
+        });
+        expect(queryResponse.data).toMatchSnapshot();
+    });
+
+    it('Should return null for the ack of a fake entry', async () => {
+        const hash = randomBytes(32).toString('hex');
+        const chainId = randomBytes(32).toString('hex');
+        const queryResponse = await query({
+            query: QUERY_ENTRY_ACK,
+            variables: { hash, chainId }
+        });
+        expect(queryResponse.data).toBeNull();
     });
 });
