@@ -15,6 +15,7 @@ import {
     QUERY_ECBLOCK,
     QUERY_ECBLOCK_HEIGHT,
     QUERY_ECBLOCK_HEAD,
+    QUERY_ECRATE,
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -219,4 +220,11 @@ describe('Integration Test Queries', () => {
         );
     });
 
+    it('Should query the entry credit rate', async () => {
+        const [expectedRate, actualRate] = await Promise.all([
+            cli.factomdApi('entry-credit-rate'),
+            query({ query: QUERY_ECRATE })
+        ]);
+        expect(actualRate.data!.entryCreditRate).toBe(expectedRate.rate);
+    });
 });

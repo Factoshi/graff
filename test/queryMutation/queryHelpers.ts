@@ -451,3 +451,9 @@ export const QUERY_ECBLOCK_HEAD = gql`
         }
     }
 `;
+
+export const QUERY_ECRATE = gql`
+    query GetEntryCreditRate {
+        entryCreditRate
+    }
+`;
