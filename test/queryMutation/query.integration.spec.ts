@@ -11,7 +11,8 @@ import {
     QUERY_ENTRY_ACK,
     QUERY_CURRENT_MINUTE,
     QUERY_ENTRY,
-    QUERY_EBLOCK
+    QUERY_EBLOCK,
+    QUERY_ECBLOCK
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -146,18 +147,6 @@ describe('Integration Test Queries', () => {
         expect(queryResponse.data!.entry).toBeNull();
     });
 
-    it('Should query an entry block', async () => {
-        const hash = '8ee8eb697d71f3485e3b7389cea5e19a86029b109333b7ea201084212ba3c75b';
-        const queryResponse = await query({ query: QUERY_EBLOCK, variables: { hash } });
-        expect(queryResponse.data).toMatchSnapshot();
-    });
-
-    it('Should return null for an unkown entry block', async () => {
-        const hash = randomBytes(32).toString('hex');
-        const queryResponse = await query({ query: QUERY_EBLOCK, variables: { hash } });
-        expect(queryResponse.data!.entryBlock).toBeNull();
-    });
-
     it('Should get the ack of a known entry', async () => {
         const hash = '5d8870cdcef3ab5fc05b6d94ff8c0f0f8a8ec4b2eb5643fe3a72e0f8c5c0a708';
         const chainId =
@@ -177,5 +166,30 @@ describe('Integration Test Queries', () => {
             variables: { hash, chainId }
         });
         expect(queryResponse.data).toBeNull();
+    });
+
+    it('Should query an entry block', async () => {
+        const hash = '8ee8eb697d71f3485e3b7389cea5e19a86029b109333b7ea201084212ba3c75b';
+        const queryResponse = await query({ query: QUERY_EBLOCK, variables: { hash } });
+        expect(queryResponse.data).toMatchSnapshot();
+    });
+
+    it('Should return null for an unkown entry block', async () => {
+        const hash = randomBytes(32).toString('hex');
+        const queryResponse = await query({ query: QUERY_EBLOCK, variables: { hash } });
+        expect(queryResponse.data!.entryBlock).toBeNull();
+    });
+
+    it('Should query an entry credit block', async () => {
+        const hash = '22d7ed3e6007bf59c0faa8d018f7998f08cfbc8310228155ba5ff7dacbca4ed0';
+        const queryResponse = await query({ query: QUERY_ECBLOCK, variables: { hash } });
+        console.log(queryResponse);
+        expect(queryResponse.data).toMatchSnapshot();
+    });
+
+    it('Should return null for an unkown entry credit block', async () => {
+        const hash = randomBytes(32).toString('hex');
+        const queryResponse = await query({ query: QUERY_ECBLOCK, variables: { hash } });
+        expect(queryResponse.data!.entryCreditBlock).toBeNull();
     });
 });

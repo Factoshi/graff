@@ -806,6 +806,89 @@ Object {
 }
 `;
 
+exports[`Integration Test Queries Should query an entry credit block 1`] = `
+Object {
+  "entryCreditBlock": Object {
+    "bodyHash": "29e77a24f9aa7a5b44acb7a0138be1911f2d2d5d409a22227790ea8f986645fe",
+    "bodySize": 22205,
+    "commitPage": Object {
+      "commits": Array [
+        Object {
+          "credits": 1,
+          "entry": Object {
+            "content": "ZiswSGRkZ1Zhc3lLRktSd3ordG0reVhFMis3RDhZb0tlazdEYVoyRERDQT0=",
+          },
+          "entryCreditBlock": Object {
+            "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+          },
+          "signature": "9a5dc68028b0c92020d20b160a9d8150cd7ee33d4afe16adc2346654ecddc7515c8d32af0a68821d5f622e500631e796664748babe1cb1d4d617ce7a46c8fe00",
+          "timestamp": 1562137176003,
+        },
+        Object {
+          "credits": 1,
+          "entry": Object {
+            "content": "ZWhUbi9aSXRFc1Z6c2VkSWVML3dETW1iYm9hUmxid25oVnUvaFhYSGtTbz0=",
+          },
+          "entryCreditBlock": Object {
+            "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+          },
+          "signature": "a9a8a685d3f57459b3fbb0e225d9d9264e71549479fb8821bf319f211e615aa8a6f8b3b54a3fa9fff7d8af181ecae5feba98835fcf1b18abf0f14efe9037290f",
+          "timestamp": 1562137204104,
+        },
+        Object {
+          "credits": 1,
+          "entry": Object {
+            "content": "Z2wzMStabVhjVEQ0N1VrTVNVVUFncEU4N3lMbSt0SDU4NHZCYndQV0NWcz0=",
+          },
+          "entryCreditBlock": Object {
+            "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+          },
+          "signature": "03b226d2bf5c27e95e2790da5bfc0f7ed29f4e9c529e76c330691a70d6b16495b81b353ea3eea1da585e7aea1ba0cbae9d51b170a01e4f5889c5828a2f2c860e",
+          "timestamp": 1562137209826,
+        },
+        Object {
+          "credits": 1,
+          "entry": Object {
+            "content": "dzdxUUJDOHEwQUVsZFg5RC9yQnZReFBEN213ZHY5VEJLcWpoR24vOHVEaz0=",
+          },
+          "entryCreditBlock": Object {
+            "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+          },
+          "signature": "a5b1240d97a4f7ee2f707fec99e95d6c53aef493633e3a35acd5ccb6a98bf162dca72633fc8ce50e4766faf8ee4dfc7363bb2e6a1a3eeb41f80852bb83699204",
+          "timestamp": 1562137212810,
+        },
+        Object {
+          "credits": 1,
+          "entry": Object {
+            "content": "em5tS2ZCbGxEdkFzdTRBZ0FJeFlET016cDF6M0hST01TOHpDOGRMRHQvUT0=",
+          },
+          "entryCreditBlock": Object {
+            "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+          },
+          "signature": "3b66b2e4f1fe46a971495a6618a343f48ea6fbd7228f68ebbe2cb6022d56d8b750890b5302047a88be4320e3bde11c873662ee3394be3a603391594576e82a0a",
+          "timestamp": 1562137219815,
+        },
+      ],
+      "offset": 0,
+      "pageLength": 5,
+      "totalCount": 161,
+    },
+    "directoryBlock": Object {
+      "height": 199641,
+    },
+    "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+    "headerHash": "22d7ed3e6007bf59c0faa8d018f7998f08cfbc8310228155ba5ff7dacbca4ed0",
+    "nextBlock": Object {
+      "bodyHash": "289509d4d2d1c6fe79ad8f96cf2f838e0c51e961e114dfb807b64e7e4c86537f",
+    },
+    "objectCount": 171,
+    "previousBlock": Object {
+      "objectCount": 45,
+    },
+  },
+}
+`;
+
 exports[`Integration Test Queries Should query the ack of a legit commit 1`] = `
 Object {
   "commitAck": Object {

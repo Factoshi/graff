@@ -298,8 +298,25 @@ export const QUERY_ENTRY = gql`
     }
 `;
 
+export const QUERY_ENTRY_ACK = gql`
+    query GetEntryAck($hash: Hash!, $chainId: Hash!) {
+        entryAck(hash: $hash, chainId: $chainId) {
+            commitHash
+            entryHash
+            commitStatus {
+                timestamp
+                status
+            }
+            entryStatus {
+                status
+                timestamp
+            }
+        }
+    }
+`;
+
 export const QUERY_EBLOCK = gql`
-    query GetEntry($hash: Hash!) {
+    query GetEntryBlock($hash: Hash!) {
         entryBlock(hash: $hash) {
             keyMR
             chainId
@@ -324,18 +341,38 @@ export const QUERY_EBLOCK = gql`
     }
 `;
 
-export const QUERY_ENTRY_ACK = gql`
-    query GetCommitAck($hash: Hash!, $chainId: Hash!) {
-        entryAck(hash: $hash, chainId: $chainId) {
-            commitHash
-            entryHash
-            commitStatus {
-                timestamp
-                status
+export const QUERY_ECBLOCK = gql`
+    query GetEntryCreditBlock($hash: Hash!) {
+        entryCreditBlock(hash: $hash) {
+            headerHash
+            fullHash
+            bodyHash
+            bodySize
+            objectCount
+            previousBlock {
+                objectCount
             }
-            entryStatus {
-                status
-                timestamp
+            nextBlock {
+                bodyHash
+            }
+            commitPage(first: 5, offset: 0) {
+                pageLength
+                totalCount
+                offset
+                commits {
+                    timestamp
+                    signature
+                    credits
+                    entry {
+                        content
+                    }
+                    entryCreditBlock {
+                        fullHash
+                    }
+                }
+            }
+            directoryBlock {
+                height
             }
         }
     }
