@@ -115,6 +115,24 @@ describe('Transaction Resolvers', () => {
         expect(fees).toBe(214500);
     });
 
+    it('Should resolve the signatures', async () => {
+        const hash = '648452235ac39cf4fdaf674d5ff8039ea77d75df62f5e7605fab6d2f143973d7';
+        const signatures = await transactionResolvers.signatures({ hash }, undefined, {
+            factomd
+        });
+        expect(Array.isArray(signatures)).toBe(true);
+        expect(typeof signatures[0]).toBe('string');
+    });
+
+    it('Should resolve the rcds', async () => {
+        const hash = '648452235ac39cf4fdaf674d5ff8039ea77d75df62f5e7605fab6d2f143973d7';
+        const rcds = await transactionResolvers.rcds({ hash }, undefined, {
+            factomd
+        });
+        expect(Array.isArray(rcds)).toBe(true);
+        expect(typeof rcds[0]).toBe('string');
+    });
+
     it('Should resolve the factoid block hash', async () => {
         const hash = '648452235ac39cf4fdaf674d5ff8039ea77d75df62f5e7605fab6d2f143973d7';
         const factoidBlock = await transactionResolvers.factoidBlock(

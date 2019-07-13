@@ -46,6 +46,14 @@ export const transactionResolvers: TransactionResolvers = {
         const transaction = await factomd.transaction.load(hash!);
         return transaction.feesPaid;
     },
+    rcds: async ({ hash }, args, { factomd }) => {
+        const transaction = await factomd.transaction.load(hash!);
+        return transaction.rcds.map(rcd => rcd.toString('hex'));
+    },
+    signatures: async ({ hash }, args, { factomd }) => {
+        const transaction = await factomd.transaction.load(hash!);
+        return transaction.signatures.map(s => s.toString('hex'));
+    },
     factoidBlock: async ({ hash }, args, { factomd }) => {
         const transaction = await factomd.transaction.load(hash!);
         return { keyMR: transaction.blockContext.factoidBlockKeyMR };
