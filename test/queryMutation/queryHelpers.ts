@@ -158,6 +158,22 @@ export const QUERY_CHAIN_HEAD = gql`
     }
 `;
 
+export const QUERY_COMMIT_ACK = gql`
+    query GetCommitAck($hash: Hash!) {
+        commitAck(hash: $hash) {
+            commitHash
+            entryHash
+            commitStatus {
+                timestamp
+                status
+            }
+            entryStatus {
+                status
+                timestamp
+            }
+        }
+    }
+`;
 export const QUERY_DBLOCK = gql`
     query GetDirectoryBlock($hash: Hash!) {
         directoryBlock(hash: $hash) {

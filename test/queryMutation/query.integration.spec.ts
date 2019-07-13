@@ -6,7 +6,8 @@ import {
     QUERY_ABLOCK_HEIGHT,
     QUERY_ABLOCK_HEAD,
     QUERY_BALANCES,
-    QUERY_CHAIN_HEAD
+    QUERY_CHAIN_HEAD,
+    QUERY_COMMIT_ACK,
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -77,6 +78,23 @@ describe('Integration Test Queries', () => {
         expect(queryResult.data!.chainHead.keyMR).toBe(actual.keyMR);
     });
 
+    it('Should query the ack of a legit commit', async () => {
+        const hash = '905ec512fe25a64e2e29ebad1614250416b625c15df4f795dd95ed92c7074066';
+        const queryResponse = await query({
+            query: QUERY_COMMIT_ACK,
+            variables: { hash }
+        });
+        expect(queryResponse.data).toMatchSnapshot();
+    });
+
+    it('Should query the ack of a fake commit', async () => {
+        const fake = 'fc6b74ec5e22366f80b6e1e1b01f651929fef228ad745fa8b41676e29b9c8bf8';
+        const queryResponse = await query({
+            query: QUERY_COMMIT_ACK,
+            variables: { hash: fake }
+        });
+        expect(queryResponse.data!.commitAck.commitStatus.status).toBe('Unknown');
+    });
     it('Should query a directory block by hash.', async () => {
         const res = await query({
             query: QUERY_DBLOCK,

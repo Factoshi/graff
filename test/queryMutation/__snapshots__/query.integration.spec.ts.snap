@@ -670,3 +670,17 @@ Object {
   },
 }
 `;
+
+exports[`Integration Test Queries Should query the ack of a legit commit 1`] = `
+Object {
+  "commitAck": Object {
+    "commitHash": "905ec512fe25a64e2e29ebad1614250416b625c15df4f795dd95ed92c7074066",
+    "commitStatus": Object {
+      "status": "DBlockConfirmed",
+      "timestamp": 1563022560000,
+    },
+    "entryHash": null,
+    "entryStatus": null,
+  },
+}
+`;
