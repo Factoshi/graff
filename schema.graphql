@@ -353,13 +353,13 @@ type Transaction {
     "An array of entry credit outputs."
     entryCreditOutputs: [Address!]!
     "The total value of all inputs. Denominated in factoshis."
-    totalInputs: Int!
+    totalInputs: Float!
     "The total value of all factoid outputs. Denominated in factoshis."
-    totalFactoidOutputs: Int!
+    totalFactoidOutputs: Float!
     "The total value of all entry credit outputs. Denominated in entry credits."
-    totalEntryCreditOutputs: Int!
+    totalEntryCreditOutputs: Float!
     "The fees burned for the transaction. Denominated in factoshis."
-    fees: Int!
+    fees: Float!
     "Redeem Condition Datastructures"
     rcds: [String!]!
     "The signature needed to satisfy RCD"
@@ -381,13 +381,13 @@ type PendingTransaction {
     "An array of entry credit outputs."
     entryCreditOutputs: [Address!]!
     "The total value of all inputs. Denominated in factoshis."
-    totalInputs: Int!
+    totalInputs: Float!
     "The total value of all factoid outputs. Denominated in factoshis."
-    totalFactoidOutputs: Int!
+    totalFactoidOutputs: Float!
     "The total value of all entry credit outputs. Denominated in entry credits."
-    totalEntryCreditOutputs: Int!
+    totalEntryCreditOutputs: Float!
     "The fees burned for the transaction. Denominated in factoshis."
-    fees: Int!
+    fees: Float!
 }
 
 "Entry not yet included in the blockchain."

@@ -622,13 +622,13 @@ export type PendingTransaction = {
   /** An array of entry credit outputs. */
   entryCreditOutputs: Array<Address>;
   /** The total value of all inputs. Denominated in factoshis. */
-  totalInputs: Scalars["Int"];
+  totalInputs: Scalars["Float"];
   /** The total value of all factoid outputs. Denominated in factoshis. */
-  totalFactoidOutputs: Scalars["Int"];
+  totalFactoidOutputs: Scalars["Float"];
   /** The total value of all entry credit outputs. Denominated in entry credits. */
   totalEntryCreditOutputs: Scalars["Int"];
   /** The fees burned for the transaction. Denominated in factoshis. */
-  fees: Scalars["Int"];
+  fees: Scalars["Float"];
 };
 
 /** Signature for the previous directory block header. */
@@ -1584,9 +1584,9 @@ export type PendingTransactionResolvers<
     ParentType,
     ContextType
   >;
-  totalInputs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  totalInputs?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   totalFactoidOutputs?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
@@ -1595,7 +1595,7 @@ export type PendingTransactionResolvers<
     ParentType,
     ContextType
   >;
-  fees?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  fees?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
 }>;
 
 export type PreviousDirectoryBlockSignatureResolvers<
