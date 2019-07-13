@@ -253,7 +253,7 @@ type FactoidBlock {
 
 "Public address and associated amount."
 type Address {
-    "Amount may be balance or output value, depending on the context."
+    "Amount may be balance or transaction input/output value, depending on the context."
     amount: Float!
     "Public address."
     address: PublicAddress!
