@@ -174,6 +174,7 @@ describe('EntryCreditBlock resolvers', () => {
             expect(typeof commit.timestamp).toBe('number');
             expect(typeof commit.credits).toBe('number');
             expect(typeof commit.paymentAddress).toBe('string');
+            expect(typeof commit.signature).toBe('string');
             expect(commit.entry).not.toBeUndefined();
             expect(typeof commit.entry.hash).toBe('string');
             expect(commit.entryCreditBlock).not.toBeUndefined();

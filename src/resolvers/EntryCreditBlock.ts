@@ -67,7 +67,8 @@ export const entryCreditBlockResolvers: EntryCreditBlockResolvers = {
                 entry: { hash: commit.entryHash },
                 credits: commit.credits,
                 paymentAddress: commit.ecPublicKey,
-                entryCreditBlock: { headerHash: headerHash }
+                entryCreditBlock: { headerHash: headerHash },
+                signature: commit.signature
             })) as Commit[];
         return {
             commits,
