@@ -10,7 +10,8 @@ import {
     QUERY_COMMIT_ACK,
     QUERY_ENTRY_ACK,
     QUERY_CURRENT_MINUTE,
-    QUERY_ENTRY
+    QUERY_ENTRY,
+    QUERY_EBLOCK
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -137,6 +138,24 @@ describe('Integration Test Queries', () => {
         const hash = '086c77c9e6a98191bcd828f099787402fa6fb7c880797c6489a49cb3cb31cdaf';
         const queryResponse = await query({ query: QUERY_ENTRY, variables: { hash } });
         expect(queryResponse.data).toMatchSnapshot();
+    });
+
+    it('Should return null for an unkown entry', async () => {
+        const hash = randomBytes(32).toString('hex');
+        const queryResponse = await query({ query: QUERY_ENTRY, variables: { hash } });
+        expect(queryResponse.data!.entry).toBeNull();
+    });
+
+    it('Should query an entry block', async () => {
+        const hash = '8ee8eb697d71f3485e3b7389cea5e19a86029b109333b7ea201084212ba3c75b';
+        const queryResponse = await query({ query: QUERY_EBLOCK, variables: { hash } });
+        expect(queryResponse.data).toMatchSnapshot();
+    });
+
+    it('Should return null for an unkown entry block', async () => {
+        const hash = randomBytes(32).toString('hex');
+        const queryResponse = await query({ query: QUERY_EBLOCK, variables: { hash } });
+        expect(queryResponse.data!.entryBlock).toBeNull();
     });
 
     it('Should get the ack of a known entry', async () => {

@@ -710,6 +710,102 @@ Object {
 }
 `;
 
+exports[`Integration Test Queries Should query an entry block 1`] = `
+Object {
+  "entryBlock": Object {
+    "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+    "directoryBlock": Object {
+      "height": 201115,
+    },
+    "entryPage": Object {
+      "entries": Array [
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022140000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022140000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022140000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+      ],
+      "offset": 0,
+      "pageLength": 18,
+      "totalCount": 18,
+    },
+    "keyMR": "8ee8eb697d71f3485e3b7389cea5e19a86029b109333b7ea201084212ba3c75b",
+    "previousBlock": Object {
+      "sequenceNumber": 0,
+    },
+    "sequenceNumber": 1,
+    "timestamp": 1563021960,
+  },
+}
+`;
+
 exports[`Integration Test Queries Should query the ack of a legit commit 1`] = `
 Object {
   "commitAck": Object {
