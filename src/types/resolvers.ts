@@ -137,7 +137,7 @@ export type AddRemoveServer = AdminEntry & {
 export type Address = {
   __typename?: "Address";
   /** Amount may be balance or output value, depending on the context. */
-  amount: Scalars["Int"];
+  amount: Scalars["Float"];
   /** Public address. */
   address: Scalars["PublicAddress"];
 };
@@ -247,7 +247,7 @@ export type CoinbaseDescriptorOutput = {
 export type Commit = {
   __typename?: "Commit";
   /** Milliseconds since Unix epoch. */
-  timestamp: Scalars["Int"];
+  timestamp: Scalars["Float"];
   /** The entry that was committed. All fields except hash will be null if not yet revealed. */
   entry: Entry;
   /** The cost of the entry. */
@@ -519,19 +519,8 @@ export type MerkleNode = {
   top: Scalars["Hash"];
 };
 
-/** Basic pagination interface. */
-export type Paginated = {
-  __typename?: "Paginated";
-  /** Total number of nodes available for pagination. */
-  totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
-  offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
-  pageLength: Scalars["Int"];
-};
-
 /** Paginated commits */
-export type PaginatedCommits = Paginated & {
+export type PaginatedCommits = {
   __typename?: "PaginatedCommits";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
@@ -544,7 +533,7 @@ export type PaginatedCommits = Paginated & {
 };
 
 /** Paginated entries */
-export type PaginatedEntries = Paginated & {
+export type PaginatedEntries = {
   __typename?: "PaginatedEntries";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
@@ -557,7 +546,7 @@ export type PaginatedEntries = Paginated & {
 };
 
 /** Paginated entry blocks */
-export type PaginatedEntryBlocks = Paginated & {
+export type PaginatedEntryBlocks = {
   __typename?: "PaginatedEntryBlocks";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
@@ -570,7 +559,7 @@ export type PaginatedEntryBlocks = Paginated & {
 };
 
 /** Paginated pending entries */
-export type PaginatedPendingEntries = Paginated & {
+export type PaginatedPendingEntries = {
   __typename?: "PaginatedPendingEntries";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
@@ -583,7 +572,7 @@ export type PaginatedPendingEntries = Paginated & {
 };
 
 /** Paginated pending transactions */
-export type PaginatedPendingTransactions = Paginated & {
+export type PaginatedPendingTransactions = {
   __typename?: "PaginatedPendingTransactions";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
@@ -596,7 +585,7 @@ export type PaginatedPendingTransactions = Paginated & {
 };
 
 /** Paginated transactions */
-export type PaginatedTransactions = Paginated & {
+export type PaginatedTransactions = {
   __typename?: "PaginatedTransactions";
   /** Total number of nodes within pages. */
   totalCount: Scalars["Int"];
@@ -832,21 +821,21 @@ export type Subscription = {
   /** Subscribe to each new directory block. */
   newDirectoryBlock: DirectoryBlock;
   /** Subscribe to each new entry block for a specified chain. */
-  newEntryBlock: Array<EntryBlock>;
+  newEntryBlock: EntryBlock;
   /** Subscribe to each new entry credit block. */
   newEntryCreditBlock: EntryCreditBlock;
   /** Subscribe to each new factoid block. */
   newFactoidBlock: FactoidBlock;
   /** Subscribe to new Factoid transactions involving a given address */
-  newFactoidTransaction: Array<Transaction>;
+  newFactoidTransaction: Transaction;
 };
 
 export type SubscriptionNewEntryBlockArgs = {
-  chains: Array<Scalars["Hash"]>;
+  chainId: Scalars["Hash"];
 };
 
 export type SubscriptionNewFactoidTransactionArgs = {
-  addresses: Array<Scalars["PublicFactoidAddress"]>;
+  address: Scalars["PublicFactoidAddress"];
 };
 
 /** Factoid Transaction included in the blockchain. */
@@ -959,7 +948,6 @@ export type ResolversTypes = ResolversObject<{
   Height: Partial<Scalars["Height"]>;
   Float: Partial<Scalars["Float"]>;
   PaginatedEntryBlocks: Partial<PaginatedEntryBlocks>;
-  Paginated: Partial<Paginated>;
   EntryBlock: Partial<EntryBlock>;
   PaginatedEntries: Partial<PaginatedEntries>;
   Entry: Partial<Entry>;
@@ -1086,7 +1074,7 @@ export type AddressResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["Address"]
 > = ResolversObject<{
-  amount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  amount?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   address?: Resolver<ResolversTypes["PublicAddress"], ParentType, ContextType>;
 }>;
 
@@ -1186,7 +1174,7 @@ export type CommitResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["Commit"]
 > = ResolversObject<{
-  timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   entry?: Resolver<ResolversTypes["Entry"], ParentType, ContextType>;
   credits?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   paymentAddress?: Resolver<
@@ -1492,25 +1480,6 @@ export type MerkleNodeResolvers<
   left?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   right?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   top?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-}>;
-
-export type PaginatedResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["Paginated"]
-> = ResolversObject<{
-  __resolveType: TypeResolveFn<
-    | "PaginatedEntryBlocks"
-    | "PaginatedEntries"
-    | "PaginatedCommits"
-    | "PaginatedTransactions"
-    | "PaginatedPendingEntries"
-    | "PaginatedPendingTransactions",
-    ParentType,
-    ContextType
-  >;
-  totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
 }>;
 
 export type PaginatedCommitsResolvers<
@@ -1865,7 +1834,7 @@ export type SubscriptionResolvers<
     ContextType
   >;
   newEntryBlock?: SubscriptionResolver<
-    Array<ResolversTypes["EntryBlock"]>,
+    ResolversTypes["EntryBlock"],
     ParentType,
     ContextType,
     SubscriptionNewEntryBlockArgs
@@ -1881,7 +1850,7 @@ export type SubscriptionResolvers<
     ContextType
   >;
   newFactoidTransaction?: SubscriptionResolver<
-    Array<ResolversTypes["Transaction"]>,
+    ResolversTypes["Transaction"],
     ParentType,
     ContextType,
     SubscriptionNewFactoidTransactionArgs
@@ -1964,7 +1933,6 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   IncreaseServerCount?: IncreaseServerCountResolvers<ContextType>;
   MatryoshkaHash?: MatryoshkaHashResolvers<ContextType>;
   MerkleNode?: MerkleNodeResolvers<ContextType>;
-  Paginated?: PaginatedResolvers;
   PaginatedCommits?: PaginatedCommitsResolvers<ContextType>;
   PaginatedEntries?: PaginatedEntriesResolvers<ContextType>;
   PaginatedEntryBlocks?: PaginatedEntryBlocksResolvers<ContextType>;

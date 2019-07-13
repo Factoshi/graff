@@ -101,13 +101,13 @@ type Subscription {
     "Subscribe to each new directory block."
     newDirectoryBlock: DirectoryBlock!
     "Subscribe to each new entry block for a specified chain."
-    newEntryBlock(chains: [Hash!]!): [EntryBlock!]!
+    newEntryBlock(chainId: Hash!): EntryBlock!
     "Subscribe to each new entry credit block."
     newEntryCreditBlock: EntryCreditBlock!
     "Subscribe to each new factoid block."
     newFactoidBlock: FactoidBlock!
     "Subscribe to new Factoid transactions involving a given address"
-    newFactoidTransaction(addresses: [PublicFactoidAddress!]!): [Transaction!]!
+    newFactoidTransaction(address: PublicFactoidAddress!): Transaction!
 }
 
 # type Mutation {
@@ -254,7 +254,7 @@ type FactoidBlock {
 "Public address and associated amount."
 type Address {
     "Amount may be balance or output value, depending on the context."
-    amount: Int!
+    amount: Float!
     "Public address."
     address: PublicAddress!
 }
@@ -327,7 +327,7 @@ type Entry {
 "Entry commit included in the blockchain."
 type Commit {
     "Milliseconds since Unix epoch."
-    timestamp: Int!
+    timestamp: Float!
     "The entry that was committed. All fields except hash will be null if not yet revealed."
     entry: Entry!
     "The cost of the entry."
@@ -725,18 +725,8 @@ type Properties {
 # Pagination #
 ##############
 
-"Basic pagination interface."
-interface Paginated {
-    "Total number of nodes available for pagination."
-    totalCount: Int!
-    "Position to offset from beginning of list"
-    offset: Int!
-    "Get pageLength x in list following offset"
-    pageLength: Int!
-}
-
 "Paginated entry blocks"
-type PaginatedEntryBlocks implements Paginated {
+type PaginatedEntryBlocks {
     "Total number of nodes within pages."
     totalCount: Int!
     "Position to offset from beginning of list"
@@ -748,7 +738,7 @@ type PaginatedEntryBlocks implements Paginated {
 }
 
 "Paginated entries"
-type PaginatedEntries implements Paginated {
+type PaginatedEntries {
     "Total number of nodes within pages."
     totalCount: Int!
     "Position to offset from beginning of list"
@@ -760,7 +750,7 @@ type PaginatedEntries implements Paginated {
 }
 
 "Paginated commits"
-type PaginatedCommits implements Paginated {
+type PaginatedCommits {
     "Total number of nodes within pages."
     totalCount: Int!
     "Position to offset from beginning of list"
@@ -772,7 +762,7 @@ type PaginatedCommits implements Paginated {
 }
 
 "Paginated transactions"
-type PaginatedTransactions implements Paginated {
+type PaginatedTransactions {
     "Total number of nodes within pages."
     totalCount: Int!
     "Position to offset from beginning of list"
@@ -784,7 +774,7 @@ type PaginatedTransactions implements Paginated {
 }
 
 "Paginated pending entries"
-type PaginatedPendingEntries implements Paginated {
+type PaginatedPendingEntries {
     "Total number of nodes within pages."
     totalCount: Int!
     "Position to offset from beginning of list"
@@ -796,7 +786,7 @@ type PaginatedPendingEntries implements Paginated {
 }
 
 "Paginated pending transactions"
-type PaginatedPendingTransactions implements Paginated {
+type PaginatedPendingTransactions {
     "Total number of nodes within pages."
     totalCount: Int!
     "Position to offset from beginning of list"
