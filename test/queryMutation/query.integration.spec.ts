@@ -22,7 +22,8 @@ import {
     QUERY_TX_ACK,
     QUERY_HEIGHTS,
     QUERY_PENDING_ENTRIES,
-    QUERY_PENDING_TXS
+    QUERY_PENDING_TXS,
+    QUERY_PROPS,
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -298,5 +299,11 @@ describe('Integration Test Queries', () => {
     it('Should query pending transactions', async () => {
         const pendingTxs = await query({ query: QUERY_PENDING_TXS });
         expect(pendingTxs.data!.pendingTransactions).toBeDefined();
+    });
+
+    it('Should query properies', async () => {
+        const properties = await query({ query: QUERY_PROPS });
+        expect(properties.data!.properties.factomdVersion).toBeDefined();
+        expect(properties.data!.properties.factomdAPIVersion).toBeDefined();
     });
 });

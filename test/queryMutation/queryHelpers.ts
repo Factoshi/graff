@@ -633,3 +633,12 @@ export const QUERY_PENDING_TXS = gql`
         }
     }
 `;
+
+export const QUERY_PROPS = gql`
+    query GetProperties {
+        properties {
+            factomdVersion
+            factomdAPIVersion
+        }
+    }
+`;
