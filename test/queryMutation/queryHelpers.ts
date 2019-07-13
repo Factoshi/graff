@@ -174,6 +174,24 @@ export const QUERY_COMMIT_ACK = gql`
         }
     }
 `;
+
+export const QUERY_CURRENT_MINUTE = gql`
+    query GetCurrentMinute {
+        currentMinute {
+            leaderHeight
+            directoryBlockHeight
+            minute
+            currentMinuteStartTime
+            currentBlockStartTime
+            currentTime
+            directoryBlockInSeconds
+            stallDetected
+            faultTimeout
+            roundTimeout
+        }
+    }
+`;
+
 export const QUERY_DBLOCK = gql`
     query GetDirectoryBlock($hash: Hash!) {
         directoryBlock(hash: $hash) {

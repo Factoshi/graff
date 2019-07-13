@@ -9,6 +9,7 @@ import {
     QUERY_CHAIN_HEAD,
     QUERY_COMMIT_ACK,
     QUERY_ENTRY_ACK,
+    QUERY_CURRENT_MINUTE
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -97,6 +98,12 @@ describe('Integration Test Queries', () => {
         });
         expect(queryResponse.data!.commitAck.commitStatus.status).toBe('Unknown');
     });
+
+    it('Should query the current minute', async () => {
+        const queryResponse = await query({ query: QUERY_CURRENT_MINUTE });
+        expect(queryResponse).toBeDefined();
+    });
+
     it('Should query a directory block by hash.', async () => {
         const res = await query({
             query: QUERY_DBLOCK,
