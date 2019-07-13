@@ -21,7 +21,7 @@ export const query: QueryResolvers = {
         const balances = await factomd.balance.loadMany(addresses);
         return balances.map((balance, i) => ({
             amount: balance,
-            publicAddress: addresses[i]
+            address: addresses[i]
         }));
     },
     currentMinute: async (root, args, { factomd }) => {

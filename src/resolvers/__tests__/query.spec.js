@@ -53,7 +53,7 @@ describe('Query Resolvers', () => {
         );
         expect(Array.isArray(balances)).toBe(true);
         balances.forEach(balance => {
-            expect(typeof balance.publicAddress).toBe('string');
+            expect(typeof balance.address).toBe('string');
             expect(typeof balance.amount).toBe('number');
         });
     });
