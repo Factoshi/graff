@@ -329,7 +329,7 @@ type Entry {
 }
 
 "Entry commit included in the blockchain."
-type Commit {
+type EntryCommit {
     "Milliseconds since Unix epoch."
     timestamp: Float!
     "The entry that was committed. All fields except hash will be null if not yet revealed."
@@ -783,7 +783,7 @@ type PaginatedCommits {
     "Get pageLength x in list following offset"
     pageLength: Int!
     "An array of commits."
-    commits: [Commit!]!
+    commits: [EntryCommit!]!
 }
 
 "Paginated transactions"
