@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import { Entry, Chain } from 'factom';
+import { Entry, Chain, Transaction, generateRandomFctAddress } from 'factom';
 import gql from 'graphql-tag';
 
 export const createEntry = (chainId: string) =>
@@ -20,6 +20,12 @@ export const createChain = () => {
         .build();
     return new Chain(e);
 };
+
+export const createTx = () =>
+    Transaction.builder()
+        .input('Fs3E9gV6DXsYzf7Fqx1fVBQPQXV695eP3k5XbmHEZVRLkMdD9qCK', 200000)
+        .output(generateRandomFctAddress().public, 100000)
+        .build();
 
 export const MUTATION_COMMIT_C = gql`
     mutation CommitChain($commit: String!) {
@@ -73,5 +79,11 @@ export const MUTATION_ADD_E = gql`
             entryHash
             chainId
         }
+    }
+`;
+
+export const MUTATION_SUBMIT_TX = gql`
+    mutation SubmitTransactions($tx: String!) {
+        submitTransaction(tx: $tx)
     }
 `;

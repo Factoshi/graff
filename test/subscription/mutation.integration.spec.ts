@@ -14,7 +14,9 @@ import {
     MUTATION_COMMIT_E,
     MUTATION_REVEAL_E,
     MUTATION_ADD_C,
-    MUTATION_ADD_E
+    MUTATION_ADD_E,
+    createTx,
+    MUTATION_SUBMIT_TX
 } from './mutationHelpers';
 import { randomBytes } from 'crypto';
 import { cli } from './factom';
@@ -36,7 +38,7 @@ describe('Integration Test Mutations', () => {
     it('Should attempt to commit a fake chain and return an error', async () => {
         const commit = randomBytes(200).toString('hex');
         const res = await mutate({ mutation: MUTATION_COMMIT_C, variables: { commit } });
-        expect(res.errors).not.toBeNull();
+        expect(res.errors).not.toBeUndefined();
     });
 
     it('Should commit an entry', async () => {
@@ -51,7 +53,7 @@ describe('Integration Test Mutations', () => {
     it('Should attempt to commit a fake entry and return an error', async () => {
         const commit = randomBytes(136).toString('hex');
         const res = await mutate({ mutation: MUTATION_COMMIT_E, variables: { commit } });
-        expect(res.errors).not.toBeNull();
+        expect(res.errors).not.toBeUndefined();
     });
 
     it('Should reveal a chain', async () => {
@@ -66,7 +68,7 @@ describe('Integration Test Mutations', () => {
     it('Should attempt to reveal a fake chain and return an error', async () => {
         const reveal = randomBytes(115).toString('hex');
         const res = await mutate({ mutation: MUTATION_REVEAL_C, variables: { reveal } });
-        expect(res.errors).not.toBeNull();
+        expect(res.errors).not.toBeUndefined();
     });
 
     it('Should reveal an entry', async () => {
@@ -82,7 +84,7 @@ describe('Integration Test Mutations', () => {
     it('Should attempt to reveal a fake entry and return an error', async () => {
         const reveal = randomBytes(115).toString('hex');
         const res = await mutate({ mutation: MUTATION_REVEAL_E, variables: { reveal } });
-        expect(res.errors).not.toBeNull();
+        expect(res.errors).not.toBeUndefined();
     });
 
     it('Should add a chain', async () => {
@@ -108,5 +110,19 @@ describe('Integration Test Mutations', () => {
         });
         expect(res.data!.addEntry.chainId).toBe(chain.chainId);
         expect(res.data!.addEntry.entryHash).toBe(entry.hashHex());
+    });
+
+    it('Should submit a factoid transaction', async () => {
+        const tx = createTx()
+            .marshalBinary()
+            .toString('hex');
+        const res = await mutate({ mutation: MUTATION_SUBMIT_TX, variables: { tx } });
+        expect(res.data!.submitTransaction).toHaveLength(64);
+    });
+
+    it('Should attempt to submit a fake transaction and return an error', async () => {
+        const tx = randomBytes(177).toString('hex');
+        const res = await mutate({ mutation: MUTATION_SUBMIT_TX, variables: { tx } });
+        expect(res.errors).not.toBeUndefined();
     });
 });
