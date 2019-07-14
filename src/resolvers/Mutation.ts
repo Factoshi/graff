@@ -18,5 +18,11 @@ export const mutation: MutationResolvers = {
             transactionHash: response.txid,
             chainIdHash: response.chainidhash
         };
+    },
+    revealChain: async (_, { reveal }, { factomd }) => {
+        const response = await factomd.cli.factomdApi(BroadcastMethod.RevealChain, {
+            entry: reveal
+        });
+        return { entryHash: response.entryhash, chainId: response.chainid };
     }
 };
