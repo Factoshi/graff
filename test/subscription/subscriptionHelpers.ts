@@ -1,9 +1,7 @@
-import { FactomCli, Entry, Chain } from 'factom';
-import config from './.factomds.json';
+import { Entry, Chain } from 'factom';
 import gql from 'graphql-tag';
 import { randomBytes } from 'crypto';
-
-const cli = new FactomCli({ port: config.factomd.apiPort });
+import { cli } from './factom';
 
 export const createChains = (num = 1) => {
     const c = Array(num)
