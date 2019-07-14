@@ -39,7 +39,7 @@
         "apollo-link-ws": "^1.0.18",
         "apollo-server-testing": "^2.6.9",
         "chai": "^4.2.0",
-        "factom-dev-stack": "^0.2.2",
+        "factom-dev-stack": "^0.2.3",
         "graphql-tag": "^2.10.1",
         "jest": "^24.8.0",
         "nodemon": "^1.19.1",
