@@ -8,8 +8,8 @@
         "start-watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.js' --exec 'ts-node' src",
         "build": "tsc",
         "test": "jest",
-        "test-query-mutation": "jest --config='test/queryMutation/jest.config.js'",
-        "test-subscription": "factom-dev-stack wrap -c test/subscription/.factomds.json \"FACTOMD_PORT=5088 jest --config='test/subscription/jest.config.js'\"",
+        "test-q": "jest --config='test/query/jest.config.js'",
+        "test-ms": "factom-dev-stack wrap -c test/subscriptionMutation/.factomds.json \"FACTOMD_PORT=5088 jest --config='test/subscriptionMutation/jest.config.js'\"",
         "generate": "graphql-codegen --config codegen.yml",
         "generate-init": "graphql-codegen init"
     },
