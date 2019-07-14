@@ -2,7 +2,6 @@ const { factoidBlockQueries, factoidBlockResolvers } = require('../FactoidBlock'
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { randomBytes } = require('crypto');
-const { TransactionAddress } = require('factom');
 
 describe('FactoidBlock resolvers', () => {
     let factomd;
