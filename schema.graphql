@@ -110,18 +110,22 @@ type Subscription {
     newFactoidTransaction(address: PublicFactoidAddress!): Transaction!
 }
 
-# type Mutation {
-#     "Send a Chain Commit Message to factomd to create a new Chain."
-#     commitChain: CommitRevealSend!
-#     "Send an Entry Commit Message to factom to create a new Entry."
-#     commitEntry: CommitRevealSend!
-#     "Reveal a Chain to factomd after the Commit to complete the Chain creation."
-#     revealChain: CommitRevealSend!
-#     "Reveal an Entry to factomd after the Commit to complete the Entry creation."
-#     revealEntry: CommitRevealSend!
-#     "Submit a factoid transaction."
-#     sendFactoids: CommitRevealSend!
-# }
+type Mutation {
+    "Commit a chain."
+    commitChain(commit: String!): CommitChain!
+    "Reveal a chain."
+    revealChain(reveal: String!): CommitRevealSend!
+    "Commit and reveal a chain."
+    addChain(commit: String!, reveal: String!): CommitRevealSend!
+    "Commit an entry."
+    commitEntry(commit: String!): CommitRevealSend!
+    "Reveal an entry."
+    revealEntry(reveal: String!): CommitRevealSend!
+    "Commit and/or reveal an entry."
+    addEntry(commit: String!, reveal: String!): CommitRevealSend!
+    "Submit a factoid transaction."
+    submitTransaction(tx: String!): CommitRevealSend!
+}
 
 ##########
 # Blocks #
@@ -422,6 +426,20 @@ type MerkleNode {
     top: Hash!
 }
 
+##################################
+# Commit Reveal Submit Responses #
+##################################
+
+"Chain commit response."
+type CommitChain {
+    "The hash of the entry that was committed."
+    entryHash: Hash!
+    "The commit transaction hash."
+    transactionHash: Hash!
+    "Double sha256 hash of the commited chain."
+    chainIdHash: Hash!
+}
+
 "Response following a chain or entry commmit or reveal, or a factoid transaction."
 type CommitRevealSend {
     "The hash of the entry that was committed or revealed. Always null for factoid transactions."
@@ -429,7 +447,7 @@ type CommitRevealSend {
     "The transaction hash. Always null for reveals."
     transactionHash: Hash
     "The chain that was committed to. Always null for entry commits and factoid transactions."
-    chain: Hash
+    chainId: Hash
 }
 
 #################

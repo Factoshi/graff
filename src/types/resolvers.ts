@@ -260,6 +260,17 @@ export type Commit = {
   entryCreditBlock: EntryCreditBlock;
 };
 
+/** Chain commit response. */
+export type CommitChain = {
+  __typename?: "CommitChain";
+  /** The hash of the entry that was committed. */
+  entryHash: Scalars["Hash"];
+  /** The commit transaction hash. */
+  transactionHash: Scalars["Hash"];
+  /** Double sha256 hash of the commited chain. */
+  chainIdHash: Scalars["Hash"];
+};
+
 /** Response following a chain or entry commmit or reveal, or a factoid transaction. */
 export type CommitRevealSend = {
   __typename?: "CommitRevealSend";
@@ -268,7 +279,7 @@ export type CommitRevealSend = {
   /** The transaction hash. Always null for reveals. */
   transactionHash?: Maybe<Scalars["Hash"]>;
   /** The chain that was committed to. Always null for entry commits and factoid transactions. */
-  chain?: Maybe<Scalars["Hash"]>;
+  chainId?: Maybe<Scalars["Hash"]>;
 };
 
 /** Blockchain time state. */
@@ -517,6 +528,54 @@ export type MerkleNode = {
   right: Scalars["Hash"];
   /** Hash of top node. */
   top: Scalars["Hash"];
+};
+
+export type Mutation = {
+  __typename?: "Mutation";
+  /** Commit a chain. */
+  commitChain: CommitChain;
+  /** Reveal a chain. */
+  revealChain: CommitRevealSend;
+  /** Commit and reveal a chain. */
+  addChain: CommitRevealSend;
+  /** Commit an entry. */
+  commitEntry: CommitRevealSend;
+  /** Reveal an entry. */
+  revealEntry: CommitRevealSend;
+  /** Commit and/or reveal an entry. */
+  addEntry: CommitRevealSend;
+  /** Submit a factoid transaction. */
+  submitTransaction: CommitRevealSend;
+};
+
+export type MutationCommitChainArgs = {
+  commit: Scalars["String"];
+};
+
+export type MutationRevealChainArgs = {
+  reveal: Scalars["String"];
+};
+
+export type MutationAddChainArgs = {
+  commit: Scalars["String"];
+  reveal: Scalars["String"];
+};
+
+export type MutationCommitEntryArgs = {
+  commit: Scalars["String"];
+};
+
+export type MutationRevealEntryArgs = {
+  reveal: Scalars["String"];
+};
+
+export type MutationAddEntryArgs = {
+  commit: Scalars["String"];
+  reveal: Scalars["String"];
+};
+
+export type MutationSubmitTransactionArgs = {
+  tx: Scalars["String"];
 };
 
 /** Paginated commits */
@@ -975,9 +1034,11 @@ export type ResolversTypes = ResolversObject<{
   Properties: Partial<Properties>;
   Receipt: Partial<Receipt>;
   MerkleNode: Partial<MerkleNode>;
+  Mutation: {};
+  CommitChain: Partial<CommitChain>;
+  CommitRevealSend: Partial<CommitRevealSend>;
   Subscription: {};
   PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
-  CommitRevealSend: Partial<CommitRevealSend>;
   DirectoryBlockSignature: Partial<DirectoryBlockSignature>;
   PreviousDirectoryBlockSignature: Partial<PreviousDirectoryBlockSignature>;
   MatryoshkaHash: Partial<MatryoshkaHash>;
@@ -1190,6 +1251,15 @@ export type CommitResolvers<
   >;
 }>;
 
+export type CommitChainResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["CommitChain"]
+> = ResolversObject<{
+  entryHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  transactionHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  chainIdHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+}>;
+
 export type CommitRevealSendResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["CommitRevealSend"]
@@ -1200,7 +1270,7 @@ export type CommitRevealSendResolvers<
     ParentType,
     ContextType
   >;
-  chain?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
+  chainId?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
 }>;
 
 export type CurrentMinuteResolvers<
@@ -1480,6 +1550,54 @@ export type MerkleNodeResolvers<
   left?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   right?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   top?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+}>;
+
+export type MutationResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["Mutation"]
+> = ResolversObject<{
+  commitChain?: Resolver<
+    ResolversTypes["CommitChain"],
+    ParentType,
+    ContextType,
+    MutationCommitChainArgs
+  >;
+  revealChain?: Resolver<
+    ResolversTypes["CommitRevealSend"],
+    ParentType,
+    ContextType,
+    MutationRevealChainArgs
+  >;
+  addChain?: Resolver<
+    ResolversTypes["CommitRevealSend"],
+    ParentType,
+    ContextType,
+    MutationAddChainArgs
+  >;
+  commitEntry?: Resolver<
+    ResolversTypes["CommitRevealSend"],
+    ParentType,
+    ContextType,
+    MutationCommitEntryArgs
+  >;
+  revealEntry?: Resolver<
+    ResolversTypes["CommitRevealSend"],
+    ParentType,
+    ContextType,
+    MutationRevealEntryArgs
+  >;
+  addEntry?: Resolver<
+    ResolversTypes["CommitRevealSend"],
+    ParentType,
+    ContextType,
+    MutationAddEntryArgs
+  >;
+  submitTransaction?: Resolver<
+    ResolversTypes["CommitRevealSend"],
+    ParentType,
+    ContextType,
+    MutationSubmitTransactionArgs
+  >;
 }>;
 
 export type PaginatedCommitsResolvers<
@@ -1917,6 +2035,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   CoinbaseDescriptorCancel?: CoinbaseDescriptorCancelResolvers<ContextType>;
   CoinbaseDescriptorOutput?: CoinbaseDescriptorOutputResolvers<ContextType>;
   Commit?: CommitResolvers<ContextType>;
+  CommitChain?: CommitChainResolvers<ContextType>;
   CommitRevealSend?: CommitRevealSendResolvers<ContextType>;
   CurrentMinute?: CurrentMinuteResolvers<ContextType>;
   DirectoryBlock?: DirectoryBlockResolvers<ContextType>;
@@ -1933,6 +2052,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   IncreaseServerCount?: IncreaseServerCountResolvers<ContextType>;
   MatryoshkaHash?: MatryoshkaHashResolvers<ContextType>;
   MerkleNode?: MerkleNodeResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   PaginatedCommits?: PaginatedCommitsResolvers<ContextType>;
   PaginatedEntries?: PaginatedEntriesResolvers<ContextType>;
   PaginatedEntryBlocks?: PaginatedEntryBlocksResolvers<ContextType>;
