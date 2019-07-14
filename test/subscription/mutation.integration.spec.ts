@@ -12,7 +12,9 @@ import {
     MUTATION_REVEAL_C,
     createEntry,
     MUTATION_COMMIT_E,
-    MUTATION_REVEAL_E
+    MUTATION_REVEAL_E,
+    MUTATION_ADD_C,
+    MUTATION_ADD_E
 } from './mutationHelpers';
 import { randomBytes } from 'crypto';
 import { cli } from './factom';
@@ -81,5 +83,30 @@ describe('Integration Test Mutations', () => {
         const reveal = randomBytes(115).toString('hex');
         const res = await mutate({ mutation: MUTATION_REVEAL_E, variables: { reveal } });
         expect(res.errors).not.toBeNull();
+    });
+
+    it('Should add a chain', async () => {
+        const chain = createChain();
+        const commit = composeChainCommit(chain, EC_ADDRESS).toString('hex');
+        const reveal = composeChainReveal(chain).toString('hex');
+        const res = await mutate({
+            mutation: MUTATION_ADD_C,
+            variables: { commit, reveal }
+        });
+        expect(res.data!.addChain.chainId).toBe(chain.idHex);
+        expect(res.data!.addChain.entryHash).toBe(chain.firstEntry.hashHex());
+    });
+
+    it('Should add an entry', async () => {
+        const chain = await cli.addChain(createChain(), EC_ADDRESS);
+        const entry = createEntry(chain.chainId);
+        const commit = composeEntryCommit(entry, EC_ADDRESS).toString('hex');
+        const reveal = composeEntryReveal(entry).toString('hex');
+        const res = await mutate({
+            mutation: MUTATION_ADD_E,
+            variables: { commit, reveal }
+        });
+        expect(res.data!.addEntry.chainId).toBe(chain.chainId);
+        expect(res.data!.addEntry.entryHash).toBe(entry.hashHex());
     });
 });

@@ -57,3 +57,21 @@ export const MUTATION_REVEAL_E = gql`
         }
     }
 `;
+
+export const MUTATION_ADD_C = gql`
+    mutation AddChain($reveal: String!, $commit: String!) {
+        addChain(reveal: $reveal, commit: $commit) {
+            entryHash
+            chainId
+        }
+    }
+`;
+
+export const MUTATION_ADD_E = gql`
+    mutation AddEntry($reveal: String!, $commit: String!) {
+        addEntry(reveal: $reveal, commit: $commit) {
+            entryHash
+            chainId
+        }
+    }
+`;
