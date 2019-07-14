@@ -26,8 +26,7 @@ export const MUTATION_REVEAL_C = gql`
     mutation RevealChain($reveal: String!) {
         revealChain(reveal: $reveal) {
             entryHash
-            transactionHash
-            chain
+            chainId
         }
     }
 `;
