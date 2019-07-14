@@ -243,7 +243,7 @@ export type CoinbaseDescriptorOutput = {
   amount: Scalars["Int"];
 };
 
-/** Chain commit response. */
+/** Commit response. */
 export type Commit = {
   __typename?: "Commit";
   /** The hash of the entry that was committed. */
@@ -252,17 +252,6 @@ export type Commit = {
   transactionHash: Scalars["Hash"];
   /** Double sha256 hash of the commited chain. Only defined on chain commits. */
   chainIdHash?: Maybe<Scalars["Hash"]>;
-};
-
-/** Response following a chain or entry commmit or reveal, or a factoid transaction. */
-export type CommitRevealSend = {
-  __typename?: "CommitRevealSend";
-  /** The hash of the entry that was committed or revealed. Always null for factoid transactions. */
-  entryHash?: Maybe<Scalars["Hash"]>;
-  /** The transaction hash. Always null for reveals. */
-  transactionHash?: Maybe<Scalars["Hash"]>;
-  /** The chain that was committed to. Always null for entry commits and factoid transactions. */
-  chainId?: Maybe<Scalars["Hash"]>;
 };
 
 /** Blockchain time state. */
@@ -544,8 +533,8 @@ export type Mutation = {
   addChain: Reveal;
   /** Commit and/or reveal an entry. */
   addEntry: Reveal;
-  /** Submit a factoid transaction. */
-  submitTransaction: CommitRevealSend;
+  /** Submit a factoid transaction. Returns the transaction ID. */
+  submitTransaction: Scalars["Hash"];
 };
 
 export type MutationCommitChainArgs = {
@@ -858,6 +847,7 @@ export type Receipt = {
   merkleBranch: Array<MerkleNode>;
 };
 
+/** Reveal response. */
 export type Reveal = {
   __typename?: "Reveal";
   /** The hash of the entry that was revealed. */
@@ -1045,7 +1035,6 @@ export type ResolversTypes = ResolversObject<{
   Mutation: {};
   Commit: Partial<Commit>;
   Reveal: Partial<Reveal>;
-  CommitRevealSend: Partial<CommitRevealSend>;
   Subscription: {};
   PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
   DirectoryBlockSignature: Partial<DirectoryBlockSignature>;
@@ -1251,19 +1240,6 @@ export type CommitResolvers<
     ParentType,
     ContextType
   >;
-}>;
-
-export type CommitRevealSendResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["CommitRevealSend"]
-> = ResolversObject<{
-  entryHash?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
-  transactionHash?: Resolver<
-    Maybe<ResolversTypes["Hash"]>,
-    ParentType,
-    ContextType
-  >;
-  chainId?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
 }>;
 
 export type CurrentMinuteResolvers<
@@ -1606,7 +1582,7 @@ export type MutationResolvers<
     MutationAddEntryArgs
   >;
   submitTransaction?: Resolver<
-    ResolversTypes["CommitRevealSend"],
+    ResolversTypes["Hash"],
     ParentType,
     ContextType,
     MutationSubmitTransactionArgs
@@ -2060,7 +2036,6 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   CoinbaseDescriptorCancel?: CoinbaseDescriptorCancelResolvers<ContextType>;
   CoinbaseDescriptorOutput?: CoinbaseDescriptorOutputResolvers<ContextType>;
   Commit?: CommitResolvers<ContextType>;
-  CommitRevealSend?: CommitRevealSendResolvers<ContextType>;
   CurrentMinute?: CurrentMinuteResolvers<ContextType>;
   DirectoryBlock?: DirectoryBlockResolvers<ContextType>;
   DirectoryBlockSignature?: DirectoryBlockSignatureResolvers<ContextType>;

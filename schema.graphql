@@ -123,8 +123,8 @@ type Mutation {
     addChain(commit: String!, reveal: String!): Reveal!
     "Commit and/or reveal an entry."
     addEntry(commit: String!, reveal: String!): Reveal!
-    "Submit a factoid transaction."
-    submitTransaction(tx: String!): CommitRevealSend!
+    "Submit a factoid transaction. Returns the transaction ID."
+    submitTransaction(tx: String!): Hash!
 }
 
 ##########
@@ -426,11 +426,11 @@ type MerkleNode {
     top: Hash!
 }
 
-##################################
-# Commit Reveal Submit Responses #
-##################################
+###########################
+# Commit Reveal Responses #
+###########################
 
-"Chain commit response."
+"Commit response."
 type Commit {
     "The hash of the entry that was committed."
     entryHash: Hash!
@@ -440,21 +440,12 @@ type Commit {
     chainIdHash: Hash
 }
 
+"Reveal response."
 type Reveal {
     "The hash of the entry that was revealed."
     entryHash: Hash!
     "The entry chain where the entry was revealed."
     chainId: Hash!
-}
-
-"Response following a chain or entry commmit or reveal, or a factoid transaction."
-type CommitRevealSend {
-    "The hash of the entry that was committed or revealed. Always null for factoid transactions."
-    entryHash: Hash
-    "The transaction hash. Always null for reveals."
-    transactionHash: Hash
-    "The chain that was committed to. Always null for entry commits and factoid transactions."
-    chainId: Hash
 }
 
 #################
