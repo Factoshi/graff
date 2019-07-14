@@ -2,6 +2,7 @@ import {
     composeChainCommit,
     composeChainReveal,
     composeEntryCommit,
+    composeEntryReveal
 } from 'factom';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
@@ -11,6 +12,7 @@ import {
     MUTATION_REVEAL_C,
     createEntry,
     MUTATION_COMMIT_E,
+    MUTATION_REVEAL_E
 } from './mutationHelpers';
 import { randomBytes } from 'crypto';
 import { cli } from './factom';
@@ -62,6 +64,22 @@ describe('Integration Test Mutations', () => {
     it('Should attempt to reveal a fake chain and return an error', async () => {
         const reveal = randomBytes(115).toString('hex');
         const res = await mutate({ mutation: MUTATION_REVEAL_C, variables: { reveal } });
+        expect(res.errors).not.toBeNull();
+    });
+
+    it('Should reveal an entry', async () => {
+        const chain = await cli.addChain(createChain(), EC_ADDRESS);
+        const entry = createEntry(chain.chainId);
+        await cli.commitEntry(entry, EC_ADDRESS);
+        const reveal = composeEntryReveal(entry).toString('hex');
+        const res = await mutate({ mutation: MUTATION_REVEAL_E, variables: { reveal } });
+        expect(res.data!.revealEntry.chainId).toBe(chain.chainId);
+        expect(res.data!.revealEntry.entryHash).toBe(entry.hashHex());
+    });
+
+    it('Should attempt to reveal a fake entry and return an error', async () => {
+        const reveal = randomBytes(115).toString('hex');
+        const res = await mutate({ mutation: MUTATION_REVEAL_E, variables: { reveal } });
         expect(res.errors).not.toBeNull();
     });
 });

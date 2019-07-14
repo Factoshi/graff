@@ -48,3 +48,12 @@ export const MUTATION_REVEAL_C = gql`
         }
     }
 `;
+
+export const MUTATION_REVEAL_E = gql`
+    mutation RevealEntry($reveal: String!) {
+        revealEntry(reveal: $reveal) {
+            entryHash
+            chainId
+        }
+    }
+`;
