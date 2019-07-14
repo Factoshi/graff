@@ -1,4 +1,8 @@
-import { QueryResolvers, EntryCreditBlockResolvers, Commit } from '../types/resolvers';
+import {
+    QueryResolvers,
+    EntryCreditBlockResolvers,
+    EntryCommit
+} from '../types/resolvers';
 import { testPaginationInput, handleBlockError } from './resolver-helpers';
 
 /**
@@ -69,7 +73,7 @@ export const entryCreditBlockResolvers: EntryCreditBlockResolvers = {
                 paymentAddress: commit.ecPublicKey,
                 entryCreditBlock: { headerHash: headerHash },
                 signature: commit.signature
-            })) as Commit[];
+            })) as EntryCommit[];
         return {
             commits,
             totalCount: entryCreditBlock.commits.length,
