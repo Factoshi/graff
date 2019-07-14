@@ -67,5 +67,11 @@ export const mutation: MutationResolvers = {
             commit: BroadcastMethod.CommitEntry,
             reveal: BroadcastMethod.RevealEntry
         });
+    },
+    submitTransaction: async (_, { tx }, { factomd }) => {
+        const res = await factomd.cli.factomdApi(BroadcastMethod.SubmitTx, {
+            transaction: tx
+        });
+        return res.txid;
     }
 };
