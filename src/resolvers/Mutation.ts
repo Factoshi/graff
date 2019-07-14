@@ -64,8 +64,8 @@ export const mutation: MutationResolvers = {
     },
     addEntry: (_, args, { factomd }) => {
         return add(factomd, args, {
-            commit: BroadcastMethod.CommitChain,
-            reveal: BroadcastMethod.RevealChain
+            commit: BroadcastMethod.CommitEntry,
+            reveal: BroadcastMethod.RevealEntry
         });
     }
 };
