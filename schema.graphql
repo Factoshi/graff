@@ -112,15 +112,15 @@ type Subscription {
 
 type Mutation {
     "Commit a chain."
-    commitChain(commit: String!): CommitChain!
+    commitChain(commit: String!): ChainEntryCommit!
+    "Commit an entry."
+    commitEntry(commit: String!): ChainEntryCommit!
     "Reveal a chain."
     revealChain(reveal: String!): RevealChain!
-    "Commit and reveal a chain."
-    addChain(commit: String!, reveal: String!): CommitRevealSend!
-    "Commit an entry."
-    commitEntry(commit: String!): CommitRevealSend!
     "Reveal an entry."
     revealEntry(reveal: String!): CommitRevealSend!
+    "Commit and reveal a chain."
+    addChain(commit: String!, reveal: String!): CommitRevealSend!
     "Commit and/or reveal an entry."
     addEntry(commit: String!, reveal: String!): CommitRevealSend!
     "Submit a factoid transaction."
@@ -431,13 +431,13 @@ type MerkleNode {
 ##################################
 
 "Chain commit response."
-type CommitChain {
+type ChainEntryCommit {
     "The hash of the entry that was committed."
     entryHash: Hash!
     "The commit transaction hash."
     transactionHash: Hash!
-    "Double sha256 hash of the commited chain."
-    chainIdHash: Hash!
+    "Double sha256 hash of the commited chain. Only defined on chain commits."
+    chainIdHash: Hash
 }
 
 type RevealChain {
