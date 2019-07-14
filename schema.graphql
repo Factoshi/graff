@@ -114,7 +114,7 @@ type Mutation {
     "Commit a chain."
     commitChain(commit: String!): CommitChain!
     "Reveal a chain."
-    revealChain(reveal: String!): CommitRevealSend!
+    revealChain(reveal: String!): RevealChain!
     "Commit and reveal a chain."
     addChain(commit: String!, reveal: String!): CommitRevealSend!
     "Commit an entry."
@@ -438,6 +438,13 @@ type CommitChain {
     transactionHash: Hash!
     "Double sha256 hash of the commited chain."
     chainIdHash: Hash!
+}
+
+type RevealChain {
+    "The hash of the entry that was revealed."
+    entryHash: Hash!
+    "The entry chain where the entry was revealed."
+    chainId: Hash!
 }
 
 "Response following a chain or entry commmit or reveal, or a factoid transaction."

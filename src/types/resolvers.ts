@@ -535,7 +535,7 @@ export type Mutation = {
   /** Commit a chain. */
   commitChain: CommitChain;
   /** Reveal a chain. */
-  revealChain: CommitRevealSend;
+  revealChain: RevealChain;
   /** Commit and reveal a chain. */
   addChain: CommitRevealSend;
   /** Commit an entry. */
@@ -858,6 +858,14 @@ export type Receipt = {
   merkleBranch: Array<MerkleNode>;
 };
 
+export type RevealChain = {
+  __typename?: "RevealChain";
+  /** The hash of the entry that was revealed. */
+  entryHash: Scalars["Hash"];
+  /** The entry chain where the entry was revealed. */
+  chainId: Scalars["Hash"];
+};
+
 /** Rolls up messages that led to the promotion/demotion of identities during an election.
  * Not currently serialized into the blockchain.
  * AdminIDs: [10]
@@ -1036,6 +1044,7 @@ export type ResolversTypes = ResolversObject<{
   MerkleNode: Partial<MerkleNode>;
   Mutation: {};
   CommitChain: Partial<CommitChain>;
+  RevealChain: Partial<RevealChain>;
   CommitRevealSend: Partial<CommitRevealSend>;
   Subscription: {};
   PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
@@ -1563,7 +1572,7 @@ export type MutationResolvers<
     MutationCommitChainArgs
   >;
   revealChain?: Resolver<
-    ResolversTypes["CommitRevealSend"],
+    ResolversTypes["RevealChain"],
     ParentType,
     ContextType,
     MutationRevealChainArgs
@@ -1924,6 +1933,14 @@ export type ReceiptResolvers<
   >;
 }>;
 
+export type RevealChainResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["RevealChain"]
+> = ResolversObject<{
+  entryHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  chainId?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+}>;
+
 export type ServerFaultHandoffResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["ServerFaultHandoff"]
@@ -2072,6 +2089,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   PublicFactoidAddress?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   Receipt?: ReceiptResolvers<ContextType>;
+  RevealChain?: RevealChainResolvers<ContextType>;
   ServerFaultHandoff?: ServerFaultHandoffResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Transaction?: TransactionResolvers<ContextType>;
