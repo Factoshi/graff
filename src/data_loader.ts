@@ -5,7 +5,7 @@ import Factom from 'factom';
  * Class holds dataloader instances to batch requests to factomd.
  */
 export class FactomdDataLoader {
-    constructor(private cli: Factom.FactomCli) {}
+    constructor(public cli: Factom.FactomCli) {}
 
     private createDataLoader<K, V>(fetch: (key: K) => Promise<V>) {
         return new DataLoader<K, V>(keys => Promise.all(keys.map(fetch)), {
