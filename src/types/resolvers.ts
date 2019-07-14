@@ -202,17 +202,6 @@ export type AdminEntry = {
   code: AdminCode;
 };
 
-/** Chain commit response. */
-export type ChainEntryCommit = {
-  __typename?: "ChainEntryCommit";
-  /** The hash of the entry that was committed. */
-  entryHash: Scalars["Hash"];
-  /** The commit transaction hash. */
-  transactionHash: Scalars["Hash"];
-  /** Double sha256 hash of the commited chain. Only defined on chain commits. */
-  chainIdHash?: Maybe<Scalars["Hash"]>;
-};
-
 /** Creates a future genesis transaction.
  * AdminIDs: [11]
  * AdminCodes: [COINBASE_DESCRIPTOR]
@@ -254,21 +243,15 @@ export type CoinbaseDescriptorOutput = {
   amount: Scalars["Int"];
 };
 
-/** Entry commit included in the blockchain. */
+/** Chain commit response. */
 export type Commit = {
   __typename?: "Commit";
-  /** Milliseconds since Unix epoch. */
-  timestamp: Scalars["Float"];
-  /** The entry that was committed. All fields except hash will be null if not yet revealed. */
-  entry: Entry;
-  /** The cost of the entry. */
-  credits: Scalars["Int"];
-  /** The entry credit address that paid for the entry. */
-  paymentAddress: Scalars["PublicEntryCreditAddress"];
-  /** The signature of this Entry Commit by the payment address. */
-  signature: Scalars["String"];
-  /** The parent entry credit block of the commit. */
-  entryCreditBlock: EntryCreditBlock;
+  /** The hash of the entry that was committed. */
+  entryHash: Scalars["Hash"];
+  /** The commit transaction hash. */
+  transactionHash: Scalars["Hash"];
+  /** Double sha256 hash of the commited chain. Only defined on chain commits. */
+  chainIdHash?: Maybe<Scalars["Hash"]>;
 };
 
 /** Response following a chain or entry commmit or reveal, or a factoid transaction. */
@@ -392,6 +375,23 @@ export type EntryBlock = {
 export type EntryBlockEntryPageArgs = {
   first?: Maybe<Scalars["Int"]>;
   offset?: Maybe<Scalars["Int"]>;
+};
+
+/** Entry commit included in the blockchain. */
+export type EntryCommit = {
+  __typename?: "EntryCommit";
+  /** Milliseconds since Unix epoch. */
+  timestamp: Scalars["Float"];
+  /** The entry that was committed. All fields except hash will be null if not yet revealed. */
+  entry: Entry;
+  /** The cost of the entry. */
+  credits: Scalars["Int"];
+  /** The entry credit address that paid for the entry. */
+  paymentAddress: Scalars["PublicEntryCreditAddress"];
+  /** The signature of this Entry Commit by the payment address. */
+  signature: Scalars["String"];
+  /** The parent entry credit block of the commit. */
+  entryCreditBlock: EntryCreditBlock;
 };
 
 /** State of an entry or commit. */
@@ -533,17 +533,17 @@ export type MerkleNode = {
 export type Mutation = {
   __typename?: "Mutation";
   /** Commit a chain. */
-  commitChain: ChainEntryCommit;
+  commitChain: Commit;
   /** Commit an entry. */
-  commitEntry: ChainEntryCommit;
+  commitEntry: Commit;
   /** Reveal a chain. */
-  revealChain: RevealChain;
+  revealChain: Reveal;
   /** Reveal an entry. */
-  revealEntry: CommitRevealSend;
+  revealEntry: Reveal;
   /** Commit and reveal a chain. */
-  addChain: CommitRevealSend;
+  addChain: Reveal;
   /** Commit and/or reveal an entry. */
-  addEntry: CommitRevealSend;
+  addEntry: Reveal;
   /** Submit a factoid transaction. */
   submitTransaction: CommitRevealSend;
 };
@@ -588,7 +588,7 @@ export type PaginatedCommits = {
   /** Get pageLength x in list following offset */
   pageLength: Scalars["Int"];
   /** An array of commits. */
-  commits: Array<Commit>;
+  commits: Array<EntryCommit>;
 };
 
 /** Paginated entries */
@@ -858,8 +858,8 @@ export type Receipt = {
   merkleBranch: Array<MerkleNode>;
 };
 
-export type RevealChain = {
-  __typename?: "RevealChain";
+export type Reveal = {
+  __typename?: "Reveal";
   /** The hash of the entry that was revealed. */
   entryHash: Scalars["Hash"];
   /** The entry chain where the entry was revealed. */
@@ -1021,7 +1021,7 @@ export type ResolversTypes = ResolversObject<{
   String: Partial<Scalars["String"]>;
   EntryCreditBlock: Partial<EntryCreditBlock>;
   PaginatedCommits: Partial<PaginatedCommits>;
-  Commit: Partial<Commit>;
+  EntryCommit: Partial<EntryCommit>;
   PublicEntryCreditAddress: Partial<Scalars["PublicEntryCreditAddress"]>;
   FactoidBlock: Partial<FactoidBlock>;
   PaginatedTransactions: Partial<PaginatedTransactions>;
@@ -1043,8 +1043,8 @@ export type ResolversTypes = ResolversObject<{
   Receipt: Partial<Receipt>;
   MerkleNode: Partial<MerkleNode>;
   Mutation: {};
-  ChainEntryCommit: Partial<ChainEntryCommit>;
-  RevealChain: Partial<RevealChain>;
+  Commit: Partial<Commit>;
+  Reveal: Partial<Reveal>;
   CommitRevealSend: Partial<CommitRevealSend>;
   Subscription: {};
   PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
@@ -1200,19 +1200,6 @@ export type AdminEntryResolvers<
   code?: Resolver<ResolversTypes["AdminCode"], ParentType, ContextType>;
 }>;
 
-export type ChainEntryCommitResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["ChainEntryCommit"]
-> = ResolversObject<{
-  entryHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  transactionHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  chainIdHash?: Resolver<
-    Maybe<ResolversTypes["Hash"]>,
-    ParentType,
-    ContextType
-  >;
-}>;
-
 export type CoinbaseDescriptorResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["CoinbaseDescriptor"]
@@ -1257,17 +1244,10 @@ export type CommitResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["Commit"]
 > = ResolversObject<{
-  timestamp?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
-  entry?: Resolver<ResolversTypes["Entry"], ParentType, ContextType>;
-  credits?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  paymentAddress?: Resolver<
-    ResolversTypes["PublicEntryCreditAddress"],
-    ParentType,
-    ContextType
-  >;
-  signature?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  entryCreditBlock?: Resolver<
-    ResolversTypes["EntryCreditBlock"],
+  entryHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  transactionHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  chainIdHash?: Resolver<
+    Maybe<ResolversTypes["Hash"]>,
     ParentType,
     ContextType
   >;
@@ -1409,6 +1389,26 @@ export type EntryBlockResolvers<
   >;
   directoryBlock?: Resolver<
     ResolversTypes["DirectoryBlock"],
+    ParentType,
+    ContextType
+  >;
+}>;
+
+export type EntryCommitResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["EntryCommit"]
+> = ResolversObject<{
+  timestamp?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  entry?: Resolver<ResolversTypes["Entry"], ParentType, ContextType>;
+  credits?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  paymentAddress?: Resolver<
+    ResolversTypes["PublicEntryCreditAddress"],
+    ParentType,
+    ContextType
+  >;
+  signature?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  entryCreditBlock?: Resolver<
+    ResolversTypes["EntryCreditBlock"],
     ParentType,
     ContextType
   >;
@@ -1570,37 +1570,37 @@ export type MutationResolvers<
   ParentType = ResolversTypes["Mutation"]
 > = ResolversObject<{
   commitChain?: Resolver<
-    ResolversTypes["ChainEntryCommit"],
+    ResolversTypes["Commit"],
     ParentType,
     ContextType,
     MutationCommitChainArgs
   >;
   commitEntry?: Resolver<
-    ResolversTypes["ChainEntryCommit"],
+    ResolversTypes["Commit"],
     ParentType,
     ContextType,
     MutationCommitEntryArgs
   >;
   revealChain?: Resolver<
-    ResolversTypes["RevealChain"],
+    ResolversTypes["Reveal"],
     ParentType,
     ContextType,
     MutationRevealChainArgs
   >;
   revealEntry?: Resolver<
-    ResolversTypes["CommitRevealSend"],
+    ResolversTypes["Reveal"],
     ParentType,
     ContextType,
     MutationRevealEntryArgs
   >;
   addChain?: Resolver<
-    ResolversTypes["CommitRevealSend"],
+    ResolversTypes["Reveal"],
     ParentType,
     ContextType,
     MutationAddChainArgs
   >;
   addEntry?: Resolver<
-    ResolversTypes["CommitRevealSend"],
+    ResolversTypes["Reveal"],
     ParentType,
     ContextType,
     MutationAddEntryArgs
@@ -1620,7 +1620,11 @@ export type PaginatedCommitsResolvers<
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  commits?: Resolver<Array<ResolversTypes["Commit"]>, ParentType, ContextType>;
+  commits?: Resolver<
+    Array<ResolversTypes["EntryCommit"]>,
+    ParentType,
+    ContextType
+  >;
 }>;
 
 export type PaginatedEntriesResolvers<
@@ -1937,9 +1941,9 @@ export type ReceiptResolvers<
   >;
 }>;
 
-export type RevealChainResolvers<
+export type RevealResolvers<
   ContextType = Context,
-  ParentType = ResolversTypes["RevealChain"]
+  ParentType = ResolversTypes["Reveal"]
 > = ResolversObject<{
   entryHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   chainId?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
@@ -2052,7 +2056,6 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Address?: AddressResolvers<ContextType>;
   AdminBlock?: AdminBlockResolvers<ContextType>;
   AdminEntry?: AdminEntryResolvers;
-  ChainEntryCommit?: ChainEntryCommitResolvers<ContextType>;
   CoinbaseDescriptor?: CoinbaseDescriptorResolvers<ContextType>;
   CoinbaseDescriptorCancel?: CoinbaseDescriptorCancelResolvers<ContextType>;
   CoinbaseDescriptorOutput?: CoinbaseDescriptorOutputResolvers<ContextType>;
@@ -2063,6 +2066,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   DirectoryBlockSignature?: DirectoryBlockSignatureResolvers<ContextType>;
   Entry?: EntryResolvers<ContextType>;
   EntryBlock?: EntryBlockResolvers<ContextType>;
+  EntryCommit?: EntryCommitResolvers<ContextType>;
   EntryCommitAck?: EntryCommitAckResolvers<ContextType>;
   EntryCreditBlock?: EntryCreditBlockResolvers<ContextType>;
   FactoidBlock?: FactoidBlockResolvers<ContextType>;
@@ -2093,7 +2097,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   PublicFactoidAddress?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   Receipt?: ReceiptResolvers<ContextType>;
-  RevealChain?: RevealChainResolvers<ContextType>;
+  Reveal?: RevealResolvers<ContextType>;
   ServerFaultHandoff?: ServerFaultHandoffResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Transaction?: TransactionResolvers<ContextType>;
