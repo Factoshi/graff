@@ -54,6 +54,8 @@
         "@types/graphql-depth-limit": "^1.1.0",
         "@types/ramda": "^0.26.15",
         "apollo-server": "^2.6.9",
+        "apollo-server-cache-redis": "^1.0.0",
+        "apollo-server-caching": "^0.4.0",
         "basic-auth": "^2.0.1",
         "bluebird": "^3.5.5",
         "dataloader": "^1.4.0",
