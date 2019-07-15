@@ -653,7 +653,7 @@ export type PendingEntry = {
   /** The status of the commit. */
   status: Ack;
   /** The chain the entry belongs to. */
-  chain?: Maybe<Scalars["Hash"]>;
+  chainId?: Maybe<Scalars["Hash"]>;
 };
 
 /** Factoid transaction not yet included in the blockchain. */

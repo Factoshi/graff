@@ -395,7 +395,7 @@ type PendingEntry {
     "The status of the commit."
     status: Ack!
     "The chain the entry belongs to."
-    chain: Hash # <---- TODO: work out of this is actually nullable
+    chainId: Hash
 }
 
 "Proof that an entry has been anchored in the bitcoin blockchain."

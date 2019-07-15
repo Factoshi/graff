@@ -68,7 +68,7 @@ export const query: QueryResolvers = {
             .slice(offset!, offset! + first!)
             .map(({ entryhash, chainid, status }) => ({
                 hash: entryhash,
-                chain: chainid,
+                chainId: chainid,
                 status
             }));
         return {

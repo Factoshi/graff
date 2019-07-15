@@ -598,7 +598,7 @@ export const QUERY_PENDING_ENTRIES = gql`
             pendingEntries {
                 hash
                 status
-                chain
+                chainId
             }
         }
     }
