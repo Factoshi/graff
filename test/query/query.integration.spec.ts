@@ -29,7 +29,7 @@ import {
 } from './queryHelpers';
 import { server } from '../../src/server';
 import { createTestClient } from 'apollo-server-testing';
-import { cli } from './factom';
+import { cli } from '../../src/factom';
 import { randomBytes } from 'crypto';
 
 const { query } = createTestClient(server as any);
