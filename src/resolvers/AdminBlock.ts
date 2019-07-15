@@ -12,11 +12,6 @@ export const adminBlockQueries: QueryResolvers = {
     adminBlockByHeight: async (_, { height }, { factomd }) => {
         const adminBlock = await factomd.adminBlock.load(height).catch(handleBlockError);
         return adminBlock && { backReferenceHash: adminBlock.backReferenceHash };
-    },
-    adminBlockHead: async (_, args, { factomd }) => {
-        const directoryBlock = await factomd.directoryBlockHead.load();
-        const adminBlock = await factomd.adminBlock.load(directoryBlock.adminBlockRef);
-        return { backReferenceHash: adminBlock.backReferenceHash };
     }
 };
 

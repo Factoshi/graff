@@ -20,10 +20,6 @@ export const entryCreditBlockQueries: QueryResolvers = {
             .load(height!)
             .catch(handleBlockError);
         return entryCreditBlock && { headerHash: entryCreditBlock.headerHash };
-    },
-    entryCreditBlockHead: async (root, args, { factomd }) => {
-        const directoryBlockHead = await factomd.directoryBlockHead.load();
-        return { headerHash: directoryBlockHead.entryCreditBlockRef };
     }
 };
 

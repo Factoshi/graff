@@ -13,15 +13,15 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Sha256 hash. */
+  /** A hex-encoded Sha256 hash. */
   Hash: string;
-  /** Block height must be a positive integer. */
+  /** Block height. Must be a positive integer. */
   Height: number;
-  /** Public entry credit address. */
+  /** A valid public entry credit address. */
   PublicEntryCreditAddress: string;
-  /** Any public address */
+  /** A valid public address */
   PublicAddress: any;
-  /** Public factoid address. */
+  /** A valid public factoid address. */
   PublicFactoidAddress: string;
 };
 
@@ -531,7 +531,7 @@ export type Mutation = {
   revealEntry: Reveal;
   /** Commit and reveal a chain. */
   addChain: Reveal;
-  /** Commit and/or reveal an entry. */
+  /** Commit and reveal an entry. */
   addEntry: Reveal;
   /** Submit a factoid transaction. Returns the transaction ID. */
   submitTransaction: Scalars["Hash"];
@@ -699,59 +699,53 @@ export type Properties = {
 
 export type Query = {
   __typename?: "Query";
-  /** Get an admin block by the specified block hash. */
+  /** Query an admin block by the specified block hash. Will return null if block cannot be found. */
   adminBlock?: Maybe<AdminBlock>;
-  /** Get an admin block by the specified block height. */
+  /** Query an admin block by the specified block height. Will return null if block cannot be found. */
   adminBlockByHeight?: Maybe<AdminBlock>;
-  /** Get the admin block at the tip of the admin chain. */
-  adminBlockHead: AdminBlock;
-  /** Get the balance of public entry credit or factoid addresses. */
+  /** Query the balances of a list of public entry credit or factoid addresses. */
   balances: Array<Address>;
-  /** Get the entry block at the tip of the specified chain. */
+  /** Query the entry block at the tip of the specified chain. Will return null if chain cannot be found. */
   chainHead?: Maybe<EntryBlock>;
-  /** Entry status. */
+  /** Query the status of a commit. */
   commitAck: EntryCommitAck;
-  /** Get protocol time state. */
+  /** Query protocol time state. */
   currentMinute: CurrentMinute;
-  /** Get a directory block by the specified block hash. */
+  /** Query a directory block by the specified block hash. Will return null if block cannot be found. */
   directoryBlock?: Maybe<DirectoryBlock>;
-  /** Get a directory block by the specified block height. */
+  /** Query a directory block by the specified block height. Will return null if block cannot be found. */
   directoryBlockByHeight?: Maybe<DirectoryBlock>;
-  /** Get the directory block at the tip of the directory chain. */
+  /** Query the directory block at the tip of the directory chain. */
   directoryBlockHead: DirectoryBlock;
-  /** Get an entry by its hash. */
+  /** Query an entry by its hash. Will return null if entry cannot be found. */
   entry?: Maybe<Entry>;
-  /** Entry status. */
+  /** Query the status of an Entry. */
   entryAck: EntryCommitAck;
-  /** Get an entry block by the specified block hash. */
+  /** Query an entry block by the specified block hash. Will return null if block cannot be found. */
   entryBlock?: Maybe<EntryBlock>;
-  /** Get an entry credit block by the specified block hash. */
+  /** Query an entry credit block by the specified block hash. Will return null if block cannot be found. */
   entryCreditBlock?: Maybe<EntryCreditBlock>;
-  /** Get an entry credit block by the specified block height. */
+  /** Query an entry credit block by the specified block height. Will return null if block cannot be found. */
   entryCreditBlockByHeight?: Maybe<EntryCreditBlock>;
-  /** Get the entry credit block at the tip of the entry credit chain. */
-  entryCreditBlockHead: EntryCreditBlock;
-  /** Get the EC-FCT exchange rate. */
+  /** Query the EC-FCT exchange rate. */
   entryCreditRate: Scalars["Int"];
-  /** Get a factoid block by the specified block hash. */
+  /** Query a factoid block by the specified block hash. Will return null if block cannot be found. */
   factoidBlock?: Maybe<FactoidBlock>;
-  /** Get a factoid block by the specified block hash. */
+  /** Query a factoid block by the specified block hash. Will return null if block cannot be found. */
   factoidBlockByHeight?: Maybe<FactoidBlock>;
-  /** Get the factoid block at the tip of the factoid chain. */
-  factoidBlockHead: FactoidBlock;
   /** Factoid transaction status. */
   factoidTransactionAck: FactoidTransactionAck;
-  /** Get blockchain heights. */
+  /** Query blockchain heights. */
   heights: Heights;
-  /** Get paginated pending entries. */
+  /** Query paginated pending entries. */
   pendingEntries: PaginatedPendingEntries;
-  /** Get paginated pending entries. */
+  /** Query paginated pending entries. */
   pendingTransactions: PaginatedPendingTransactions;
-  /** Get properties of factomd and the APIs. */
+  /** Query properties of factomd. */
   properties: Properties;
-  /** Get an entry receipt */
+  /** Query an entry receipt. Will return null if entry receipt cannot be found. */
   receipt?: Maybe<Receipt>;
-  /** Get a transaction by its hash. */
+  /** Query a transaction by its hash. Will return null if transaction cannot be found. */
   transaction?: Maybe<Transaction>;
 };
 
@@ -1763,11 +1757,6 @@ export type QueryResolvers<
     ContextType,
     QueryAdminBlockByHeightArgs
   >;
-  adminBlockHead?: Resolver<
-    ResolversTypes["AdminBlock"],
-    ParentType,
-    ContextType
-  >;
   balances?: Resolver<
     Array<ResolversTypes["Address"]>,
     ParentType,
@@ -1838,11 +1827,6 @@ export type QueryResolvers<
     ContextType,
     QueryEntryCreditBlockByHeightArgs
   >;
-  entryCreditBlockHead?: Resolver<
-    ResolversTypes["EntryCreditBlock"],
-    ParentType,
-    ContextType
-  >;
   entryCreditRate?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   factoidBlock?: Resolver<
     Maybe<ResolversTypes["FactoidBlock"]>,
@@ -1855,11 +1839,6 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryFactoidBlockByHeightArgs
-  >;
-  factoidBlockHead?: Resolver<
-    ResolversTypes["FactoidBlock"],
-    ParentType,
-    ContextType
   >;
   factoidTransactionAck?: Resolver<
     ResolversTypes["FactoidTransactionAck"],

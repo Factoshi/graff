@@ -16,13 +16,6 @@ export const factoidBlockQueries: QueryResolvers = {
             .load(height)
             .catch(handleBlockError);
         return factoidBlock && { keyMR: factoidBlock.keyMR };
-    },
-    factoidBlockHead: async (root, args, { factomd }) => {
-        const directoryBlockHead = await factomd.directoryBlockHead.load();
-        const factoidBlockHead = await factomd.factoidBlock.load(
-            directoryBlockHead.factoidBlockRef
-        );
-        return { keyMR: factoidBlockHead.keyMR };
     }
 };
 

@@ -54,16 +54,6 @@ describe('Integration Test Queries', () => {
         expect(res.data).toMatchSnapshot();
     });
 
-    it('Should query the admin block head.', async () => {
-        const [expected, res] = await Promise.all([
-            cli.getDirectoryBlockHead().then(res => cli.getAdminBlock(res.adminBlockRef)),
-            query({ query: QUERY_ABLOCK_HEAD }) as any
-        ]);
-        const aBlock = res.data.adminBlockHead;
-        expect(expected.backReferenceHash).toBe(aBlock.backReferenceHash);
-        expect(aBlock.nextBlock).toBeNull();
-    });
-
     it('Should query the balances of several addresses', async () => {
         const fctAddress = 'FA3RqGvKruW9BPTPHqRGAop76HgJm4fHoit7wW4aqmPyHtrjCy1M';
         const ecAddress = 'EC2XugtJ3PqJdAqVGeKnUZLKs2XhZM3kkXJor7DiYkN9uSKqKWB9';
@@ -221,15 +211,6 @@ describe('Integration Test Queries', () => {
         expect(queryResponse.data!.entryCreditBlockByHeight).toBeNull();
     });
 
-    it('Should query an entry credit block head', async () => {
-        const dblockHead = await cli.getDirectoryBlockHead();
-        const ecBlockHead = await cli.getEntryCreditBlock(dblockHead.entryCreditBlockRef);
-        const queryResponse = await query({ query: QUERY_ECBLOCK_HEAD });
-        expect(queryResponse.data!.entryCreditBlockHead.headerHash).toBe(
-            ecBlockHead.headerHash
-        );
-    });
-
     it('Should query the entry credit rate', async () => {
         const [expectedRate, actualRate] = await Promise.all([
             cli.factomdApi('entry-credit-rate'),
@@ -264,13 +245,6 @@ describe('Integration Test Queries', () => {
             variables: { height: Number.MAX_SAFE_INTEGER }
         });
         expect(fblock.data!.factoidBlockByHeight).toBeNull();
-    });
-
-    it('Should query the factoid block head', async () => {
-        const dblockHead = await cli.getDirectoryBlockHead();
-        const fBlockHead = await cli.getFactoidBlock(dblockHead.factoidBlockRef);
-        const fBlock = await query({ query: QUERY_FBLOCK_HEAD });
-        expect(fBlock.data!.factoidBlockHead.bodyMR).toBe(fBlockHead.bodyMR);
     });
 
     it('Should query a factoid transaction ack', async () => {

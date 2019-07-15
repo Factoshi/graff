@@ -44,17 +44,6 @@ describe('AdminBlock Resolvers', () => {
         expect(adminBlock).toBeNull();
     });
 
-    it('Should resolve the backReferenceHash field of the adminBlockHead', async () => {
-        const directoryBlockHead = await cli.getDirectoryBlockHead();
-        const adminBlockHead = await cli.getAdminBlock(directoryBlockHead.adminBlockRef);
-        const adminBlock = await adminBlockQueries.adminBlockHead(undefined, undefined, {
-            factomd
-        });
-        expect(adminBlock).toEqual({
-            backReferenceHash: adminBlockHead.backReferenceHash
-        });
-    });
-
     it('Should resolve the backReferenceHash field of the previousBlock field', async () => {
         const backReferenceHash =
             'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';

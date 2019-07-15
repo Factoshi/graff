@@ -48,19 +48,6 @@ describe('EntryCreditBlock resolvers', () => {
         expect(entryCreditBlock).toBeNull();
     });
 
-    it('Should resolve the headerHash from the entryCreditBlockHead resolver', async () => {
-        const directoryBlockHead = await cli.getDirectoryBlockHead();
-        const expected = await cli.getEntryCreditBlock(
-            directoryBlockHead.entryCreditBlockRef
-        );
-        const entryCreditBlock = await entryCreditBlockQueries.entryCreditBlockHead(
-            undefined,
-            undefined,
-            { factomd }
-        );
-        expect(entryCreditBlock).toEqual({ headerHash: expected.headerHash });
-    });
-
     it('Should resolve the fullHash field', async () => {
         const headerHash =
             '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';

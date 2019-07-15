@@ -45,17 +45,6 @@ describe('FactoidBlock resolvers', () => {
         expect(factoidBlock).toBeNull();
     });
 
-    it('Should resolve the keyMR from the factoidBlockHead query', async () => {
-        const directoryBlockHead = await cli.getDirectoryBlockHead();
-        const expected = await cli.getFactoidBlock(directoryBlockHead.factoidBlockRef);
-        const factoidBlock = await factoidBlockQueries.factoidBlockHead(
-            undefined,
-            undefined,
-            { factomd }
-        );
-        expect(factoidBlock).toEqual({ keyMR: expected.keyMR });
-    });
-
     it('Should resolve the bodyMR field', async () => {
         const keyMR = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
         const bodyMR = await factoidBlockResolvers.bodyMR({ keyMR }, {}, { factomd });

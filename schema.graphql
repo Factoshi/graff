@@ -26,9 +26,7 @@ type Query {
     adminBlock(hash: Hash!): AdminBlock
     "Get an admin block by the specified block height."
     adminBlockByHeight(height: Height!): AdminBlock
-    "Get the admin block at the tip of the admin chain."
-    adminBlockHead: AdminBlock!
-    "Get the balance of public entry credit or factoid addresses."
+    "Query the balances of a list of public entry credit or factoid addresses."
     balances(addresses: [PublicAddress!]!): [Address!]!
     "Get the entry block at the tip of the specified chain."
     chainHead(chainId: Hash!): EntryBlock
@@ -57,16 +55,12 @@ type Query {
     entryCreditBlock(hash: Hash!): EntryCreditBlock
     "Get an entry credit block by the specified block height."
     entryCreditBlockByHeight(height: Height!): EntryCreditBlock
-    "Get the entry credit block at the tip of the entry credit chain."
-    entryCreditBlockHead: EntryCreditBlock!
-    "Get the EC-FCT exchange rate."
+    "Query the EC-FCT exchange rate."
     entryCreditRate: Int!
     "Get a factoid block by the specified block hash."
     factoidBlock(hash: Hash!): FactoidBlock
     "Get a factoid block by the specified block hash."
     factoidBlockByHeight(height: Height!): FactoidBlock
-    "Get the factoid block at the tip of the factoid chain."
-    factoidBlockHead: FactoidBlock!
     "Factoid transaction status."
     factoidTransactionAck(hash: Hash!): FactoidTransactionAck!
     "Get blockchain heights."
