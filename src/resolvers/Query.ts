@@ -7,6 +7,7 @@ import { entryCreditBlockQueries } from './EntryCreditBlock';
 import { factoidBlockQueries } from './FactoidBlock';
 import { directoryBlockQueries } from './DirectoryBlock';
 import { transactionQueries } from './Transaction';
+import { handleEntryError } from './resolver-helpers';
 
 export const query: QueryResolvers = {
     ...adminBlockQueries,
@@ -21,7 +22,7 @@ export const query: QueryResolvers = {
         const balances = await factomd.balance.loadMany(addresses);
         return balances.map((balance, i) => ({
             amount: balance,
-            publicAddress: addresses[i]
+            address: addresses[i]
         }));
     },
     currentMinute: async (root, args, { factomd }) => {
@@ -67,7 +68,7 @@ export const query: QueryResolvers = {
             .slice(offset!, offset! + first!)
             .map(({ entryhash, chainid, status }) => ({
                 hash: entryhash,
-                chain: chainid,
+                chainId: chainid,
                 status
             }));
         return {
@@ -112,12 +113,14 @@ export const query: QueryResolvers = {
         };
     },
     receipt: async (root, { hash }, { factomd }) => {
-        const receipt = await factomd.receipt.load(hash);
-        return {
-            entry: { hash },
-            bitcoinTransactionHash: receipt.receipt.bitcointransactionhash || null,
-            bitcoinBlockHash: receipt.receipt.bitcoinblockhash || null,
-            merkleBranch: receipt.receipt.merklebranch
-        };
+        const receipt = await factomd.receipt.load(hash).catch(handleEntryError);
+        return (
+            receipt && {
+                entry: { hash },
+                bitcoinTransactionHash: receipt.receipt.bitcointransactionhash || null,
+                bitcoinBlockHash: receipt.receipt.bitcoinblockhash || null,
+                merkleBranch: receipt.receipt.merklebranch
+            }
+        );
     }
 };

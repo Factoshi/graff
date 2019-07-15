@@ -3,18 +3,26 @@ import { RedisCache } from 'apollo-server-cache-redis';
 import { importSchema } from 'graphql-import';
 import { resolvers } from './resolvers';
 import { resolve } from 'path';
-import { factomdPasswd, factomdUser } from './contants';
+import {
+    FACTOMD_PASSWD,
+    FACTOMD_USER,
+    MAX_QUERY_DEPTH,
+    MAX_COMPLEXITY
+} from './contants';
+import { Context } from './types/server';
 import auth from 'basic-auth';
 import { FactomdDataLoader } from './data_loader';
 import { cli } from './factom';
 import { compose } from 'ramda';
 import { Request } from 'express';
-import { Context } from 'apollo-server-core';
 import { FactomdDataSource } from './datasource';
+import depthLimit from 'graphql-depth-limit';
+
+const { createComplexityLimitRule } = require('graphql-validation-complexity');
 
 // token should be a basic authorization string.
 const authorize = (token: string | undefined) => {
-    if (factomdPasswd && factomdUser) {
+    if (FACTOMD_PASSWD && FACTOMD_USER) {
         if (token === undefined) {
             throw new AuthenticationError('Must provide authorization token.');
         }
@@ -23,7 +31,7 @@ const authorize = (token: string | undefined) => {
             const message = `${token} is not a valid basic auth string.`;
             throw new AuthenticationError(message);
         }
-        if (cred.name !== factomdUser || cred.pass !== factomdPasswd) {
+        if (cred.name !== FACTOMD_USER || cred.pass !== FACTOMD_PASSWD) {
             throw new AuthenticationError('Invalid credentials.');
         }
     }
@@ -75,27 +83,21 @@ const typeDefs = gql`
  *  Create server  *
  ******************/
 // bring it all together
-const server = new ApolloServer({
+export const server = new ApolloServer({
     typeDefs,
     resolvers,
     // If req is undefined then this is a subscription and thus auth will be handled
-    // by the subscription lifecycle methods below.
+    // by the onConnect subscription lifecycle method.
     context: ({ req }) => (req !== undefined ? context(req) : createContextObject()),
     subscriptions: { onConnect },
+    tracing: false,
+    validationRules: [
+        depthLimit(MAX_QUERY_DEPTH),
+        // See https://github.com/4Catalyzer/graphql-validation-complexity for details on this rule.
+        createComplexityLimitRule(MAX_COMPLEXITY)
+    ],
     cache: new RedisCache(),
     dataSources: () => ({
         factomd: new FactomdDataSource(cli)
-    }),
-    tracing: true
+    })
 });
-
-/*******************
- *  Launch server  *
- ******************/
-server.listen().then(({ url }) => console.log(`Server ready at ${url} 🚀`));
-
-// TODO: figure out how to mitigate malicious queries
-// TODO: add subscriptions
-// TODO: add mutations
-// TODO: set up e2e testing
-// TODO: User config option for pagination limit

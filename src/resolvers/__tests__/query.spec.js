@@ -1,11 +1,43 @@
 const { query } = require('../Query');
 const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
-const { assert } = require('chai');
-const {
-    generateMockPendingEntriesMethod,
-    generateMockPendingTransactionsMethod
-} = require('./testHelpers');
+const { randomBytes } = require('crypto');
+
+const generateMockPendingEntriesMethod = length => ({
+    factomd: {
+        pendingEntries: {
+            load: async () =>
+                Array(length)
+                    .fill(0)
+                    .map(() => ({
+                        entryhash: randomBytes(32).toString('hex'),
+                        chainid: randomBytes(32).toString('hex'),
+                        status: 'TransactionAck'
+                    }))
+        }
+    }
+});
+
+const generateMockPendingTransactionsMethod = length => ({
+    factomd: {
+        pendingTransactions: {
+            load: async () =>
+                Array(length)
+                    .fill(0)
+                    .map(() => ({
+                        hash: randomBytes(32).toString('hex'),
+                        status: 'TransactionAck',
+                        inputs: [],
+                        factoidOutputs: [],
+                        entryCreditOutputs: [],
+                        totalInputs: Math.floor(Math.random() * 10),
+                        totalFactoidOutputs: Math.floor(Math.random() * 10),
+                        totalEntryCreditOutputs: Math.floor(Math.random() * 10),
+                        fees: Math.floor(Math.random() * 10)
+                    }))
+        }
+    }
+});
 
 describe('Query Resolvers', () => {
     let factomd;
@@ -19,52 +51,38 @@ describe('Query Resolvers', () => {
             { addresses: [ecAddress, fctAddress] },
             { factomd }
         );
-        assert.isArray(balances);
-        balances.forEach(
-            balance => assert.hasAllKeys[(balance, ('publicAddress', 'amount'))]
-        );
-        balances.forEach(balance => assert.isString(balance.publicAddress));
-        balances.forEach(balance => assert.isNumber(balance.amount));
+        expect(Array.isArray(balances)).toBe(true);
+        balances.forEach(balance => {
+            expect(typeof balance.address).toBe('string');
+            expect(typeof balance.amount).toBe('number');
+        });
     });
 
     it('Should get the leaves of CurrentMinute from the currentMinute resolver', async () => {
         const currentMinute = await query.currentMinute(undefined, undefined, {
             factomd
         });
-
-        assert.hasAllKeys(currentMinute, [
-            'leaderHeight',
-            'directoryBlockHeight',
-            'minute',
-            'currentBlockStartTime',
-            'currentMinuteStartTime',
-            'currentTime',
-            'directoryBlockInSeconds',
-            'stallDetected',
-            'faultTimeout',
-            'roundTimeout'
-        ]);
-        assert.isNumber(currentMinute.leaderHeight);
-        assert.isNumber(currentMinute.directoryBlockHeight);
-        assert.isNumber(currentMinute.minute);
-        assert.isNumber(currentMinute.currentBlockStartTime);
-        assert.isNumber(currentMinute.currentMinuteStartTime);
-        assert.isNumber(currentMinute.currentTime);
-        assert.isNumber(currentMinute.directoryBlockInSeconds);
-        assert.isBoolean(currentMinute.stallDetected);
-        assert.isNumber(currentMinute.faultTimeout);
-        assert.isNumber(currentMinute.roundTimeout);
+        expect(typeof currentMinute.leaderHeight).toBe('number');
+        expect(typeof currentMinute.directoryBlockHeight).toBe('number');
+        expect(typeof currentMinute.minute).toBe('number');
+        expect(typeof currentMinute.currentBlockStartTime).toBe('number');
+        expect(typeof currentMinute.currentMinuteStartTime).toBe('number');
+        expect(typeof currentMinute.currentTime).toBe('number');
+        expect(typeof currentMinute.directoryBlockInSeconds).toBe('number');
+        expect(typeof currentMinute.faultTimeout).toBe('number');
+        expect(typeof currentMinute.roundTimeout).toBe('number');
+        expect(typeof currentMinute.stallDetected).toBe('boolean');
     });
 
     it('Should get the entry credit rate', async () => {
         const ecRate = await query.entryCreditRate(undefined, undefined, { factomd });
-        assert.isNumber(ecRate);
+        expect(typeof ecRate).toBe('number');
     });
 
     it('Should get the leaves of FactoidTransactionAck from the factoidTransactionAck resolver', async () => {
         const hash = 'b853f921bb6598b20c5054fa422a83a6a128ccd3c0fed2aaf03f0060d6805744';
         const ack = await query.factoidTransactionAck(undefined, { hash }, { factomd });
-        assert.deepStrictEqual(ack, {
+        expect(ack).toEqual({
             hash,
             txTimestamp: 1560361379165,
             blockTimestamp: 1560361080000,
@@ -74,27 +92,18 @@ describe('Query Resolvers', () => {
 
     it('Should get the leaves of Heights from the heights resolver', async () => {
         const heights = await query.heights(undefined, undefined, { factomd });
-        assert.hasAllKeys(heights, [
-            'leaderHeight',
-            'directoryBlockHeight',
-            'entryBlockHeight',
-            'entryHeight'
-        ]);
-        Object.values(heights).forEach(assert.isNumber);
+        expect(typeof heights.leaderHeight).toBe('number');
+        expect(typeof heights.directoryBlockHeight).toBe('number');
+        expect(typeof heights.entryBlockHeight).toBe('number');
+        expect(typeof heights.entryHeight).toBe('number');
     });
 
     it('Should get paginated pending entries', async () => {
         const pendingEntries = await query.pendingEntries(undefined, {}, { factomd });
-        assert.hasAllKeys(pendingEntries, [
-            'totalCount',
-            'offset',
-            'pageLength',
-            'pendingEntries'
-        ]);
-        assert.isNumber(pendingEntries.totalCount);
-        assert.isNumber(pendingEntries.offset);
-        assert.isNumber(pendingEntries.pageLength);
-        assert.isArray(pendingEntries.pendingEntries);
+        expect(typeof pendingEntries.totalCount).toBe('number');
+        expect(typeof pendingEntries.offset).toBe('number');
+        expect(typeof pendingEntries.pageLength).toBe('number');
+        expect(Array.isArray(pendingEntries.pendingEntries)).toBe(true);
     });
 
     it('Should get first 20 paginated pending entries', async () => {
@@ -104,23 +113,23 @@ describe('Query Resolvers', () => {
             { offset: 0, first: 20 },
             mock
         );
-        assert.strictEqual(first20.totalCount, 40);
-        assert.lengthOf(first20.pendingEntries, 20);
-        assert.strictEqual(first20.offset, 0);
-        assert.strictEqual(first20.pageLength, 20);
+        expect(first20.totalCount).toBe(40);
+        expect(first20.pendingEntries).toHaveLength(20);
+        expect(first20.offset).toBe(0);
+        expect(first20.pageLength).toBe(20);
     });
 
     it('Should return 0 for paginated entry values', async () => {
         const mock = generateMockPendingEntriesMethod(0);
-        const first20 = await query.pendingEntries(
+        const emptyPage = await query.pendingEntries(
             undefined,
             { offset: 0, first: 20 },
             mock
         );
-        assert.strictEqual(first20.totalCount, 0);
-        assert.lengthOf(first20.pendingEntries, 0);
-        assert.strictEqual(first20.offset, 0);
-        assert.strictEqual(first20.pageLength, 0);
+        expect(emptyPage.totalCount).toBe(0);
+        expect(emptyPage.pendingEntries).toHaveLength(0);
+        expect(emptyPage.offset).toBe(0);
+        expect(emptyPage.pageLength).toBe(0);
     });
 
     it('Should return 0 for paginated entry values when offset is grester than 0', async () => {
@@ -130,10 +139,10 @@ describe('Query Resolvers', () => {
             { offset: 20, first: 20 },
             mock
         );
-        assert.strictEqual(emptyPage.totalCount, 0);
-        assert.lengthOf(emptyPage.pendingEntries, 0);
-        assert.strictEqual(emptyPage.offset, 20);
-        assert.strictEqual(emptyPage.pageLength, 0);
+        expect(emptyPage.totalCount).toBe(0);
+        expect(emptyPage.pendingEntries).toHaveLength(0);
+        expect(emptyPage.offset).toBe(20);
+        expect(emptyPage.pageLength).toBe(0);
     });
 
     it('Should get paginated pending transactions', async () => {
@@ -142,28 +151,10 @@ describe('Query Resolvers', () => {
             {},
             { factomd }
         );
-        assert.hasAllKeys(pendingTransactions, [
-            'totalCount',
-            'offset',
-            'pageLength',
-            'pendingTransactions'
-        ]);
-        assert.isNumber(pendingTransactions.totalCount);
-        assert.isNumber(pendingTransactions.offset);
-        assert.isNumber(pendingTransactions.pageLength);
-        assert.isArray(pendingTransactions.pendingTransactions);
-        // There will always be at least a pending coinbase transactions
-        assert.hasAllKeys(pendingTransactions.pendingTransactions[0], [
-            'hash',
-            'status',
-            'inputs',
-            'factoidOutputs',
-            'entryCreditOutputs',
-            'totalInputs',
-            'totalFactoidOutputs',
-            'totalEntryCreditOutputs',
-            'fees'
-        ]);
+        expect(typeof pendingTransactions.totalCount).toBe('number');
+        expect(typeof pendingTransactions.offset).toBe('number');
+        expect(typeof pendingTransactions.pageLength).toBe('number');
+        expect(Array.isArray(pendingTransactions.pendingTransactions)).toBe(true);
     });
 
     it('Should get the first 20 paginated pending transactions', async () => {
@@ -173,10 +164,10 @@ describe('Query Resolvers', () => {
             { offset: 0, first: 20 },
             mock
         );
-        assert.strictEqual(first20.totalCount, 40);
-        assert.lengthOf(first20.pendingTransactions, 20);
-        assert.strictEqual(first20.offset, 0);
-        assert.strictEqual(first20.pageLength, 20);
+        expect(first20.totalCount).toBe(40);
+        expect(first20.offset).toBe(0);
+        expect(first20.pageLength).toBe(20);
+        expect(first20.pendingTransactions).toHaveLength(20);
     });
 
     it('Should get the last 20 paginated pending transactions', async () => {
@@ -186,10 +177,10 @@ describe('Query Resolvers', () => {
             { offset: 20, first: 20 },
             mock
         );
-        assert.strictEqual(last20.totalCount, 40);
-        assert.lengthOf(last20.pendingTransactions, 20);
-        assert.strictEqual(last20.offset, 20);
-        assert.strictEqual(last20.pageLength, 20);
+        expect(last20.totalCount).toBe(40);
+        expect(last20.offset).toBe(20);
+        expect(last20.pageLength).toBe(20);
+        expect(last20.pendingTransactions).toHaveLength(20);
     });
 
     it('Should return 0 for paginated transaction values', async () => {
@@ -199,32 +190,32 @@ describe('Query Resolvers', () => {
             { offset: 0, first: 20 },
             mock
         );
-        assert.strictEqual(emptyPage.totalCount, 0);
-        assert.lengthOf(emptyPage.pendingTransactions, 0);
-        assert.strictEqual(emptyPage.offset, 0);
-        assert.strictEqual(emptyPage.pageLength, 0);
+        expect(emptyPage.totalCount).toBe(0);
+        expect(emptyPage.offset).toBe(0);
+        expect(emptyPage.pageLength).toBe(0);
+        expect(emptyPage.pendingTransactions).toHaveLength(0);
     });
 
     it('Should get the leaves of Properties from the properties resolver', async () => {
         const properties = await query.properties(undefined, undefined, { factomd });
-        assert.hasAllKeys(properties, ['factomdVersion', 'factomdAPIVersion']);
-        Object.values(properties).forEach(assert.isString);
+        expect(typeof properties.factomdVersion).toBe('string');
+        expect(typeof properties.factomdAPIVersion).toBe('string');
     });
 
     it('Should get an entry receipt', async () => {
         const hash = 'f15aa73fbe29c9e5a6a53b4fbac16f8917bc7fb5441b32cd32453195c808fb5d';
         const receipt = await query.receipt(undefined, { hash }, { factomd });
-        assert.deepStrictEqual(receipt.entry, { hash });
-        assert.strictEqual(
-            receipt.bitcoinBlockHash,
+        expect(receipt.entry).toEqual({ hash });
+        expect(receipt.bitcoinBlockHash).toBe(
             '0000000000000000001cc4b4bbb96148080072ab215a61bd050825fcdeca4980'
         );
-        assert.strictEqual(
-            receipt.bitcoinTransactionHash,
+        expect(receipt.bitcoinTransactionHash).toBe(
             'e55bd0093be4a30d988532ac27a4544b95d6fc4e638c9a626c2ede5c87a75eae'
         );
-        receipt.merkleBranch.forEach(branch =>
-            assert.hasAllKeys(branch, ['left', 'right', 'top'])
-        );
+        receipt.merkleBranch.forEach(branch => {
+            expect(typeof branch.left).toBe('string');
+            expect(typeof branch.right).toBe('string');
+            expect(typeof branch.top).toBe('string');
+        });
     });
 });

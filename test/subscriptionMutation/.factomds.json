@@ -1,0 +1,12 @@
+{
+    "factomd": {
+        "blockTime": 10,
+        "apiPort": 5088,
+        "controlPanelPort": 5090
+    },
+    "bootstrap": {
+        "wallet": ["Es4D1XXGBBJcWea54xDLMVYgobHzciXKfPSxoZNdsbdjxJftPM6Y"],
+        "scriptjs": "bootstrap.js",
+        "waitNewBlock": false
+    }
+}

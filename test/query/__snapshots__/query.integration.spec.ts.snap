@@ -1,0 +1,1283 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration Test Queries Should get the ack of a known entry 1`] = `
+Object {
+  "entryAck": Object {
+    "commitHash": "c3d5ff23e70ee345dad983d01912a3d3ddabc8cfe8b07a078bb7f1e2d44ee9de",
+    "commitStatus": Object {
+      "status": "DBlockConfirmed",
+      "timestamp": null,
+    },
+    "entryHash": "5d8870cdcef3ab5fc05b6d94ff8c0f0f8a8ec4b2eb5643fe3a72e0f8c5c0a708",
+    "entryStatus": Object {
+      "status": "DBlockConfirmed",
+      "timestamp": 1563022560000,
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query a directory block by hash. 1`] = `
+Object {
+  "directoryBlock": Object {
+    "adminBlock": Object {
+      "bodySize": 3354,
+    },
+    "entryBlockPage": Object {
+      "entryBlocks": Array [
+        Object {
+          "chainId": "04e8e1ba1d9bf5e0ed848912a4daec9a861848aac6005850341a2a930a4f5ce0",
+        },
+        Object {
+          "chainId": "0773f67c4901739231574bb93879fb06bbe7ccbc441222cbdc7cd50880d3b02d",
+        },
+        Object {
+          "chainId": "4a35522c834022a4153c4ac92f61f22fad640647f91a21a65cf632f738717966",
+        },
+        Object {
+          "chainId": "6e4540d08d5ac6a1a394e982fb6a2ab8b516ee751c37420055141b94fe070bfe",
+        },
+        Object {
+          "chainId": "9005bb7dd69fb9910ee0b0db7b8a01198f03623eab6dadf1eba01f9dbc207577",
+        },
+      ],
+    },
+    "entryCreditBlock": Object {
+      "fullHash": "8831e32853528b4f6dffaeabfff3626a70aa86e89a9d9b4e803efd6e7ba40ccf",
+    },
+    "factoidBlock": Object {
+      "bodyMR": "b966e16d8c8253ab7298bf428a2901d4e7d12fd625a06af2cd631fcd942cdd0b",
+    },
+    "height": 200361,
+    "keyMR": "e9b52c4b48325c83de601c022cb314d819c911ae24bda0ca4a17476562622bd0",
+    "nextBlock": Object {
+      "height": 200362,
+    },
+    "previousBlock": Object {
+      "height": 200360,
+    },
+    "timestamp": 1562569320000,
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query a directory block by height. 1`] = `
+Object {
+  "directoryBlockByHeight": Object {
+    "adminBlock": Object {
+      "bodySize": 3354,
+    },
+    "entryBlockPage": Object {
+      "entryBlocks": Array [
+        Object {
+          "chainId": "04e8e1ba1d9bf5e0ed848912a4daec9a861848aac6005850341a2a930a4f5ce0",
+        },
+        Object {
+          "chainId": "0773f67c4901739231574bb93879fb06bbe7ccbc441222cbdc7cd50880d3b02d",
+        },
+        Object {
+          "chainId": "4a35522c834022a4153c4ac92f61f22fad640647f91a21a65cf632f738717966",
+        },
+        Object {
+          "chainId": "6e4540d08d5ac6a1a394e982fb6a2ab8b516ee751c37420055141b94fe070bfe",
+        },
+        Object {
+          "chainId": "9005bb7dd69fb9910ee0b0db7b8a01198f03623eab6dadf1eba01f9dbc207577",
+        },
+      ],
+    },
+    "entryCreditBlock": Object {
+      "fullHash": "8831e32853528b4f6dffaeabfff3626a70aa86e89a9d9b4e803efd6e7ba40ccf",
+    },
+    "factoidBlock": Object {
+      "bodyMR": "b966e16d8c8253ab7298bf428a2901d4e7d12fd625a06af2cd631fcd942cdd0b",
+    },
+    "height": 200361,
+    "keyMR": "e9b52c4b48325c83de601c022cb314d819c911ae24bda0ca4a17476562622bd0",
+    "nextBlock": Object {
+      "height": 200362,
+    },
+    "previousBlock": Object {
+      "height": 200360,
+    },
+    "timestamp": 1562569320000,
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query a factoid block by hash 1`] = `
+Object {
+  "data": Object {
+    "factoidBlock": Object {
+      "bodyMR": "927de854a4e4b8a82098ebf83c6afbfa6e5d1b9efd0c644d77da7adf522768b7",
+      "directoryBlock": Object {
+        "height": 201141,
+      },
+      "entryCreditRate": 22000,
+      "keyMR": "8519c32c9ed474f54ee95a63b679373015bc23db29f164a69eba0048783f2ccf",
+      "ledgerKeyMR": "1304bb800677fe53e5f4401cac77e0dedb76c88fae8ea8985a77dd904b6a3706",
+      "nextBlock": Object {
+        "entryCreditRate": 22000,
+      },
+      "previousBlock": Object {
+        "bodyMR": "b7b967521172dee6ab221fd04c850750ec32e52955363f9740ecfc3f99ca45fa",
+      },
+      "transactionPage": Object {
+        "offset": 0,
+        "pageLength": 3,
+        "totalCount": 3,
+        "transactions": Array [
+          Object {
+            "entryCreditOutputs": Array [],
+            "factoidBlock": Object {
+              "bodyMR": "927de854a4e4b8a82098ebf83c6afbfa6e5d1b9efd0c644d77da7adf522768b7",
+            },
+            "factoidOutputs": Array [],
+            "fees": 0,
+            "hash": "3890a8a4b9fd5295775522a85893b90de31a05def0e84286cbf70e0c5219889c",
+            "inputs": Array [],
+            "rcds": Array [],
+            "signatures": Array [],
+            "timestamp": 1563037560605,
+            "totalEntryCreditOutputs": 0,
+            "totalFactoidOutputs": 0,
+            "totalInputs": 0,
+          },
+          Object {
+            "entryCreditOutputs": Array [],
+            "factoidBlock": Object {
+              "bodyMR": "927de854a4e4b8a82098ebf83c6afbfa6e5d1b9efd0c644d77da7adf522768b7",
+            },
+            "factoidOutputs": Array [
+              Object {
+                "address": "FA29eyMVJaZ2tbGqJ3M49gANaXMXCjgfKcJGe5mx8p4iQFCvFDAC",
+                "amount": 100000,
+              },
+            ],
+            "fees": 264000,
+            "hash": "0e7df81ca237f87efaa5beb61fe0a6b70071dc42554a19260d187cc5fd28df0f",
+            "inputs": Array [
+              Object {
+                "address": "FA29eyMVJaZ2tbGqJ3M49gANaXMXCjgfKcJGe5mx8p4iQFCvFDAC",
+                "amount": 364000,
+              },
+            ],
+            "rcds": Array [
+              "01495dc8d0389078e68dc616112311bab456af73c264becf295da1ec8f55184b86",
+            ],
+            "signatures": Array [
+              "3bf459049a475660d548d247f04ba8cdbf512d6806b8cd6accc2da415d085ad20ad3dbe222ad3177671c1cf2b5366203655692cbbf0576b1e9aee12c517bda01",
+            ],
+            "timestamp": 1563038056082,
+            "totalEntryCreditOutputs": 0,
+            "totalFactoidOutputs": 100000,
+            "totalInputs": 364000,
+          },
+          Object {
+            "entryCreditOutputs": Array [
+              Object {
+                "address": "EC3b6ph71PXiXorFnStNNPNP8mF4YkZMQwQxH4oNs52HvXiXgjar",
+                "amount": 2200000,
+              },
+            ],
+            "factoidBlock": Object {
+              "bodyMR": "927de854a4e4b8a82098ebf83c6afbfa6e5d1b9efd0c644d77da7adf522768b7",
+            },
+            "factoidOutputs": Array [],
+            "fees": 264000,
+            "hash": "92e9d62ceef0d8fb3d22e1fc0b4faff68d7849bddb2fd8fa8c91ff463f55fb33",
+            "inputs": Array [
+              Object {
+                "address": "FA29eyMVJaZ2tbGqJ3M49gANaXMXCjgfKcJGe5mx8p4iQFCvFDAC",
+                "amount": 2464000,
+              },
+            ],
+            "rcds": Array [
+              "01495dc8d0389078e68dc616112311bab456af73c264becf295da1ec8f55184b86",
+            ],
+            "signatures": Array [
+              "1882325adc827a18d11fe5e029e945ee1fa313ede57485f7471d5c9ac32bfa71486255629808c9146cea8c57a694f2999c7572e89b8a81cde81d916d2173d705",
+            ],
+            "timestamp": 1563038056059,
+            "totalEntryCreditOutputs": 2200000,
+            "totalFactoidOutputs": 0,
+            "totalInputs": 2464000,
+          },
+        ],
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query a factoid block by height 1`] = `
+Object {
+  "data": Object {
+    "factoidBlockByHeight": Object {
+      "bodyMR": "bd99abfabe12023b57c933bbb8a54dce5e3fe03ec048c9d47279615dc6ab7853",
+      "directoryBlock": Object {
+        "height": 10,
+      },
+      "entryCreditRate": 666600,
+      "keyMR": "05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3",
+      "ledgerKeyMR": "27f86c84c7793465cb18f93a844c981e6d977e3f57d913e9180e2a54383a1875",
+      "nextBlock": Object {
+        "entryCreditRate": 666600,
+      },
+      "previousBlock": Object {
+        "bodyMR": "90080b8a6073033c811aaeba64c911ec7a3907d61332328d1833364567754faf",
+      },
+      "transactionPage": Object {
+        "offset": 0,
+        "pageLength": 1,
+        "totalCount": 1,
+        "transactions": Array [
+          Object {
+            "entryCreditOutputs": Array [],
+            "factoidBlock": Object {
+              "bodyMR": "bd99abfabe12023b57c933bbb8a54dce5e3fe03ec048c9d47279615dc6ab7853",
+            },
+            "factoidOutputs": Array [],
+            "fees": 0,
+            "hash": "e096f83392fc0d1dabf812c339679bf82ad6c085b3c976429de3de8dd3dad089",
+            "inputs": Array [],
+            "rcds": Array [],
+            "signatures": Array [],
+            "timestamp": 1441143000608,
+            "totalEntryCreditOutputs": 0,
+            "totalFactoidOutputs": 0,
+            "totalInputs": 0,
+          },
+        ],
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query a factoid transaction ack 1`] = `
+Object {
+  "data": Object {
+    "factoidTransactionAck": Object {
+      "blockTimestamp": 1563037560000,
+      "hash": "92e9d62ceef0d8fb3d22e1fc0b4faff68d7849bddb2fd8fa8c91ff463f55fb33",
+      "status": "DBlockConfirmed",
+      "txTimestamp": 1563038056059,
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query a missing factoid transaction ack 1`] = `
+Object {
+  "data": Object {
+    "factoidTransactionAck": Object {
+      "blockTimestamp": null,
+      "hash": "92e9d62ceef0d8fb3d22e1fc0b4faff68d7849bddb2fd8fa8c91ff463f55fb32",
+      "status": "Unknown",
+      "txTimestamp": null,
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query a transaction 1`] = `
+Object {
+  "transaction": Object {
+    "entryCreditOutputs": Array [],
+    "factoidBlock": Object {
+      "bodyMR": "b73317cc983c9e6938d6df519bab245899b16d165c404ebb3e79f3d7319b22aa",
+    },
+    "factoidOutputs": Array [
+      Object {
+        "address": "FA21T29QvNGRen1T4edQ3pMBL5jKSuWWJGfcCuuGHjmhPFtJZAz1",
+        "amount": 10000000000,
+      },
+    ],
+    "fees": 264000,
+    "hash": "5ba30e3bdb7fd826a2a7316fb488a7df472171feb8d4fc1827f58736155f8e17",
+    "inputs": Array [
+      Object {
+        "address": "FA2tUk6LNzNsdzCbxmac1Kx9wpU9wS7GSoME5BTosK4zAUBM1gEC",
+        "amount": 10000264000,
+      },
+    ],
+    "rcds": Array [
+      "012886331a62282efb09fbd60b29e3c5d3f34963a3d6574fb266b67715ff42cb96",
+    ],
+    "signatures": Array [
+      "714c3ee97041fa0942f48e4bf58be1ee6806d6f333904a173e07820ad234577acb7dc77028a29d76fb60c8f4072f3771de17b42b753736af84f6a88358e47e02",
+    ],
+    "timestamp": 1563042293448,
+    "totalEntryCreditOutputs": 0,
+    "totalFactoidOutputs": 10000000000,
+    "totalInputs": 10000264000,
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query an admin block by hash. 1`] = `
+Object {
+  "adminBlock": Object {
+    "backReferenceHash": "643389830972e29c06a7602c1858aeab8d6077b22ac6ce9db3be3568873b98c3",
+    "bodySize": 3943,
+    "directoryBlock": Object {
+      "height": 200727,
+    },
+    "entries": Array [
+      Object {
+        "code": "ADD_AUDIT_SERVER",
+        "directoryBlockHeight": 200728,
+        "id": 6,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "bc2ec61c6270a9c89f38e54acbd2bb46bf54c0f1ae08f159e0a143e73e342e9b75d0f055cee97ad5924f67ad6a67080fe915cdecce5601e9fc23c14a8c07b507",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "a99a738ac25b999e7883e400216d1632d32cac7f02e1c882ce366f03e1056fd9d4163ca43411c0182bab3ae535fc774f3032e914ddf6788544b3329710be7208",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "6db47078511d7a4987a115c32180c13adb2cf443c34e9711749cda2f43600cc8cead7863be305c618a826bed4f0cf18d9e23f44912a0c1d565114551f0322c02",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "3bbf531776fa440627245213965632fa753b79ef4d2a350b75bcdd9b43502c71f30923a0ef4e5ebfcb8a8d91e70de68546a7f99eba9007bc56df2cd02cc0d908",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "33a956bb72b5fab7dd4a12c35ca475e7415898acfefe50094b3c30796893b117f7da6eace7ac91766fe5353aa1030bcceddff056da42ec0981d22ae69cf61604",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "42e6831d6d27a314a9ce7d2cd987bb3df7dd8768008c0f237070459b7e3554bcb076dad28c30f763a19f1968457b6c92140abe0145f1288e1c29c4f9d6266e02",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "87aeb8a275b15973e3b3fd1fdf0f823ff52b3d535666ed1a89f2137f51feaf4a0fa46eaa45a86f89ea078656e1110b7c9b9226ebd14ae1648a889397ecf2dc04",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "b9321933a38509902342632fe50870edb88b743095e075f647cdb6416104ca840080b64520ca3c93de1c6ec2f5346ce731513115bd6f034e3c1310988e853b0a",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "ff1b898091e5aa038ee1d370d7e01fa4b1a45feaffea8ed037f4f3efd98e2940f8c17f1cb94898fb997c3e910364d24f725e087729524077bfb7497fdb47390c",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "12a2f46932411763a121f32bd182e29ea08f0407cc27574594e576f1b032e27459f17bb085f03e58a8a3960244e9a536a63deb1a2479dfd97934c45a819f8d09",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "9ed98ea240c5ac3365adb54226e3df621848153b5270dfe4858687b1b5fc0dddeeb8b0666204d0315fcd958f6a163983396c28ceaff0b91426ef1fc255c04101",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "d9df22c158aef833accceb489718779ab4e32170751f80c45cc6275c5e5fe8e8b3add3c85dd7f186c093773386751451057e8c279f3788becdaf5d895f9aed0b",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "e0bc489ae7b3741349a3931d07d99fcb92956470c469870f40069ad10c6484e565756936dca0becd8018b73058d1cc2b6baec575bf685b19e0ed3a2103b2ac02",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "8296d1118df2213bdf4d5c4ffe2d7f2dc17dc55f0b4bab4fc3ebeadc877267ad8ebf1c77e469d380b396acc7417d936af6fb56b0829917c1127484df0bedb401",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "282537eea37d003f107b8699eb9c1868871dd63f7ab32e71f28925cbb0d41765b37bcfadb6323d3dedf8db2311c74c7d0cace72cf689e70c04e822640e6d9e0e",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "8c5c4a3a2fedde33edc6d482b4971b0577290a88069b32b5b41896f4d3d8917049325ad5e7b500d4be5a8b96b99ea9881b190f6f12ccfef91c311238c8517c09",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "50e7e2b4e25b6857de211c6c3f1f6c003d95c796d5919e0f7ee22e1547892be00a36ccfd5f0cd9b1605a0121f282468cf6a7141397fe0f0aa53a55491d60f302",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "ddf4b0edff5a1cfbd2acd154920513066707eb2a4a2265ad22f9152644e4f2c5b8da7378ef9b01a1588aed1d2493a8e56cebd26b97d6fb262945280f99bd4202",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "0b0c4f6ceff72a78a16a43f277d7673c83ce97b184856dff3ba664142862b3d2c9c5502e9ff89a99e1cdb9efbd70fb216d4a2a1145d18a2e192dbeab89ae9c04",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "61cce8a10f07132ebe20583b7130ba78e985d770fff67e69093f0e0072014f9e5bd32487ab63f1f4a3e5f419ab95632aa8c6d5b242d9e749074b7cdaf2bd910e",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "349bd263e787eb7bfa4eb42ff79207a5676ce2176e6e0e30cec10c465e1237658747837a83b2dd7ed5310a8fa87e1dda41f941e973709c8e97bf478aedae760b",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "126454ecab437fc6c0c98588277217cb0f8c6f8a009e78eb1dea4f35a38d1b547941859ad174d28cfc7b6e3b6ff73ba0520a8c0b75a5a46e74e36eeaa3b5fd05",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "e22f6731159975375c825a4d6cb114e0a921dc35e5e28614b1ae9eca3bf287cc19a513ecb75c99414c8efcde674c7254724b275f55ae7442ebe16fbf1a80850c",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "e2f074355bfb1f8009dc928317b393b3d55cdb1c5d2269cfd86b305205a4be59dac5f44a7581c8f69edeee59e09ba34d2f0a2ab6b91c0b2f6ed90fc7b7401907",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "8fb978cad0989089faf67260bbd589c30364feea39589bc2f99de3077c53c828c589c4e03acc477fe1638ab3d28c7ffcbdce2228fb3a61257a4a1a664e78a701",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "02db62dc107b00f9c38330fa40bc7aad8924d137f4b79855f0cd9cf39d29ec9f887f901bd1d2f09e6f54d5c5989bbbd4e6bb54dc7ef019474e5fe81d91949300",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "ba596022be74b584c5c0e2dc9636db107d16b3f055ea3760287b8eda0a0f31443e877065a6625888a6642fd062aa64f613216f46c45906b57f80a38a29d6680d",
+        },
+      },
+      Object {
+        "code": "DIRECTORY_BLOCK_SIGNATURE",
+        "id": 1,
+        "previousDirectoryBlockSignature": Object {
+          "signature": "324b0d96253630fc1ce39b62f940c9060cac5c4b4c4a23bd5b740b9c77677be764e5c83f9c1aa041ab647fba6ba60ff4735b4200fa9034624e853ddc35b9c508",
+        },
+      },
+      Object {
+        "code": "ADD_REPLACE_MATRYOSHKA_HASH",
+        "id": 3,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+        "matryoshkaHash": "6239f7101dcf426e5c2ab8289dd41704ddd9d6781a6f54bde3d9cb1a65da9168",
+      },
+      Object {
+        "code": "ADD_FEDERATED_SERVER_SIGNING_KEY",
+        "directoryBlockHeight": 200728,
+        "id": 8,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+        "keyPriority": 0,
+        "publicKey": "f12b3c19570dbed86c3d3d2a3d095963975c17cd1738a0453dd8468a59d23a9d",
+      },
+      Object {
+        "code": "ADD_FEDERATED_SERVER_BITCOIN_ANCHOR_KEY",
+        "ecdsaPublicKey": "d3374b7ad2f506c7ebcf8ac8a6264572599aeaff",
+        "id": 9,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+        "keyPriority": 0,
+        "keyType": "0",
+      },
+      Object {
+        "code": "ADD_AUTHORITY_FACTOID_ADDRESS",
+        "factoidAddress": "FA2Fk7LUtcXKLQ2tWhHs3JuqkqAfLsyGw2fEBoYLnrjLSmeo9yoE",
+        "id": 13,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+        "rcdHash": "25d6d8ea3d5e821466d2613a09dd1acf87e21afccaff95ebdbb199d349fdafdb",
+      },
+      Object {
+        "code": "ADD_AUTHORITY_EFFICIENCY",
+        "efficiency": 60,
+        "id": 14,
+        "identityChainId": "888888991e1d42be729136538f51fee046f93fad57522749b67bd58428384077",
+      },
+    ],
+    "lookupHash": "f8e211a95158df9bf01b1bd74517c6985891dbcba397d24995f95e0ce5fca778",
+    "nextBlock": Object {
+      "lookupHash": "26f78b4161c5c456d89bd5012eeb026f6544023cc2ee795b97b5f96e0bcb44d5",
+    },
+    "previousBlock": Object {
+      "bodySize": 3943,
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query an admin block by height. 1`] = `
+Object {
+  "adminBlockByHeight": Object {
+    "backReferenceHash": "cb43441dc8e69bce217cd52c60a30683c7e1cea42829d486f0b219330e169471",
+    "bodySize": 5597,
+    "directoryBlock": Object {
+      "height": 201100,
+    },
+    "entries": Array [
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {},
+      Object {
+        "code": "COINBASE_DESCRIPTOR",
+        "id": 11,
+        "outputs": Array [
+          Object {
+            "address": "FA2zGvyrRyjK9AkChEucBmoXadJsNd19Co2ijBQMT4x65Gw998Ht",
+            "amount": 320000000,
+            "rcdHash": "866979181e13233484298c4905c5a579fb4a973f210116d5424b74b72daa88a2",
+          },
+          Object {
+            "address": "FA2j6Puy4tLPRBtc9dEit925eeBjjRyMJVhT42rhpoq6HJLLsnRV",
+            "amount": 512000000,
+            "rcdHash": "63f0b1cacc72017f31a5658357b4df7520efe8ea977e41412be00f127c261e61",
+          },
+          Object {
+            "address": "FA2b8xEUnvv8TwZEUx4mCZQioQpkuwdAtL4AetzRLAtaxWwhhMhc",
+            "amount": 320000000,
+            "rcdHash": "51e016b124af5ec5e8e4f4afca8c75d5f53b548526e56e8e8ad9991caa9a4bbb",
+          },
+          Object {
+            "address": "FA3NCo9KzPQpP3HRmPsFy9pAVj2fWgHBwjuu7oFH96FsyQ5Z4PWe",
+            "amount": 320000000,
+            "rcdHash": "b8342cf774e25f1eda172772fcfee87951131c5b2464725ef14fbd26d1297596",
+          },
+          Object {
+            "address": "FA3RqGvKruW9BPTPHqRGAop76HgJm4fHoit7wW4aqmPyHtrjCy1M",
+            "amount": 320000000,
+            "rcdHash": "c0719b6ed37ab9200e912568acb0e9167ed35bb77138f90065da56d87dae6d86",
+          },
+          Object {
+            "address": "FA2AfaeWXYG4mQkfhQfACLtu3Ad2m1QFk1VGLtZsGa62Aa7geYS5",
+            "amount": 192000000,
+            "rcdHash": "1a4f0f4216d9618e848a75fdc802c9db462907d547595885cc5c46ae2ebb7d03",
+          },
+          Object {
+            "address": "FA3Qt7GgiNVo3xmq7b7rviJFiHtRUb1bVRWsZBAGamruEK99ppY8",
+            "amount": 576000000,
+            "rcdHash": "be48ba0ae1b09fd0153d6428dc95730e5881a5e05875dd5444f0c293e5be995e",
+          },
+          Object {
+            "address": "FA2kLWxAXX1mRCch6fTwS8pckrR4dDUJGbMq1DAtA6U9kTmZD1y9",
+            "amount": 416000000,
+            "rcdHash": "66c37fac65f52fe296ec90f53c81c60c6a72ae9fc2de70337cdb679a32560c92",
+          },
+          Object {
+            "address": "FA1yNkC81cVXfUL578K6HLySGssv76uW8N9AMJZBvCnPFPsqyBRU",
+            "amount": 480000000,
+            "rcdHash": "00ac42ef5e784dad4446b6e150912c0f2d6ae3df3aa1b54374cee05f064e9691",
+          },
+          Object {
+            "address": "FA2HBeH9XGgAkYapAyeD6styij39rhaJDKgCCoqr1M1L3NmUcvjL",
+            "amount": 480000000,
+            "rcdHash": "291c065662824dc0d70146407398d5e71aedecfbc1c997f3247a91c0e7bcf0e0",
+          },
+          Object {
+            "address": "FA2AfaeWXYG4mQkfhQfACLtu3Ad2m1QFk1VGLtZsGa62Aa7geYS5",
+            "amount": 192000000,
+            "rcdHash": "1a4f0f4216d9618e848a75fdc802c9db462907d547595885cc5c46ae2ebb7d03",
+          },
+          Object {
+            "address": "FA3nSCfSD9G3c8DZGsZCq36PrbFRw1pBgLxNyu4SQ5kb4x3x1wF5",
+            "amount": 256000000,
+            "rcdHash": "ef393adf35a741b900afa3f1869e69ff33e64be3c336a5f86f77b4300466e6d7",
+          },
+          Object {
+            "address": "FA29VaCpxTnnrQs8U2H8ujFSguB77Xt5QBYvSNRNxKU2f5ybf6L7",
+            "amount": 320000000,
+            "rcdHash": "17a57bb3029686ff0e324cd705720ccb0fa51be5ff51717f6b889ce19328c684",
+          },
+          Object {
+            "address": "FA3SREn3QSBQ9TNzu9RmxA6CPsXDHhxyZDm7LAuT1a2kd6QdVMMB",
+            "amount": 256000000,
+            "rcdHash": "c1c5fca15e38a7d3bc75acf189372c171f4a181848a2b660f478f97076f97481",
+          },
+          Object {
+            "address": "FA3HSuFo9Soa5ZnG82JHqyKiRi4Pw17LxPTo9AsCaFNLCGkXkgsu",
+            "amount": 640000000,
+            "rcdHash": "ad6724d6a15a16292a012211e38ccc8efff44dce85a53c6bb5e61d38897b29a1",
+          },
+          Object {
+            "address": "FA2cQhPNrQZRjUpr4hpt3WeUSWaBJDyzBzLrpUhQzdiwnmV4ApBs",
+            "amount": 384000000,
+            "rcdHash": "54c327ccd5959a6c18593ec4bcbc6eb462fcc97a308344077ad5863e2378f3ec",
+          },
+          Object {
+            "address": "FA3mAX5HpMaPAUuLopTWgjaB6pm9PeHoyD6r9cCRwcpaqWbuW8Fz",
+            "amount": 256000000,
+            "rcdHash": "ec56c7731179d9cd6a00f0cdd8f56e19ab6757ab4106055dcd0d1daf877c334e",
+          },
+          Object {
+            "address": "FA3NCo9KzPQpP3HRmPsFy9pAVj2fWgHBwjuu7oFH96FsyQ5Z4PWe",
+            "amount": 320000000,
+            "rcdHash": "b8342cf774e25f1eda172772fcfee87951131c5b2464725ef14fbd26d1297596",
+          },
+          Object {
+            "address": "FA2j6Puy4tLPRBtc9dEit925eeBjjRyMJVhT42rhpoq6HJLLsnRV",
+            "amount": 512000000,
+            "rcdHash": "63f0b1cacc72017f31a5658357b4df7520efe8ea977e41412be00f127c261e61",
+          },
+          Object {
+            "address": "FA3KmpnDD56WX91ninPGKV9uHhybcfZW2mm727wp5X4JMp7VJk2e",
+            "amount": 256000000,
+            "rcdHash": "b2af5927c37c34722a7e28551f34829d8706f83162b5b88184345c818fc9d1dc",
+          },
+          Object {
+            "address": "FA2SdYu74EFg9E9KLZfDrGwTETavGqJr935vauesticqxHFvQRYn",
+            "amount": 192000000,
+            "rcdHash": "3e8f2eb59607166b95652765aa5a6866da8f525f4e93030f68d1f8d36bc014a2",
+          },
+          Object {
+            "address": "FA2pSDKCUkE84kQ9Kt3nphbS1QviHez2JjcmPsQSLaX7p95rtBha",
+            "amount": 256000000,
+            "rcdHash": "7011b361819920b88bb25a3df396eb6817022b9796e26ac1c041d47d8d63937c",
+          },
+          Object {
+            "address": "FA3X1crrWJWtMR26K719kLo3fNauLRymr5cKvPfsnRbEGvxFkr5G",
+            "amount": 320000000,
+            "rcdHash": "cc33ab7bc13f7ca5026f2e550d597c73abba1fd5557d127326fa02b1fdc8d48b",
+          },
+          Object {
+            "address": "FA3RQmdJ7FsZaeMXgZYnrz3nRjW1u11W47y8Whe6V13qUpj4KqA1",
+            "amount": 320000000,
+            "rcdHash": "bf7c041a04933c10732130f5222154bc952fe0287b5de2433b9adb8db450d92e",
+          },
+          Object {
+            "address": "FA32ChVPaHjQ6L1Ypi88bF5t9vBNuJSRxeBBM43PgQWVqJ3P7JsX",
+            "amount": 320000000,
+            "rcdHash": "8ac99cc05065bed87ffd8b7b8e7b5acaec8b4f9d6d298c8ae4f142e67859321d",
+          },
+          Object {
+            "address": "FA36bdk4n23sQzZYLmt2p2CVZ7UxhxUhTqE5T8sU7A6PsAS6Bovt",
+            "amount": 512000000,
+            "rcdHash": "94c496e58d4ced91da9f0be168c346e15cb70943ee554ad7f8564a0ec3209d06",
+          },
+          Object {
+            "address": "FA2KA6uNfQhtUgh5kjYFBNjaAgDUKd1JetoU354DZemN9irwRKYc",
+            "amount": 480000000,
+            "rcdHash": "2d9723cd1d4f288ba4ab4f03974255f402913a8ebd7bb71b009481b08e566159",
+          },
+          Object {
+            "address": "FA3Qt7GgiNVo3xmq7b7rviJFiHtRUb1bVRWsZBAGamruEK99ppY8",
+            "amount": 576000000,
+            "rcdHash": "be48ba0ae1b09fd0153d6428dc95730e5881a5e05875dd5444f0c293e5be995e",
+          },
+          Object {
+            "address": "FA3nsSjUy5uSkqMEug8t3VcehZn5w2ciSMpgqFEEsMRwMrHoa9k3",
+            "amount": 512000000,
+            "rcdHash": "f036366b3fd56d2db477e6100c901b89fe7f619844c13ce538cdfc6dde6905a4",
+          },
+          Object {
+            "address": "FA2R7rcs554iRaNQevKopeTm9UzeJXGkQGgWnYgAndttSRSmCymG",
+            "amount": 256000000,
+            "rcdHash": "3b204da73d058497d2a673c2effa56b965ea34b6fe9df31992af5c128edbf3cc",
+          },
+          Object {
+            "address": "FA3RQmdJ7FsZaeMXgZYnrz3nRjW1u11W47y8Whe6V13qUpj4KqA1",
+            "amount": 320000000,
+            "rcdHash": "bf7c041a04933c10732130f5222154bc952fe0287b5de2433b9adb8db450d92e",
+          },
+          Object {
+            "address": "FA2Fk7LUtcXKLQ2tWhHs3JuqkqAfLsyGw2fEBoYLnrjLSmeo9yoE",
+            "amount": 256000000,
+            "rcdHash": "25d6d8ea3d5e821466d2613a09dd1acf87e21afccaff95ebdbb199d349fdafdb",
+          },
+          Object {
+            "address": "FA2HBeH9XGgAkYapAyeD6styij39rhaJDKgCCoqr1M1L3NmUcvjL",
+            "amount": 480000000,
+            "rcdHash": "291c065662824dc0d70146407398d5e71aedecfbc1c997f3247a91c0e7bcf0e0",
+          },
+          Object {
+            "address": "FA3LDEA5fcskV6ZoFpKE84qPcjd7GYjEnswGHMZXL1V9d14wmgh3",
+            "amount": 320000000,
+            "rcdHash": "b3adf069a630b8e2a8b8aec1a8839e3eb8b52ab28f3105a2302746d0d590446f",
+          },
+          Object {
+            "address": "FA3nSCfSD9G3c8DZGsZCq36PrbFRw1pBgLxNyu4SQ5kb4x3x1wF5",
+            "amount": 256000000,
+            "rcdHash": "ef393adf35a741b900afa3f1869e69ff33e64be3c336a5f86f77b4300466e6d7",
+          },
+          Object {
+            "address": "FA2B6MwDRShpbizxLurzt6mtQPr8brLA8roxTBowEUYWPY4XgVeE",
+            "amount": 416000000,
+            "rcdHash": "1b476a1b26f4099a875db26e2ab3d264a3497b7a1eff6e8adef0cea413bf81e0",
+          },
+          Object {
+            "address": "FA3ng8sPtUESh97yy6MzeLmT4Azqj8PVYyg6CLxYfQnS3QC3ytKL",
+            "amount": 384000000,
+            "rcdHash": "efc4e21af7d3c1989d3eebf8730d5fe73877c182f4c8415ce2b9d55be5802dec",
+          },
+          Object {
+            "address": "FA29VaCpxTnnrQs8U2H8ujFSguB77Xt5QBYvSNRNxKU2f5ybf6L7",
+            "amount": 320000000,
+            "rcdHash": "17a57bb3029686ff0e324cd705720ccb0fa51be5ff51717f6b889ce19328c684",
+          },
+          Object {
+            "address": "FA36bdk4n23sQzZYLmt2p2CVZ7UxhxUhTqE5T8sU7A6PsAS6Bovt",
+            "amount": 512000000,
+            "rcdHash": "94c496e58d4ced91da9f0be168c346e15cb70943ee554ad7f8564a0ec3209d06",
+          },
+          Object {
+            "address": "FA21gMnPtu8ijR1kzUmQBxpuGJFL9S6c9kR7oaL515MeuaZun8Fz",
+            "amount": 320000000,
+            "rcdHash": "05e758503609b92db885575207e134364cd5330013fde64bc0970130a2f5396c",
+          },
+          Object {
+            "address": "FA2ttAh8PHwHa2ES56GkSmD6Vp4SCZxLWVL8f4E625oWZaPxTCLG",
+            "amount": 320000000,
+            "rcdHash": "7a2af03bd03ecd3136208d82c86aee01032171d3c5ceec3e8b1c581672208b5f",
+          },
+          Object {
+            "address": "FA3TWvyAC8oEerab1LDNzhTjmNtPjszcvS331esrEYLPAtgq1pGo",
+            "amount": 480000000,
+            "rcdHash": "c44452424b0477438748a3978b9dea8009ca00a20737cb320788df2698e61123",
+          },
+          Object {
+            "address": "FA2aaCy9HXYtwHgyiJXVXbEv4t5nE8KwSUnrkNuH5hKiRhHdgf1b",
+            "amount": 256000000,
+            "rcdHash": "5097e82f7802e085698730e1a05bdfce13d8ebff179af278e324466bbbc289db",
+          },
+          Object {
+            "address": "FA3LDEA5fcskV6ZoFpKE84qPcjd7GYjEnswGHMZXL1V9d14wmgh3",
+            "amount": 320000000,
+            "rcdHash": "b3adf069a630b8e2a8b8aec1a8839e3eb8b52ab28f3105a2302746d0d590446f",
+          },
+          Object {
+            "address": "FA2dzMdzbv9frenUCCRcnwo8j5m69zqa2a8ivcTvkwtW4KeXRfeN",
+            "amount": 256000000,
+            "rcdHash": "5859c5bba6de80a36a6edb3234bf91f2dbef1f44b1c07a59b34a5cf7a0a2cc5d",
+          },
+          Object {
+            "address": "FA3mAX5HpMaPAUuLopTWgjaB6pm9PeHoyD6r9cCRwcpaqWbuW8Fz",
+            "amount": 256000000,
+            "rcdHash": "ec56c7731179d9cd6a00f0cdd8f56e19ab6757ab4106055dcd0d1daf877c334e",
+          },
+          Object {
+            "address": "FA2zGvyrRyjK9AkChEucBmoXadJsNd19Co2ijBQMT4x65Gw998Ht",
+            "amount": 320000000,
+            "rcdHash": "866979181e13233484298c4905c5a579fb4a973f210116d5424b74b72daa88a2",
+          },
+          Object {
+            "address": "FA3nsSjUy5uSkqMEug8t3VcehZn5w2ciSMpgqFEEsMRwMrHoa9k3",
+            "amount": 512000000,
+            "rcdHash": "f036366b3fd56d2db477e6100c901b89fe7f619844c13ce538cdfc6dde6905a4",
+          },
+          Object {
+            "address": "FA3HSuFo9Soa5ZnG82JHqyKiRi4Pw17LxPTo9AsCaFNLCGkXkgsu",
+            "amount": 640000000,
+            "rcdHash": "ad6724d6a15a16292a012211e38ccc8efff44dce85a53c6bb5e61d38897b29a1",
+          },
+          Object {
+            "address": "FA3KmpnDD56WX91ninPGKV9uHhybcfZW2mm727wp5X4JMp7VJk2e",
+            "amount": 256000000,
+            "rcdHash": "b2af5927c37c34722a7e28551f34829d8706f83162b5b88184345c818fc9d1dc",
+          },
+          Object {
+            "address": "FA2dzMdzbv9frenUCCRcnwo8j5m69zqa2a8ivcTvkwtW4KeXRfeN",
+            "amount": 288000000,
+            "rcdHash": "5859c5bba6de80a36a6edb3234bf91f2dbef1f44b1c07a59b34a5cf7a0a2cc5d",
+          },
+          Object {
+            "address": "FA2pSDKCUkE84kQ9Kt3nphbS1QviHez2JjcmPsQSLaX7p95rtBha",
+            "amount": 256000000,
+            "rcdHash": "7011b361819920b88bb25a3df396eb6817022b9796e26ac1c041d47d8d63937c",
+          },
+          Object {
+            "address": "FA3RqGvKruW9BPTPHqRGAop76HgJm4fHoit7wW4aqmPyHtrjCy1M",
+            "amount": 320000000,
+            "rcdHash": "c0719b6ed37ab9200e912568acb0e9167ed35bb77138f90065da56d87dae6d86",
+          },
+          Object {
+            "address": "FA2svZ8yzBMQ4bbuM8b1uA8j2V5ApYWRjk4N75PFnk8CU9taWUkr",
+            "amount": 480000000,
+            "rcdHash": "77fd94eacd8191bef2b42cef6108eaeae28d1674354e169e88a9e6f0eefa29e8",
+          },
+        ],
+      },
+    ],
+    "lookupHash": "f81ca2896a3602b322c94378119ed085b75af3464d02abb423452c6337c339a3",
+    "nextBlock": Object {
+      "lookupHash": "a8e393b2353114c1d7d79492e73c7fbc65951f7e8e808d912b3134d79799d088",
+    },
+    "previousBlock": Object {
+      "bodySize": 3612,
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query an entry 1`] = `
+Object {
+  "entry": Object {
+    "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+    "content": "eyJlbnRyeV9kYXRlIjoxNTYzMDIyMDM1LCJwb3N0X2RhdGEiOnsiZWRpdF9jb3VudCI6MCwibGFzdF9lZGl0X2RhdGUiOjAsImxhc3RfZWRpdF91c2VyX2lkIjowLCJtZXNzYWdlX3NoYTUxMiI6ImUyZTE3MzVmOGMwNTNlNWYyOTI5YWY4MTNjNGYzMzM1YzA5YmMwYjhhZDg2MzFiNjBjYTMyYWU3NTg0MWFmODA1YTUwOTkwNTBmYzNkNjMxYmFhNzRhY2FkZGFkMzM3ZGYxZjgzNWUxNjcxOTU2MmRkNjBjMmFjN2EzYWI0MzY3Iiwibm9kZV9pZCI6MzEsInBvc3RfZGF0ZSI6MTMyNTEyNTU3NSwidGhyZWFkX2lkIjozMDQxMiwidGl0bGVfc2hhNTEyIjoiNTY4NTRlOWJlYWM4ZjIxOTQyMzMzZTEzZTI3OGQ2Y2Q5ZjNlYjQ4NzlhMjJjNTRhOWFjOTk5MDc3ZTZlMjM4NjA2YzAzZDc1ODhlM2RhY2I1N2M5MzliNDg1MWI4OTJmNTVmYzI0NjE3MzIxODc5MmVjNzdlOTE3OWU0MjdkMGEiLCJ1c2VyX2lkIjoxfSwicG9zdF9pZCI6Mzg2OTIyfQ==",
+    "entryBlock": Object {
+      "sequenceNumber": 1,
+      "timestamp": 1563021960,
+    },
+    "externalIds": Array [
+      "UlNBLVNIQTUxMg==",
+      "nI6NH2Nv39YEeNmBdlNYasPPo58o9bb+UhvA61tc3sG/mOn2RF3lsHuR5Pfcg42g4OBE2JnWFP2imGUQN468AkFt0/5XSoiNQM6/mFC3aflzvnHzFezuWC6hzIm9OYnhpZXjTdVGFTFALudZlC2VfMCc2UrEQTFeRpesh4vrhD9h+sReV0hUUPYwjOTBvlsERm+a+KorDujEOSuh7dJyTSH+wFwpbshqiRjxXgPOhMclxYG5Kn4YV3PaFCqkRoMWQ00Ib2bGW8KqERp9o9ishEiBZvWd3chjDq3g1CPg0bdVxc6fewuLPBlg/i75CUSw1vH7Xai4gI//pQWIz7OnAbjZLwlEYPdKSgaE21KhqENg/mFZUJiliF/kLEI/iF+QsixdzbT/i2EnmxLUciRm+fqK6h4MbYYQCzk8KcGVwe1nPxQF68hThFvYWZP1Kv0OZUSSThvC+GOBDP3FK9Q42fWofED7t9A8Z53a5pYMWnbRHCEYkdSs5a0Sv7EZPp0ndexnCxtEbuJeUakNDirOQydEGE43FJTufeSy81cAV5Qg3oMnHU8BWvGeXLBeoHQ6z0nGWnwtNFb5r/l1SILZn13CHSWottPVdUJrN2OZCiqA+AQszvv4tW2JccZU+FwQGQW4Qzsr/tu8tShfUfTYT+JJzHhL0xEoVept7pr+f70=",
+      "SWRlbnRpdHlDaGFpbklEPWFmMDQyM2ZjMmFlNDFhOGFjMmFlMjNhYjJlY2JkMWM4MzI2NGM1Y2ZkYmNiYTRlYmRhZmVjMTYwOGZlZGQ4Njk=",
+      "Rm9ydW0gUG9zdA==",
+      "djEuMC4w",
+    ],
+    "hash": "086c77c9e6a98191bcd828f099787402fa6fb7c880797c6489a49cb3cb31cdaf",
+    "timestamp": 1563022140000,
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query an entry block 1`] = `
+Object {
+  "entryBlock": Object {
+    "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+    "directoryBlock": Object {
+      "height": 201115,
+    },
+    "entryPage": Object {
+      "entries": Array [
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022140000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022140000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022140000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+        Object {
+          "chainId": "bdbaa9bacb84b6e207a1546706df3c3f8c6ed0517be8f2a872619da1665a5434",
+          "timestamp": 1563022380000,
+        },
+      ],
+      "offset": 0,
+      "pageLength": 18,
+      "totalCount": 18,
+    },
+    "keyMR": "8ee8eb697d71f3485e3b7389cea5e19a86029b109333b7ea201084212ba3c75b",
+    "previousBlock": Object {
+      "sequenceNumber": 0,
+    },
+    "sequenceNumber": 1,
+    "timestamp": 1563021960,
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query an entry credit block 1`] = `
+Object {
+  "entryCreditBlock": Object {
+    "bodyHash": "29e77a24f9aa7a5b44acb7a0138be1911f2d2d5d409a22227790ea8f986645fe",
+    "bodySize": 22205,
+    "commitPage": Object {
+      "commits": Array [
+        Object {
+          "credits": 1,
+          "entry": Object {
+            "content": "ZiswSGRkZ1Zhc3lLRktSd3ordG0reVhFMis3RDhZb0tlazdEYVoyRERDQT0=",
+          },
+          "entryCreditBlock": Object {
+            "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+          },
+          "signature": "9a5dc68028b0c92020d20b160a9d8150cd7ee33d4afe16adc2346654ecddc7515c8d32af0a68821d5f622e500631e796664748babe1cb1d4d617ce7a46c8fe00",
+          "timestamp": 1562137176003,
+        },
+        Object {
+          "credits": 1,
+          "entry": Object {
+            "content": "ZWhUbi9aSXRFc1Z6c2VkSWVML3dETW1iYm9hUmxid25oVnUvaFhYSGtTbz0=",
+          },
+          "entryCreditBlock": Object {
+            "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+          },
+          "signature": "a9a8a685d3f57459b3fbb0e225d9d9264e71549479fb8821bf319f211e615aa8a6f8b3b54a3fa9fff7d8af181ecae5feba98835fcf1b18abf0f14efe9037290f",
+          "timestamp": 1562137204104,
+        },
+        Object {
+          "credits": 1,
+          "entry": Object {
+            "content": "Z2wzMStabVhjVEQ0N1VrTVNVVUFncEU4N3lMbSt0SDU4NHZCYndQV0NWcz0=",
+          },
+          "entryCreditBlock": Object {
+            "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+          },
+          "signature": "03b226d2bf5c27e95e2790da5bfc0f7ed29f4e9c529e76c330691a70d6b16495b81b353ea3eea1da585e7aea1ba0cbae9d51b170a01e4f5889c5828a2f2c860e",
+          "timestamp": 1562137209826,
+        },
+        Object {
+          "credits": 1,
+          "entry": Object {
+            "content": "dzdxUUJDOHEwQUVsZFg5RC9yQnZReFBEN213ZHY5VEJLcWpoR24vOHVEaz0=",
+          },
+          "entryCreditBlock": Object {
+            "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+          },
+          "signature": "a5b1240d97a4f7ee2f707fec99e95d6c53aef493633e3a35acd5ccb6a98bf162dca72633fc8ce50e4766faf8ee4dfc7363bb2e6a1a3eeb41f80852bb83699204",
+          "timestamp": 1562137212810,
+        },
+        Object {
+          "credits": 1,
+          "entry": Object {
+            "content": "em5tS2ZCbGxEdkFzdTRBZ0FJeFlET016cDF6M0hST01TOHpDOGRMRHQvUT0=",
+          },
+          "entryCreditBlock": Object {
+            "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+          },
+          "signature": "3b66b2e4f1fe46a971495a6618a343f48ea6fbd7228f68ebbe2cb6022d56d8b750890b5302047a88be4320e3bde11c873662ee3394be3a603391594576e82a0a",
+          "timestamp": 1562137219815,
+        },
+      ],
+      "offset": 0,
+      "pageLength": 5,
+      "totalCount": 161,
+    },
+    "directoryBlock": Object {
+      "height": 199641,
+    },
+    "fullHash": "8c29093249d6af7e8c16938515529edf57dea79ba1c5dc566703675a7232768d",
+    "headerHash": "22d7ed3e6007bf59c0faa8d018f7998f08cfbc8310228155ba5ff7dacbca4ed0",
+    "nextBlock": Object {
+      "bodyHash": "289509d4d2d1c6fe79ad8f96cf2f838e0c51e961e114dfb807b64e7e4c86537f",
+    },
+    "objectCount": 171,
+    "previousBlock": Object {
+      "objectCount": 45,
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query an entry credit block by height 1`] = `
+Object {
+  "data": Object {
+    "entryCreditBlockByHeight": Object {
+      "bodyHash": "898b0672bb93057a2dec036ee99ef1a2cae3fcea76733b0f3272e2f5c69bd0e8",
+      "bodySize": 433,
+      "commitPage": Object {
+        "commits": Array [
+          Object {
+            "credits": 1,
+            "entry": Object {
+              "content": "eyJBbmNob3JSZWNvcmRWZXIiOjEsIkRCSGVpZ2h0Ijo4LCJLZXlNUiI6IjYzN2I2MDEwY2I2MTIxZjc2YzY1YjIwMGE2Y2Y5NGNiNjY1NTg4MWZiNGNhYzQ4OTc5Zjg5NTBlN2EzNDlkYTEiLCJSZWNvcmRIZWlnaHQiOjksIkJpdGNvaW4iOnsiQWRkcmVzcyI6IjFLMlNYZ0FwbW85dVpveWFodnNiU2FucFZXYnpaV1ZWTUYiLCJUWElEIjoiYjczYjM4YjhhZjQzZjRkYmFlYjA2MWYxNThkNGJmNTAwNGI0MDIxNmIzMGFjZDNiZWNhNDNmYWUxYmE2ZDFiNyIsIkJsb2NrSGVpZ2h0IjozNzI1NzksIkJsb2NrSGFzaCI6IjAwMDAwMDAwMDAwMDAwMDAwNTg5NTQwZmRhYWNmNGY2YmEzNzUxM2FlZGMxMDMzZTY4YTY0OWZmZGUwNTczYWQiLCJPZmZzZXQiOjExODV9fTg2YzZhNDE0OWRmOWIzNTU1YmI0MDFhZjc4NzMzMjg3NTU4ZTE1MTNlZjg4N2JiNGIxMmY5MmIzNGM5ODQ0MjVjZjYxOTRlOGY1YmU3MGQ3Yjg1NTRlZTg4ZDdjNmY4MGI2YzU0YTUwNTU3NjkzYTcxM2JjN2U3NjMxODUzODA2",
+            },
+            "entryCreditBlock": Object {
+              "fullHash": "298121b6bd1aa048b4b7fc3a48488a1f3de7681e94fd40608dc4b2b13f4595c0",
+            },
+            "signature": "0bb90cd75fa38d6669deb8a23c31ed04524cdee8574b4bb2576e5a1b7768855e1a07e89c62ebfb6abee3bf4d9e5cdee3b91c2390ab400c37f0f5f40201509d0d",
+            "timestamp": 1441143156109,
+          },
+          Object {
+            "credits": 1,
+            "entry": Object {
+              "content": "eyJBbmNob3JSZWNvcmRWZXIiOjEsIkRCSGVpZ2h0Ijo5LCJLZXlNUiI6IjI2ZDg0ZmE5ZDYzYTUyYTIwMjJjM2QxZDkwZDc1MGZlMWVmNzdjNWI3YWFmMDk2MzgzOGRlODRiNmU5ZjA3MzMiLCJSZWNvcmRIZWlnaHQiOjksIkJpdGNvaW4iOnsiQWRkcmVzcyI6IjFLMlNYZ0FwbW85dVpveWFodnNiU2FucFZXYnpaV1ZWTUYiLCJUWElEIjoiMzJlMzk2OGZlMDhmYWE3OGE1MTFlN2MxMWQ5NzMxZThiZDFhZjM5ZDk1NzY4ZDZiYTJmNjU1OWMzZWM4ZGUwOSIsIkJsb2NrSGVpZ2h0IjozNzI1NzksIkJsb2NrSGFzaCI6IjAwMDAwMDAwMDAwMDAwMDAwNTg5NTQwZmRhYWNmNGY2YmEzNzUxM2FlZGMxMDMzZTY4YTY0OWZmZGUwNTczYWQiLCJPZmZzZXQiOjExOTB9fWE5MmUxYTllNjVhYTRkMDNjNDdhOWMxYTJiYzBiMGQ4ZGRhZTk5ODQyMmQyMDMwYjViOTkzYWExZmY0MjJiZTFjNmZkNTM2ODEyN2VmOTExMjM4NjA4ZDIwMmVlN2VhYTlkZjNiMDI1ZTM1YTMyODRhOWQzZjA4MjJmMjE3NTA0",
+            },
+            "entryCreditBlock": Object {
+              "fullHash": "298121b6bd1aa048b4b7fc3a48488a1f3de7681e94fd40608dc4b2b13f4595c0",
+            },
+            "signature": "cac9dc9364259903c19f99f4f65c407e3345e9f4a45336c366947ca7dbc6ff5ac474a061030922d625f2af03bedf8f812032e2647fa9c7a4d7de34481eef4a00",
+            "timestamp": 1441143156111,
+          },
+          Object {
+            "credits": 1,
+            "entry": Object {
+              "content": "eyJBbmNob3JSZWNvcmRWZXIiOjEsIkRCSGVpZ2h0Ijo3LCJLZXlNUiI6IjNhMzhmZWM4MmIyNmVlOTE2ODkxZGFiM2RkN2E3ZTEwMWFiNjQzYWZmNGE2NDFkODk1MTM3YTdhN2M5Y2FjNTUiLCJSZWNvcmRIZWlnaHQiOjksIkJpdGNvaW4iOnsiQWRkcmVzcyI6IjFLMlNYZ0FwbW85dVpveWFodnNiU2FucFZXYnpaV1ZWTUYiLCJUWElEIjoiMzg0NjRiOThmZmU0NGM3MWYwNjNmZjNiZWRmODBkYjVlOGJiNmZlMzg0ODMyMmEwOTY2ZTUwYTYwYTY1Y2ZjNSIsIkJsb2NrSGVpZ2h0IjozNzI1NzksIkJsb2NrSGFzaCI6IjAwMDAwMDAwMDAwMDAwMDAwNTg5NTQwZmRhYWNmNGY2YmEzNzUxM2FlZGMxMDMzZTY4YTY0OWZmZGUwNTczYWQiLCJPZmZzZXQiOjExOTF9fTE2NzU1MDc5YTg5ZWU5YzBkNjhhNDU4NWE1NWQ1NjQyMjgxMDk1ZTlhYjNjOWY3ZTBjMzAxNDkwMzJhMWE4YzU0ZDcxNTIxZjc1YjUzZDNkMWIyOGFiOWQxY2E4N2NhMzIxNWQyZjBlNTkzZmFjZjkyMTBlOTE5MzYzMmRhYjA3",
+            },
+            "entryCreditBlock": Object {
+              "fullHash": "298121b6bd1aa048b4b7fc3a48488a1f3de7681e94fd40608dc4b2b13f4595c0",
+            },
+            "signature": "8d4d4ce70cc7e699d1a49269228d5c058002337962d0440d0cd2b9d4b8f196a750b703928a61160f45072757305fec2db9a5f670a44f0509b69d6ad2fc0fdd00",
+            "timestamp": 1441143156112,
+          },
+        ],
+        "offset": 0,
+        "pageLength": 3,
+        "totalCount": 3,
+      },
+      "directoryBlock": Object {
+        "height": 10,
+      },
+      "fullHash": "298121b6bd1aa048b4b7fc3a48488a1f3de7681e94fd40608dc4b2b13f4595c0",
+      "headerHash": "96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68",
+      "nextBlock": Object {
+        "bodyHash": "f739576e337103e1b93dcd2f59e23b8d0e43f482734f186dadce222c6537e7a5",
+      },
+      "objectCount": 14,
+      "previousBlock": Object {
+        "objectCount": 11,
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query entry receipt 1`] = `
+Object {
+  "receipt": Object {
+    "bitcoinBlockHash": "00000000000000000015fed1e31d05966266ee9bd329d3cd5d730af0d471c77f",
+    "bitcoinTransactionHash": "13ff6aef2972b5e8c1d68d91fd5a69050a62fd8c0584efe10f7fc81dd669f068",
+    "entry": Object {
+      "chainId": "b75164b4193455657b72764fca03c573b7fbff9b2278e9d123e7b08cad7af3e7",
+      "content": "eyJlbnRyeV9kYXRlIjoxNTYzMDM3NjU0LCJwb3N0X2RhdGEiOnsiZWRpdF9jb3VudCI6MCwibGFzdF9lZGl0X2RhdGUiOjAsImxhc3RfZWRpdF91c2VyX2lkIjowLCJtZXNzYWdlX3NoYTUxMiI6IjQzYjgyNWIzZjNkYjQ0YjUwYTNlYzk1ZTk5NzAyMzEwNWU5YzMzMmM2YjgwNzIwOWU5YTk4NjVkMTliMThjYzE2MGFiMTkzNmY2MmNhNDg0OGQ0YjMwMmEwMGE4MzM4MjliZTg4ZjkyZWJhMDY2NjU2NjIwMWI0NzhhZGVkZDIwIiwibm9kZV9pZCI6MzEsInBvc3RfZGF0ZSI6MTM1MjI1OTYxMywidGhyZWFkX2lkIjo0MzAzOCwidXNlcl9pZCI6NjA0MjB9LCJwb3N0X2lkIjo1MjczNzh9",
+    },
+    "merkleBranch": Array [
+      Object {
+        "left": "cb2c8c3403f758e5288656e82c965dd45e41d573efe3fb8ee58d50649a4ba2b3",
+        "right": "6803f82d40f0727d68cfbc1ca9e8d8be0503fc3ce3ba630143cc09cd448d71e3",
+        "top": "b13ed5c14d652e4f48567798ce7f7e4b2a25b571499f158f303762e3737a1ab7",
+      },
+      Object {
+        "left": "b13ed5c14d652e4f48567798ce7f7e4b2a25b571499f158f303762e3737a1ab7",
+        "right": "c0be9d046476f8c94b11f6996b0de0aed656f1770db7eca2c0b2efda77b0e32e",
+        "top": "0a9b6ae49489121c30ce11f7abd9b0841c4db9a734a67253fcab57c678fdf99d",
+      },
+      Object {
+        "left": "0a9b6ae49489121c30ce11f7abd9b0841c4db9a734a67253fcab57c678fdf99d",
+        "right": "e859181c9db3f07025482536d7d61a392ef7709411a9a767e2b4c9ec91da96cc",
+        "top": "9c3607207eead2feaddd8ce64f4c4a61a8e91c4b0632852480e0bedfa4d96814",
+      },
+      Object {
+        "left": "9c3607207eead2feaddd8ce64f4c4a61a8e91c4b0632852480e0bedfa4d96814",
+        "right": "7b775c423d8373336d7b6e7b0970928e02c2fb5a6afc3b4f74a9382a438b401e",
+        "top": "5bc87e135a58a6f07940f382b09317a0ec44b782305b3872fe3136e24e698e9e",
+      },
+      Object {
+        "left": "07555ea4e8a81d31d929c821de118275274cde61405de99193a9e450acd985d1",
+        "right": "5bc87e135a58a6f07940f382b09317a0ec44b782305b3872fe3136e24e698e9e",
+        "top": "21c8febef8457c5bb6c9893e58dbff8ab6d3f440d58c54c9b941496618e13052",
+      },
+      Object {
+        "left": "b75164b4193455657b72764fca03c573b7fbff9b2278e9d123e7b08cad7af3e7",
+        "right": "21c8febef8457c5bb6c9893e58dbff8ab6d3f440d58c54c9b941496618e13052",
+        "top": "688f7139c81c3aefc0d10c94ecaae9b04b65822e91bed6d83d87ff6195f6788c",
+      },
+      Object {
+        "left": "688f7139c81c3aefc0d10c94ecaae9b04b65822e91bed6d83d87ff6195f6788c",
+        "right": "688f7139c81c3aefc0d10c94ecaae9b04b65822e91bed6d83d87ff6195f6788c",
+        "top": "a3e2606bd4ef572d61ab44ec9131b3895556a712d679719aa6410258dda2a2e8",
+      },
+      Object {
+        "left": "a3e2606bd4ef572d61ab44ec9131b3895556a712d679719aa6410258dda2a2e8",
+        "right": "a3e2606bd4ef572d61ab44ec9131b3895556a712d679719aa6410258dda2a2e8",
+        "top": "a53526f7031503cbc8143333830f67102d68e2ef5108f74fff12e788dd310326",
+      },
+      Object {
+        "left": "a53526f7031503cbc8143333830f67102d68e2ef5108f74fff12e788dd310326",
+        "right": "a53526f7031503cbc8143333830f67102d68e2ef5108f74fff12e788dd310326",
+        "top": "8febbfed7b5cf11e8bf01aa92dd8ad75b7f567c4d9f1cb19c88ef60bec476cfd",
+      },
+      Object {
+        "left": "3d653b456a528a04d616f210fb0e91411959c5e22daea3845ad6dfde3e6aea36",
+        "right": "8febbfed7b5cf11e8bf01aa92dd8ad75b7f567c4d9f1cb19c88ef60bec476cfd",
+        "top": "dc00ee70c6e3e0a1846d3295601fe6c7fda11ab5a647cae957fd25ebb450da76",
+      },
+      Object {
+        "left": "086366a45acdc19dcd6af020d725c0a72c4c852dab9b1aafac6bb5ae82afa463",
+        "right": "dc00ee70c6e3e0a1846d3295601fe6c7fda11ab5a647cae957fd25ebb450da76",
+        "top": "dbeca80a5bf9f02d95b4bc0085808ea58ae79a2b3c5be1beb2cbe7f0cc422159",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Integration Test Queries Should query the ack of a legit commit 1`] = `
+Object {
+  "commitAck": Object {
+    "commitHash": "905ec512fe25a64e2e29ebad1614250416b625c15df4f795dd95ed92c7074066",
+    "commitStatus": Object {
+      "status": "DBlockConfirmed",
+      "timestamp": 1563022560000,
+    },
+    "entryHash": null,
+    "entryStatus": null,
+  },
+}
+`;

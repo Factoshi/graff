@@ -13,15 +13,15 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Sha256 hash. */
+  /** A hex-encoded Sha256 hash. */
   Hash: string;
-  /** Block height must be a positive integer. */
+  /** Block height. Must be a positive integer. */
   Height: number;
-  /** Public entry credit address. */
+  /** A valid public entry credit address. */
   PublicEntryCreditAddress: string;
-  /** Any public address */
+  /** A valid public address */
   PublicAddress: any;
-  /** Public factoid address. */
+  /** A valid public factoid address. */
   PublicFactoidAddress: string;
 };
 
@@ -37,9 +37,12 @@ export enum Ack {
   Unknown = "Unknown"
 }
 
+/** The status and timestamp of an Ack. */
 export type AckStatus = {
   __typename?: "AckStatus";
+  /** Timestamp of the ack. Will be null if status is Unknown. */
   timestamp?: Maybe<Scalars["Float"]>;
+  /** The status of an ack. */
   status: Ack;
 };
 
@@ -91,9 +94,9 @@ export type AddFederatedServerBitcoinAnchorKey = AdminEntry & {
   identityChainId: Scalars["Hash"];
   /** The priority of the key. */
   keyPriority: Scalars["Int"];
-  /** Bitcoin key type */
+  /** The type of bitcoin key. */
   keyType: Scalars["String"];
-  /** Public bitcoin key */
+  /** The public bitcoin key. */
   ecdsaPublicKey: Scalars["String"];
 };
 
@@ -136,8 +139,8 @@ export type AddRemoveServer = AdminEntry & {
 /** Public address and associated amount. */
 export type Address = {
   __typename?: "Address";
-  /** Amount may be balance or output value, depending on the context. */
-  amount: Scalars["Int"];
+  /** Amount may be balance or transaction input/output value, depending on the context. */
+  amount: Scalars["Float"];
   /** Public address. */
   address: Scalars["PublicAddress"];
 };
@@ -145,13 +148,15 @@ export type Address = {
 /** Admin Block */
 export type AdminBlock = {
   __typename?: "AdminBlock";
-  /** The hash of the current block. */
-  hash: Scalars["Hash"];
-  /** Block height. */
-  height: Scalars["Height"];
-  /** The previous block. */
+  /** The top 256 bits of a SHA512 checksum of the previous Admin Block. */
+  backReferenceHash: Scalars["Hash"];
+  /** Hash used by the directory block to reference this admin block. */
+  lookupHash: Scalars["Hash"];
+  /** The number of bytes the body of this block contains. Big endian. */
+  bodySize: Scalars["Int"];
+  /** The previous block. Will be null if current block is height 0. */
   previousBlock?: Maybe<AdminBlock>;
-  /** The next block. */
+  /** The next block. Will be null if current block is tip of chain. */
   nextBlock?: Maybe<AdminBlock>;
   /** Array of admin entries contained within this admin block. */
   entries: Array<AdminEntry>;
@@ -224,9 +229,9 @@ export type CoinbaseDescriptorCancel = AdminEntry & {
   id: Scalars["Int"];
   /** The code of the admin entry. */
   code: AdminCode;
-  /** An output the Descriptor at this height will not be created. */
+  /** The target height containing the descriptor for which an output will be cancelled. */
   descriptorHeight: Scalars["Height"];
-  /** This index into the specified descriptor will not be created. */
+  /** This index to be cancelled for the specified descriptor. */
   descriptorIndex: Scalars["Int"];
 };
 
@@ -241,30 +246,15 @@ export type CoinbaseDescriptorOutput = {
   amount: Scalars["Int"];
 };
 
-/** Entry commit included in the blockchain. */
+/** Commit response. */
 export type Commit = {
   __typename?: "Commit";
-  /** Milliseconds since Unix epoch. */
-  timestamp: Scalars["Int"];
-  /** The entry that was committed. All fields except hash will be null if not yet revealed. */
-  entry: Entry;
-  /** The cost of the entry. */
-  credits: Scalars["Int"];
-  /** The entry credit address that paid for the entry. */
-  paymentAddress: Scalars["PublicEntryCreditAddress"];
-  /** The parent entry credit block of the commit. */
-  block: EntryCreditBlock;
-};
-
-/** Response following a chain or entry commmit or reveal, or a factoid transaction. */
-export type CommitRevealSend = {
-  __typename?: "CommitRevealSend";
-  /** The hash of the entry that was committed or revealed. Always null for factoid transactions. */
-  entryHash?: Maybe<Scalars["Hash"]>;
-  /** The transaction hash. Always null for reveals. */
-  transactionHash?: Maybe<Scalars["Hash"]>;
-  /** The chain that was committed to. Always null for entry commits and factoid transactions. */
-  chain?: Maybe<Scalars["Hash"]>;
+  /** The hash of the entry that was committed. */
+  entryHash: Scalars["Hash"];
+  /** The commit transaction hash. */
+  transactionHash: Scalars["Hash"];
+  /** Double sha256 hash of the commited chain. Only defined on chain commits. */
+  chainIdHash?: Maybe<Scalars["Hash"]>;
 };
 
 /** Blockchain time state. */
@@ -276,12 +266,12 @@ export type CurrentMinute = {
   directoryBlockHeight: Scalars["Height"];
   /** The minute number of the open entry block. */
   minute: Scalars["Int"];
-  /** The start time of the current block. */
-  currentBlockStartTime: Scalars["Int"];
-  /** The start time of the current minute. */
-  currentMinuteStartTime: Scalars["Int"];
-  /** The time as understood by factomd. */
-  currentTime: Scalars["Int"];
+  /** The start time of the current block in nano seconds. */
+  currentBlockStartTime: Scalars["Float"];
+  /** The start time of the current minute in nano seconds. */
+  currentMinuteStartTime: Scalars["Float"];
+  /** The time as understood by factomd in nano seconds. */
+  currentTime: Scalars["Float"];
   /** The number of seconds per block. */
   directoryBlockInSeconds: Scalars["Int"];
   /** Boolean to determine whether factomd thinks it is stalled. */
@@ -295,11 +285,11 @@ export type CurrentMinute = {
 /** Directory Block */
 export type DirectoryBlock = {
   __typename?: "DirectoryBlock";
-  /** The hash of the current block. */
-  hash: Scalars["Hash"];
-  /** The previous block. */
+  /** The key merkle root of the current block. */
+  keyMR: Scalars["Hash"];
+  /** The previous block. Will be null if current block is height 0. */
   previousBlock?: Maybe<DirectoryBlock>;
-  /** The next block. */
+  /** The next block. Will be null if current block is tip of chain. */
   nextBlock?: Maybe<DirectoryBlock>;
   /** Block height. */
   height: Scalars["Height"];
@@ -308,7 +298,7 @@ export type DirectoryBlock = {
   /** The admin block referenced by this directory block. */
   adminBlock: AdminBlock;
   /** The entry blocks referenced by this directory block. */
-  entryBlocks: PaginatedEntryBlocks;
+  entryBlockPage: PaginatedEntryBlocks;
   /** The entry credit block referenced by this directory block. */
   entryCreditBlock: EntryCreditBlock;
   /** The factoid block referenced by this directory block. */
@@ -316,7 +306,7 @@ export type DirectoryBlock = {
 };
 
 /** Directory Block */
-export type DirectoryBlockEntryBlocksArgs = {
+export type DirectoryBlockEntryBlockPageArgs = {
   first?: Maybe<Scalars["Int"]>;
   offset?: Maybe<Scalars["Int"]>;
 };
@@ -333,17 +323,17 @@ export type DirectoryBlockSignature = AdminEntry & {
   code: AdminCode;
   /** The identity chain of the signing authority. */
   identityChainId: Scalars["Hash"];
-  /** Signature for the previous directorty block. */
+  /** Signature for the previous directory block. */
   previousDirectoryBlockSignature?: Maybe<PreviousDirectoryBlockSignature>;
 };
 
 /** An Entry. Fields may be null if the entry has not yet been revealed. */
 export type Entry = {
   __typename?: "Entry";
-  /** The hash of the entry */
+  /** The hash of the entry. */
   hash: Scalars["Hash"];
   /** The chain the entry belongs to. */
-  chain?: Maybe<Scalars["Hash"]>;
+  chainId?: Maybe<Scalars["Hash"]>;
   /** The timestamp of the entry. */
   timestamp?: Maybe<Scalars["Float"]>;
   /** List of external IDs associated with the entry as base64. */
@@ -357,26 +347,43 @@ export type Entry = {
 /** Entry Block */
 export type EntryBlock = {
   __typename?: "EntryBlock";
-  /** The hash of the current block. */
-  hash: Scalars["Hash"];
-  /** The previous block. */
-  previousBlock?: Maybe<EntryBlock>;
+  /** The key merkle root of the current block. */
+  keyMR: Scalars["Hash"];
   /** The ID of the parent chain. */
-  chain: Scalars["Hash"];
+  chainId: Scalars["Hash"];
   /** Height of entry block. Also known as sequence number. */
-  height: Scalars["Height"];
+  sequenceNumber: Scalars["Height"];
   /** Milliseconds since Unix epoch. Marks the start of the block. */
   timestamp: Scalars["Float"];
-  /** Paginated entries contained within this entry block */
-  entries: PaginatedEntries;
+  /** The previous block. Will be null if current block is sequence number 0. */
+  previousBlock?: Maybe<EntryBlock>;
+  /** Paginated entries contained within this entry block. */
+  entryPage: PaginatedEntries;
   /** Parent directory block. */
   directoryBlock: DirectoryBlock;
 };
 
 /** Entry Block */
-export type EntryBlockEntriesArgs = {
+export type EntryBlockEntryPageArgs = {
   first?: Maybe<Scalars["Int"]>;
   offset?: Maybe<Scalars["Int"]>;
+};
+
+/** Entry commit included in the blockchain. */
+export type EntryCommit = {
+  __typename?: "EntryCommit";
+  /** Milliseconds since Unix epoch. */
+  timestamp: Scalars["Float"];
+  /** The entry that was committed. All fields except hash will be null if not yet revealed. */
+  entry: Entry;
+  /** The cost of the entry. */
+  credits: Scalars["Int"];
+  /** The entry credit address that paid for the entry. */
+  paymentAddress: Scalars["PublicEntryCreditAddress"];
+  /** The signature of this Entry Commit by the payment address. */
+  signature: Scalars["String"];
+  /** The parent entry credit block of the commit. */
+  entryCreditBlock: EntryCreditBlock;
 };
 
 /** State of an entry or commit. */
@@ -395,22 +402,28 @@ export type EntryCommitAck = {
 /** Entry Credit Block */
 export type EntryCreditBlock = {
   __typename?: "EntryCreditBlock";
-  /** The hash of the current block. */
-  hash: Scalars["Hash"];
-  /** Block height. */
-  height: Scalars["Height"];
-  /** The previous block. */
+  /** The SHA256 hash of the serialized header. */
+  headerHash: Scalars["Hash"];
+  /** The SHA256 checksum of the entire entry credit block. */
+  fullHash: Scalars["Hash"];
+  /** The SHA256 hash of the serialized body. */
+  bodyHash: Scalars["Hash"];
+  /** The number of bytes the body of this block contains. Big endian. */
+  bodySize: Scalars["Int"];
+  /** The number of objects this block contains. Big endian. */
+  objectCount: Scalars["Int"];
+  /** The previous block. Will be null if current block is height 0. */
   previousBlock?: Maybe<EntryCreditBlock>;
-  /** The next block. */
+  /** The next block. Will be null if current block is tip of chain. */
   nextBlock?: Maybe<EntryCreditBlock>;
-  /** Paginated commits contained within the entry credit block */
-  commits: PaginatedCommits;
+  /** Paginated commits contained within the entry credit block. */
+  commitPage: PaginatedCommits;
   /** Parent directory block. */
   directoryBlock: DirectoryBlock;
 };
 
 /** Entry Credit Block */
-export type EntryCreditBlockCommitsArgs = {
+export type EntryCreditBlockCommitPageArgs = {
   first?: Maybe<Scalars["Int"]>;
   offset?: Maybe<Scalars["Int"]>;
 };
@@ -418,24 +431,26 @@ export type EntryCreditBlockCommitsArgs = {
 /** Factoid Block */
 export type FactoidBlock = {
   __typename?: "FactoidBlock";
-  /** The hash of the current block. */
-  hash: Scalars["Hash"];
-  /** Block height. */
-  height: Scalars["Height"];
-  /** The previous block. */
+  /** The key merkle root of the current block. */
+  keyMR: Scalars["Hash"];
+  /** The Merkle root of the Factoid transactions contained in this block. */
+  bodyMR: Scalars["Hash"];
+  /** Data structure which allows proofs of only the value transfers. */
+  ledgerKeyMR: Scalars["Hash"];
+  /** The previous block. Will be null if current block is height 0. */
   previousBlock?: Maybe<FactoidBlock>;
-  /** The next block. */
+  /** The next block. Will be null if current block is tip of chain. */
   nextBlock?: Maybe<FactoidBlock>;
   /** EC-FCT exchange rate. */
   entryCreditRate: Scalars["Int"];
-  /** Paginated transactions contained within the factoid block */
-  transactions: PaginatedTransactions;
+  /** Paginated transactions contained within the factoid block. */
+  transactionPage: PaginatedTransactions;
   /** Parent directory block. */
   directoryBlock: DirectoryBlock;
 };
 
 /** Factoid Block */
-export type FactoidBlockTransactionsArgs = {
+export type FactoidBlockTransactionPageArgs = {
   first?: Maybe<Scalars["Int"]>;
   offset?: Maybe<Scalars["Int"]>;
 };
@@ -449,7 +464,7 @@ export type FactoidTransactionAck = {
   txTimestamp?: Maybe<Scalars["Float"]>;
   /** The timestamp of the containing block. Milliseconds since Unix epoch. */
   blockTimestamp?: Maybe<Scalars["Float"]>;
-  /** The status of the factoid transaction */
+  /** The status of the factoid transaction. */
   status: Ack;
 };
 
@@ -507,90 +522,127 @@ export type MerkleNode = {
   top: Scalars["Hash"];
 };
 
-/** Basic pagination interface. */
-export type Paginated = {
-  __typename?: "Paginated";
-  /** Total number of nodes available for pagination. */
-  totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
-  offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
-  pageLength: Scalars["Int"];
+export type Mutation = {
+  __typename?: "Mutation";
+  /** Commit a chain. */
+  commitChain: Commit;
+  /** Commit an entry. */
+  commitEntry: Commit;
+  /** Reveal a chain. */
+  revealChain: Reveal;
+  /** Reveal an entry. */
+  revealEntry: Reveal;
+  /** Commit and reveal a chain. */
+  addChain: Reveal;
+  /** Commit and reveal an entry. */
+  addEntry: Reveal;
+  /** Submit a factoid transaction. Returns the transaction ID. */
+  submitTransaction: Scalars["Hash"];
+};
+
+export type MutationCommitChainArgs = {
+  commit: Scalars["String"];
+};
+
+export type MutationCommitEntryArgs = {
+  commit: Scalars["String"];
+};
+
+export type MutationRevealChainArgs = {
+  reveal: Scalars["String"];
+};
+
+export type MutationRevealEntryArgs = {
+  reveal: Scalars["String"];
+};
+
+export type MutationAddChainArgs = {
+  commit: Scalars["String"];
+  reveal: Scalars["String"];
+};
+
+export type MutationAddEntryArgs = {
+  commit: Scalars["String"];
+  reveal: Scalars["String"];
+};
+
+export type MutationSubmitTransactionArgs = {
+  tx: Scalars["String"];
 };
 
 /** Paginated commits */
-export type PaginatedCommits = Paginated & {
+export type PaginatedCommits = {
   __typename?: "PaginatedCommits";
-  /** Total number of nodes within pages. */
+  /** Total number items avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of item list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of commits. */
-  commits: Array<Commit>;
+  commits: Array<EntryCommit>;
 };
 
 /** Paginated entries */
-export type PaginatedEntries = Paginated & {
+export type PaginatedEntries = {
   __typename?: "PaginatedEntries";
-  /** Total number of nodes within pages. */
+  /** Total number items avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of item list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of entries. */
   entries: Array<Entry>;
 };
 
 /** Paginated entry blocks */
-export type PaginatedEntryBlocks = Paginated & {
+export type PaginatedEntryBlocks = {
   __typename?: "PaginatedEntryBlocks";
-  /** Total number of nodes within pages. */
+  /** Total number entry blocks avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of entry block list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of entry blocks. */
   entryBlocks: Array<EntryBlock>;
 };
 
 /** Paginated pending entries */
-export type PaginatedPendingEntries = Paginated & {
+export type PaginatedPendingEntries = {
   __typename?: "PaginatedPendingEntries";
-  /** Total number of nodes within pages. */
+  /** Total number items avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of item list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of pending entries. */
   pendingEntries: Array<PendingEntry>;
 };
 
 /** Paginated pending transactions */
-export type PaginatedPendingTransactions = Paginated & {
+export type PaginatedPendingTransactions = {
   __typename?: "PaginatedPendingTransactions";
-  /** Total number of nodes within pages. */
+  /** Total number items avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of item list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of pending transactions. */
   pendingTransactions: Array<PendingTransaction>;
 };
 
 /** Paginated transactions */
-export type PaginatedTransactions = Paginated & {
+export type PaginatedTransactions = {
   __typename?: "PaginatedTransactions";
-  /** Total number of nodes within pages. */
+  /** Total number items avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of item list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of transactions. */
   transactions: Array<Transaction>;
@@ -604,7 +656,7 @@ export type PendingEntry = {
   /** The status of the commit. */
   status: Ack;
   /** The chain the entry belongs to. */
-  chain?: Maybe<Scalars["Hash"]>;
+  chainId?: Maybe<Scalars["Hash"]>;
 };
 
 /** Factoid transaction not yet included in the blockchain. */
@@ -616,18 +668,18 @@ export type PendingTransaction = {
   status: Ack;
   /** An array of factoid inputs. */
   inputs: Array<Address>;
-  /** An array of factoid outputs */
+  /** An array of factoid outputs. */
   factoidOutputs: Array<Address>;
   /** An array of entry credit outputs. */
   entryCreditOutputs: Array<Address>;
   /** The total value of all inputs. Denominated in factoshis. */
-  totalInputs: Scalars["Int"];
+  totalInputs: Scalars["Float"];
   /** The total value of all factoid outputs. Denominated in factoshis. */
-  totalFactoidOutputs: Scalars["Int"];
+  totalFactoidOutputs: Scalars["Float"];
   /** The total value of all entry credit outputs. Denominated in entry credits. */
-  totalEntryCreditOutputs: Scalars["Int"];
+  totalEntryCreditOutputs: Scalars["Float"];
   /** The fees burned for the transaction. Denominated in factoshis. */
-  fees: Scalars["Int"];
+  fees: Scalars["Float"];
 };
 
 /** Signature for the previous directory block header. */
@@ -635,7 +687,7 @@ export type PreviousDirectoryBlockSignature = {
   __typename?: "PreviousDirectoryBlockSignature";
   /** Ed25519 public key held in the authority identity chain. */
   publicKey: Scalars["String"];
-  /** signature of the previous directoty block header */
+  /** signature for the previous directory block header */
   signature: Scalars["String"];
 };
 
@@ -650,59 +702,53 @@ export type Properties = {
 
 export type Query = {
   __typename?: "Query";
-  /** Get an admin block by the specified block hash. */
+  /** Query an admin block by the specified block hash. Will return null if block cannot be found. */
   adminBlock?: Maybe<AdminBlock>;
-  /** Get an admin block by the specified block height. */
+  /** Query an admin block by the specified block height. Will return null if block cannot be found. */
   adminBlockByHeight?: Maybe<AdminBlock>;
-  /** Get the admin block at the tip of the admin chain. */
-  adminBlockHead: AdminBlock;
-  /** Get the balance of public entry credit or factoid addresses. */
+  /** Query the balances of a list of public entry credit or factoid addresses. */
   balances: Array<Address>;
-  /** Get the entry block at the tip of the specified chain. */
+  /** Query the entry block at the tip of the specified chain. Will return null if chain cannot be found. */
   chainHead?: Maybe<EntryBlock>;
-  /** Entry status. */
+  /** Query the status of a commit. */
   commitAck: EntryCommitAck;
-  /** Get protocol time state. */
+  /** Query protocol time state. */
   currentMinute: CurrentMinute;
-  /** Get a directory block by the specified block hash. */
+  /** Query a directory block by the specified block hash. Will return null if block cannot be found. */
   directoryBlock?: Maybe<DirectoryBlock>;
-  /** Get a directory block by the specified block height. */
+  /** Query a directory block by the specified block height. Will return null if block cannot be found. */
   directoryBlockByHeight?: Maybe<DirectoryBlock>;
-  /** Get the directory block at the tip of the directory chain. */
+  /** Query the directory block at the tip of the directory chain. */
   directoryBlockHead: DirectoryBlock;
-  /** Get an entry by its hash. */
+  /** Query an entry by its hash. Will return null if entry cannot be found. */
   entry?: Maybe<Entry>;
-  /** Entry status. */
+  /** Query the status of an Entry. */
   entryAck: EntryCommitAck;
-  /** Get an entry block by the specified block hash. */
+  /** Query an entry block by the specified block hash. Will return null if block cannot be found. */
   entryBlock?: Maybe<EntryBlock>;
-  /** Get an entry credit block by the specified block hash. */
+  /** Query an entry credit block by the specified block hash. Will return null if block cannot be found. */
   entryCreditBlock?: Maybe<EntryCreditBlock>;
-  /** Get an entry credit block by the specified block height. */
+  /** Query an entry credit block by the specified block height. Will return null if block cannot be found. */
   entryCreditBlockByHeight?: Maybe<EntryCreditBlock>;
-  /** Get the entry credit block at the tip of the entry credit chain. */
-  entryCreditBlockHead: EntryCreditBlock;
-  /** Get the EC-FCT exchange rate. */
+  /** Query the EC-FCT exchange rate. */
   entryCreditRate: Scalars["Int"];
-  /** Get a factoid block by the specified block hash. */
+  /** Query a factoid block by the specified block hash. Will return null if block cannot be found. */
   factoidBlock?: Maybe<FactoidBlock>;
-  /** Get a factoid block by the specified block hash. */
+  /** Query a factoid block by the specified block hash. Will return null if block cannot be found. */
   factoidBlockByHeight?: Maybe<FactoidBlock>;
-  /** Get the factoid block at the tip of the factoid chain. */
-  factoidBlockHead: FactoidBlock;
   /** Factoid transaction status. */
   factoidTransactionAck: FactoidTransactionAck;
-  /** Get blockchain heights. */
+  /** Query blockchain heights. */
   heights: Heights;
-  /** Get paginated pending entries. */
+  /** Query paginated pending entries. */
   pendingEntries: PaginatedPendingEntries;
-  /** Get paginated pending entries. */
+  /** Query paginated pending entries. */
   pendingTransactions: PaginatedPendingTransactions;
-  /** Get properties of factomd and the APIs. */
+  /** Query properties of factomd. */
   properties: Properties;
-  /** Get an entry receipt */
-  receipt: Receipt;
-  /** Get a transaction by its hash. */
+  /** Query an entry receipt. Will return null if entry receipt cannot be found. */
+  receipt?: Maybe<Receipt>;
+  /** Query a transaction by its hash. Will return null if transaction cannot be found. */
   transaction?: Maybe<Transaction>;
 };
 
@@ -719,7 +765,7 @@ export type QueryBalancesArgs = {
 };
 
 export type QueryChainHeadArgs = {
-  chain: Scalars["Hash"];
+  chainId: Scalars["Hash"];
 };
 
 export type QueryCommitAckArgs = {
@@ -740,7 +786,7 @@ export type QueryEntryArgs = {
 
 export type QueryEntryAckArgs = {
   hash: Scalars["Hash"];
-  chain: Scalars["Hash"];
+  chainId: Scalars["Hash"];
 };
 
 export type QueryEntryBlockArgs = {
@@ -790,12 +836,21 @@ export type Receipt = {
   __typename?: "Receipt";
   /** The entry this receipt is for. */
   entry: Entry;
-  /** The hash of the bitcoin transaction that anchored this entry into Bitcoin. */
+  /** The hash of the bitcoin transaction that anchored this entry into Bitcoin. Null if not yet anchored. */
   bitcoinTransactionHash?: Maybe<Scalars["Hash"]>;
-  /** The bitcoin block where the anchored transaction was included. */
+  /** The bitcoin block where the anchored transaction was included. Null if not yet anchored. */
   bitcoinBlockHash?: Maybe<Scalars["Hash"]>;
   /** The merkle proof to connect the entry to the bitcoin transaction. */
   merkleBranch: Array<MerkleNode>;
+};
+
+/** Reveal response. */
+export type Reveal = {
+  __typename?: "Reveal";
+  /** The hash of the entry that was revealed. */
+  entryHash: Scalars["Hash"];
+  /** The entry chain where the entry was revealed. */
+  chainId: Scalars["Hash"];
 };
 
 /** Rolls up messages that led to the promotion/demotion of identities during an election.
@@ -816,7 +871,7 @@ export type Subscription = {
   /** Subscribe to each new admin block. */
   newAdminBlock: AdminBlock;
   /** Subscribe to newly created chains. */
-  newChainsCreated: Array<PaginatedEntryBlocks>;
+  newChains: Array<EntryBlock>;
   /** Subscribe to each new directory block. */
   newDirectoryBlock: DirectoryBlock;
   /** Subscribe to each new entry block for a specified chain. */
@@ -825,10 +880,16 @@ export type Subscription = {
   newEntryCreditBlock: EntryCreditBlock;
   /** Subscribe to each new factoid block. */
   newFactoidBlock: FactoidBlock;
+  /** Subscribe to new Factoid transactions involving a given address. */
+  newFactoidTransaction: Transaction;
 };
 
 export type SubscriptionNewEntryBlockArgs = {
-  chain: Scalars["Hash"];
+  chainId: Scalars["Hash"];
+};
+
+export type SubscriptionNewFactoidTransactionArgs = {
+  address: Scalars["PublicFactoidAddress"];
 };
 
 /** Factoid Transaction included in the blockchain. */
@@ -845,15 +906,19 @@ export type Transaction = {
   /** An array of entry credit outputs. */
   entryCreditOutputs: Array<Address>;
   /** The total value of all inputs. Denominated in factoshis. */
-  totalInputs: Scalars["Int"];
+  totalInputs: Scalars["Float"];
   /** The total value of all factoid outputs. Denominated in factoshis. */
-  totalFactoidOutputs: Scalars["Int"];
+  totalFactoidOutputs: Scalars["Float"];
   /** The total value of all entry credit outputs. Denominated in entry credits. */
-  totalEntryCreditOutputs: Scalars["Int"];
+  totalEntryCreditOutputs: Scalars["Float"];
   /** The fees burned for the transaction. Denominated in factoshis. */
-  fees: Scalars["Int"];
+  fees: Scalars["Float"];
+  /** Redeem Condition Datastructures */
+  rcds: Array<Scalars["String"]>;
+  /** The signature needed to satisfy RCD */
+  signatures: Array<Scalars["String"]>;
   /** The parent factoid block of the transaction. */
-  block: FactoidBlock;
+  factoidBlock: FactoidBlock;
 };
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -930,21 +995,20 @@ export type ResolversTypes = ResolversObject<{
   Query: {};
   Hash: Partial<Scalars["Hash"]>;
   AdminBlock: Partial<AdminBlock>;
-  Height: Partial<Scalars["Height"]>;
-  AdminEntry: Partial<AdminEntry>;
   Int: Partial<Scalars["Int"]>;
+  AdminEntry: Partial<AdminEntry>;
   AdminCode: Partial<AdminCode>;
   DirectoryBlock: Partial<DirectoryBlock>;
+  Height: Partial<Scalars["Height"]>;
   Float: Partial<Scalars["Float"]>;
   PaginatedEntryBlocks: Partial<PaginatedEntryBlocks>;
-  Paginated: Partial<Paginated>;
   EntryBlock: Partial<EntryBlock>;
   PaginatedEntries: Partial<PaginatedEntries>;
   Entry: Partial<Entry>;
   String: Partial<Scalars["String"]>;
   EntryCreditBlock: Partial<EntryCreditBlock>;
   PaginatedCommits: Partial<PaginatedCommits>;
-  Commit: Partial<Commit>;
+  EntryCommit: Partial<EntryCommit>;
   PublicEntryCreditAddress: Partial<Scalars["PublicEntryCreditAddress"]>;
   FactoidBlock: Partial<FactoidBlock>;
   PaginatedTransactions: Partial<PaginatedTransactions>;
@@ -965,9 +1029,11 @@ export type ResolversTypes = ResolversObject<{
   Properties: Partial<Properties>;
   Receipt: Partial<Receipt>;
   MerkleNode: Partial<MerkleNode>;
+  Mutation: {};
+  Commit: Partial<Commit>;
+  Reveal: Partial<Reveal>;
   Subscription: {};
   PublicFactoidAddress: Partial<Scalars["PublicFactoidAddress"]>;
-  CommitRevealSend: Partial<CommitRevealSend>;
   DirectoryBlockSignature: Partial<DirectoryBlockSignature>;
   PreviousDirectoryBlockSignature: Partial<PreviousDirectoryBlockSignature>;
   MatryoshkaHash: Partial<MatryoshkaHash>;
@@ -1064,7 +1130,7 @@ export type AddressResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["Address"]
 > = ResolversObject<{
-  amount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  amount?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   address?: Resolver<ResolversTypes["PublicAddress"], ParentType, ContextType>;
 }>;
 
@@ -1072,8 +1138,9 @@ export type AdminBlockResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["AdminBlock"]
 > = ResolversObject<{
-  hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
+  backReferenceHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  lookupHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  bodySize?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   previousBlock?: Resolver<
     Maybe<ResolversTypes["AdminBlock"]>,
     ParentType,
@@ -1163,28 +1230,13 @@ export type CommitResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["Commit"]
 > = ResolversObject<{
-  timestamp?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  entry?: Resolver<ResolversTypes["Entry"], ParentType, ContextType>;
-  credits?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  paymentAddress?: Resolver<
-    ResolversTypes["PublicEntryCreditAddress"],
-    ParentType,
-    ContextType
-  >;
-  block?: Resolver<ResolversTypes["EntryCreditBlock"], ParentType, ContextType>;
-}>;
-
-export type CommitRevealSendResolvers<
-  ContextType = Context,
-  ParentType = ResolversTypes["CommitRevealSend"]
-> = ResolversObject<{
-  entryHash?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
-  transactionHash?: Resolver<
+  entryHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  transactionHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  chainIdHash?: Resolver<
     Maybe<ResolversTypes["Hash"]>,
     ParentType,
     ContextType
   >;
-  chain?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
 }>;
 
 export type CurrentMinuteResolvers<
@@ -1199,16 +1251,16 @@ export type CurrentMinuteResolvers<
   >;
   minute?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   currentBlockStartTime?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
   currentMinuteStartTime?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
-  currentTime?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  currentTime?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   directoryBlockInSeconds?: Resolver<
     ResolversTypes["Int"],
     ParentType,
@@ -1223,7 +1275,7 @@ export type DirectoryBlockResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["DirectoryBlock"]
 > = ResolversObject<{
-  hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  keyMR?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   previousBlock?: Resolver<
     Maybe<ResolversTypes["DirectoryBlock"]>,
     ParentType,
@@ -1237,11 +1289,11 @@ export type DirectoryBlockResolvers<
   height?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
   timestamp?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   adminBlock?: Resolver<ResolversTypes["AdminBlock"], ParentType, ContextType>;
-  entryBlocks?: Resolver<
+  entryBlockPage?: Resolver<
     ResolversTypes["PaginatedEntryBlocks"],
     ParentType,
     ContextType,
-    DirectoryBlockEntryBlocksArgs
+    DirectoryBlockEntryBlockPageArgs
   >;
   entryCreditBlock?: Resolver<
     ResolversTypes["EntryCreditBlock"],
@@ -1274,7 +1326,7 @@ export type EntryResolvers<
   ParentType = ResolversTypes["Entry"]
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  chain?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
+  chainId?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
   timestamp?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
   externalIds?: Resolver<
     Maybe<Array<ResolversTypes["String"]>>,
@@ -1293,23 +1345,43 @@ export type EntryBlockResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["EntryBlock"]
 > = ResolversObject<{
-  hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  keyMR?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  chainId?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  sequenceNumber?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   previousBlock?: Resolver<
     Maybe<ResolversTypes["EntryBlock"]>,
     ParentType,
     ContextType
   >;
-  chain?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
-  entries?: Resolver<
+  entryPage?: Resolver<
     ResolversTypes["PaginatedEntries"],
     ParentType,
     ContextType,
-    EntryBlockEntriesArgs
+    EntryBlockEntryPageArgs
   >;
   directoryBlock?: Resolver<
     ResolversTypes["DirectoryBlock"],
+    ParentType,
+    ContextType
+  >;
+}>;
+
+export type EntryCommitResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["EntryCommit"]
+> = ResolversObject<{
+  timestamp?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  entry?: Resolver<ResolversTypes["Entry"], ParentType, ContextType>;
+  credits?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  paymentAddress?: Resolver<
+    ResolversTypes["PublicEntryCreditAddress"],
+    ParentType,
+    ContextType
+  >;
+  signature?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  entryCreditBlock?: Resolver<
+    ResolversTypes["EntryCreditBlock"],
     ParentType,
     ContextType
   >;
@@ -1333,8 +1405,11 @@ export type EntryCreditBlockResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["EntryCreditBlock"]
 > = ResolversObject<{
-  hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
+  headerHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  fullHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  bodyHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  bodySize?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  objectCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   previousBlock?: Resolver<
     Maybe<ResolversTypes["EntryCreditBlock"]>,
     ParentType,
@@ -1345,11 +1420,11 @@ export type EntryCreditBlockResolvers<
     ParentType,
     ContextType
   >;
-  commits?: Resolver<
+  commitPage?: Resolver<
     ResolversTypes["PaginatedCommits"],
     ParentType,
     ContextType,
-    EntryCreditBlockCommitsArgs
+    EntryCreditBlockCommitPageArgs
   >;
   directoryBlock?: Resolver<
     ResolversTypes["DirectoryBlock"],
@@ -1362,8 +1437,9 @@ export type FactoidBlockResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["FactoidBlock"]
 > = ResolversObject<{
-  hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes["Height"], ParentType, ContextType>;
+  keyMR?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  bodyMR?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  ledgerKeyMR?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   previousBlock?: Resolver<
     Maybe<ResolversTypes["FactoidBlock"]>,
     ParentType,
@@ -1375,11 +1451,11 @@ export type FactoidBlockResolvers<
     ContextType
   >;
   entryCreditRate?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  transactions?: Resolver<
+  transactionPage?: Resolver<
     ResolversTypes["PaginatedTransactions"],
     ParentType,
     ContextType,
-    FactoidBlockTransactionsArgs
+    FactoidBlockTransactionPageArgs
   >;
   directoryBlock?: Resolver<
     ResolversTypes["DirectoryBlock"],
@@ -1462,23 +1538,52 @@ export type MerkleNodeResolvers<
   top?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
 }>;
 
-export type PaginatedResolvers<
+export type MutationResolvers<
   ContextType = Context,
-  ParentType = ResolversTypes["Paginated"]
+  ParentType = ResolversTypes["Mutation"]
 > = ResolversObject<{
-  __resolveType: TypeResolveFn<
-    | "PaginatedEntryBlocks"
-    | "PaginatedEntries"
-    | "PaginatedCommits"
-    | "PaginatedTransactions"
-    | "PaginatedPendingEntries"
-    | "PaginatedPendingTransactions",
+  commitChain?: Resolver<
+    ResolversTypes["Commit"],
     ParentType,
-    ContextType
+    ContextType,
+    MutationCommitChainArgs
   >;
-  totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  commitEntry?: Resolver<
+    ResolversTypes["Commit"],
+    ParentType,
+    ContextType,
+    MutationCommitEntryArgs
+  >;
+  revealChain?: Resolver<
+    ResolversTypes["Reveal"],
+    ParentType,
+    ContextType,
+    MutationRevealChainArgs
+  >;
+  revealEntry?: Resolver<
+    ResolversTypes["Reveal"],
+    ParentType,
+    ContextType,
+    MutationRevealEntryArgs
+  >;
+  addChain?: Resolver<
+    ResolversTypes["Reveal"],
+    ParentType,
+    ContextType,
+    MutationAddChainArgs
+  >;
+  addEntry?: Resolver<
+    ResolversTypes["Reveal"],
+    ParentType,
+    ContextType,
+    MutationAddEntryArgs
+  >;
+  submitTransaction?: Resolver<
+    ResolversTypes["Hash"],
+    ParentType,
+    ContextType,
+    MutationSubmitTransactionArgs
+  >;
 }>;
 
 export type PaginatedCommitsResolvers<
@@ -1488,7 +1593,11 @@ export type PaginatedCommitsResolvers<
   totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   offset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   pageLength?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  commits?: Resolver<Array<ResolversTypes["Commit"]>, ParentType, ContextType>;
+  commits?: Resolver<
+    Array<ResolversTypes["EntryCommit"]>,
+    ParentType,
+    ContextType
+  >;
 }>;
 
 export type PaginatedEntriesResolvers<
@@ -1563,7 +1672,7 @@ export type PendingEntryResolvers<
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Ack"], ParentType, ContextType>;
-  chain?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
+  chainId?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
 }>;
 
 export type PendingTransactionResolvers<
@@ -1583,18 +1692,18 @@ export type PendingTransactionResolvers<
     ParentType,
     ContextType
   >;
-  totalInputs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  totalInputs?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   totalFactoidOutputs?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
   totalEntryCreditOutputs?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
-  fees?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  fees?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
 }>;
 
 export type PreviousDirectoryBlockSignatureResolvers<
@@ -1650,11 +1759,6 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryAdminBlockByHeightArgs
-  >;
-  adminBlockHead?: Resolver<
-    ResolversTypes["AdminBlock"],
-    ParentType,
-    ContextType
   >;
   balances?: Resolver<
     Array<ResolversTypes["Address"]>,
@@ -1726,11 +1830,6 @@ export type QueryResolvers<
     ContextType,
     QueryEntryCreditBlockByHeightArgs
   >;
-  entryCreditBlockHead?: Resolver<
-    ResolversTypes["EntryCreditBlock"],
-    ParentType,
-    ContextType
-  >;
   entryCreditRate?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   factoidBlock?: Resolver<
     Maybe<ResolversTypes["FactoidBlock"]>,
@@ -1743,11 +1842,6 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryFactoidBlockByHeightArgs
-  >;
-  factoidBlockHead?: Resolver<
-    ResolversTypes["FactoidBlock"],
-    ParentType,
-    ContextType
   >;
   factoidTransactionAck?: Resolver<
     ResolversTypes["FactoidTransactionAck"],
@@ -1770,7 +1864,7 @@ export type QueryResolvers<
   >;
   properties?: Resolver<ResolversTypes["Properties"], ParentType, ContextType>;
   receipt?: Resolver<
-    ResolversTypes["Receipt"],
+    Maybe<ResolversTypes["Receipt"]>,
     ParentType,
     ContextType,
     QueryReceiptArgs
@@ -1805,6 +1899,14 @@ export type ReceiptResolvers<
   >;
 }>;
 
+export type RevealResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes["Reveal"]
+> = ResolversObject<{
+  entryHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  chainId?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+}>;
+
 export type ServerFaultHandoffResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["ServerFaultHandoff"]
@@ -1822,8 +1924,8 @@ export type SubscriptionResolvers<
     ParentType,
     ContextType
   >;
-  newChainsCreated?: SubscriptionResolver<
-    Array<ResolversTypes["PaginatedEntryBlocks"]>,
+  newChains?: SubscriptionResolver<
+    Array<ResolversTypes["EntryBlock"]>,
     ParentType,
     ContextType
   >;
@@ -1848,6 +1950,12 @@ export type SubscriptionResolvers<
     ParentType,
     ContextType
   >;
+  newFactoidTransaction?: SubscriptionResolver<
+    ResolversTypes["Transaction"],
+    ParentType,
+    ContextType,
+    SubscriptionNewFactoidTransactionArgs
+  >;
 }>;
 
 export type TransactionResolvers<
@@ -1867,19 +1975,29 @@ export type TransactionResolvers<
     ParentType,
     ContextType
   >;
-  totalInputs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  totalInputs?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   totalFactoidOutputs?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
   totalEntryCreditOutputs?: Resolver<
-    ResolversTypes["Int"],
+    ResolversTypes["Float"],
     ParentType,
     ContextType
   >;
-  fees?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  block?: Resolver<ResolversTypes["FactoidBlock"], ParentType, ContextType>;
+  fees?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  rcds?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
+  signatures?: Resolver<
+    Array<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
+  factoidBlock?: Resolver<
+    ResolversTypes["FactoidBlock"],
+    ParentType,
+    ContextType
+  >;
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
@@ -1900,12 +2018,12 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   CoinbaseDescriptorCancel?: CoinbaseDescriptorCancelResolvers<ContextType>;
   CoinbaseDescriptorOutput?: CoinbaseDescriptorOutputResolvers<ContextType>;
   Commit?: CommitResolvers<ContextType>;
-  CommitRevealSend?: CommitRevealSendResolvers<ContextType>;
   CurrentMinute?: CurrentMinuteResolvers<ContextType>;
   DirectoryBlock?: DirectoryBlockResolvers<ContextType>;
   DirectoryBlockSignature?: DirectoryBlockSignatureResolvers<ContextType>;
   Entry?: EntryResolvers<ContextType>;
   EntryBlock?: EntryBlockResolvers<ContextType>;
+  EntryCommit?: EntryCommitResolvers<ContextType>;
   EntryCommitAck?: EntryCommitAckResolvers<ContextType>;
   EntryCreditBlock?: EntryCreditBlockResolvers<ContextType>;
   FactoidBlock?: FactoidBlockResolvers<ContextType>;
@@ -1916,7 +2034,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   IncreaseServerCount?: IncreaseServerCountResolvers<ContextType>;
   MatryoshkaHash?: MatryoshkaHashResolvers<ContextType>;
   MerkleNode?: MerkleNodeResolvers<ContextType>;
-  Paginated?: PaginatedResolvers;
+  Mutation?: MutationResolvers<ContextType>;
   PaginatedCommits?: PaginatedCommitsResolvers<ContextType>;
   PaginatedEntries?: PaginatedEntriesResolvers<ContextType>;
   PaginatedEntryBlocks?: PaginatedEntryBlocksResolvers<ContextType>;
@@ -1936,6 +2054,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   PublicFactoidAddress?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   Receipt?: ReceiptResolvers<ContextType>;
+  Reveal?: RevealResolvers<ContextType>;
   ServerFaultHandoff?: ServerFaultHandoffResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Transaction?: TransactionResolvers<ContextType>;

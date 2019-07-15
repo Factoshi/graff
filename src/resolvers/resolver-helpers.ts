@@ -1,9 +1,14 @@
+import { MAX_PAGE_LENGTH } from '../contants';
+
 export const testPaginationInput = (offset: number, first: number) => {
     if (offset! < 0 || !Number.isInteger(offset!)) {
-        throw new Error('`offset` must be a positive integer.');
+        throw new Error('offset must be a positive integer.');
     }
     if (first! < 0 || (first !== Infinity && !Number.isInteger(first!))) {
-        throw new Error('`first` must be a positive integer.');
+        throw new Error('first must be a positive integer.');
+    }
+    if (first > MAX_PAGE_LENGTH) {
+        throw new Error(`first exceeds the maximum page length of ${MAX_PAGE_LENGTH}`);
     }
 };
 

@@ -10,6 +10,7 @@ import { factoidBlockResolvers } from './FactoidBlock';
 import { transactionResolvers } from './Transaction';
 import { entryResolvers } from './Entry';
 import { subscription } from './Subscription';
+import { mutation } from './Mutation';
 
 export const resolvers: Resolvers = {
     //Queries
@@ -20,6 +21,7 @@ export const resolvers: Resolvers = {
     EntryBlock: entryBlockResolvers,
     EntryCreditBlock: entryCreditBlockResolvers,
     FactoidBlock: factoidBlockResolvers,
+    Mutation: mutation,
     Query: query,
     Subscription: subscription,
     Transaction: transactionResolvers,

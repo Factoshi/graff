@@ -1,20 +1,20 @@
 import { FactomCli, FactomEventEmitter } from 'factom';
 import {
-    factomdPort,
-    factomdHost,
-    factomdPath,
-    factomdUser,
-    factomdPasswd,
-    factomdProto
+    FACTOMD_PORT,
+    FACTOMD_HOST,
+    FACTOMD_PATH,
+    FACTOMD_USER,
+    FACTOMD_PASSWD,
+    FACTOMD_PROTOCOL
 } from './contants';
 
 export const cli = new FactomCli({
-    host: factomdHost,
-    port: factomdPort ? parseInt(factomdPort) : 8088,
-    path: factomdPath || '/v2',
-    user: factomdUser,
-    password: factomdPasswd,
-    protocol: factomdProto || 'http'
+    host: FACTOMD_HOST,
+    port: FACTOMD_PORT,
+    path: FACTOMD_PATH,
+    user: FACTOMD_USER,
+    password: FACTOMD_PASSWD,
+    protocol: FACTOMD_PROTOCOL
 });
 
 export const factomEmitter = new FactomEventEmitter(cli);
