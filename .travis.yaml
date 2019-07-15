@@ -1,0 +1,20 @@
+sudo: required
+services:
+    - docker
+language: node_js
+node_js:
+    - '12.4'
+
+install: npm install
+
+jobs:
+    include: 
+        - stage: mainnet # used for unit tests and query integration tests.
+          script: npm run test
+          script: npm run test-q
+          env:
+            FACTOMD_HOST=api.factomd.net
+            FACTOMD_PORT=443
+            FACTOMD_PROTO=https
+        - stage: factom-dev-stack # used for subscription and mutation integration tests.
+          script: npm run test-ms
