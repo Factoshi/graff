@@ -37,9 +37,12 @@ export enum Ack {
   Unknown = "Unknown"
 }
 
+/** The status and timestamp of an Ack. */
 export type AckStatus = {
   __typename?: "AckStatus";
+  /** Timestamp of the ack. Will be null if status is Unknown. */
   timestamp?: Maybe<Scalars["Float"]>;
+  /** The status of an ack. */
   status: Ack;
 };
 
@@ -91,9 +94,9 @@ export type AddFederatedServerBitcoinAnchorKey = AdminEntry & {
   identityChainId: Scalars["Hash"];
   /** The priority of the key. */
   keyPriority: Scalars["Int"];
-  /** Bitcoin key type */
+  /** The type of bitcoin key. */
   keyType: Scalars["String"];
-  /** Public bitcoin key */
+  /** The public bitcoin key. */
   ecdsaPublicKey: Scalars["String"];
 };
 
@@ -226,9 +229,9 @@ export type CoinbaseDescriptorCancel = AdminEntry & {
   id: Scalars["Int"];
   /** The code of the admin entry. */
   code: AdminCode;
-  /** An output the Descriptor at this height will not be created. */
+  /** The target height containing the descriptor for which an output will be cancelled. */
   descriptorHeight: Scalars["Height"];
-  /** This index into the specified descriptor will not be created. */
+  /** This index to be cancelled for the specified descriptor. */
   descriptorIndex: Scalars["Int"];
 };
 
@@ -263,11 +266,11 @@ export type CurrentMinute = {
   directoryBlockHeight: Scalars["Height"];
   /** The minute number of the open entry block. */
   minute: Scalars["Int"];
-  /** The start time of the current block in nano seconds */
+  /** The start time of the current block in nano seconds. */
   currentBlockStartTime: Scalars["Float"];
-  /** The start time of the current minute in nano seconds */
+  /** The start time of the current minute in nano seconds. */
   currentMinuteStartTime: Scalars["Float"];
-  /** The time as understood by factomd in nano seconds */
+  /** The time as understood by factomd in nano seconds. */
   currentTime: Scalars["Float"];
   /** The number of seconds per block. */
   directoryBlockInSeconds: Scalars["Int"];
@@ -320,14 +323,14 @@ export type DirectoryBlockSignature = AdminEntry & {
   code: AdminCode;
   /** The identity chain of the signing authority. */
   identityChainId: Scalars["Hash"];
-  /** Signature for the previous directorty block. */
+  /** Signature for the previous directory block. */
   previousDirectoryBlockSignature?: Maybe<PreviousDirectoryBlockSignature>;
 };
 
 /** An Entry. Fields may be null if the entry has not yet been revealed. */
 export type Entry = {
   __typename?: "Entry";
-  /** The hash of the entry */
+  /** The hash of the entry. */
   hash: Scalars["Hash"];
   /** The chain the entry belongs to. */
   chainId?: Maybe<Scalars["Hash"]>;
@@ -354,7 +357,7 @@ export type EntryBlock = {
   timestamp: Scalars["Float"];
   /** The previous block. Will be null if current block is sequence number 0. */
   previousBlock?: Maybe<EntryBlock>;
-  /** Paginated entries contained within this entry block */
+  /** Paginated entries contained within this entry block. */
   entryPage: PaginatedEntries;
   /** Parent directory block. */
   directoryBlock: DirectoryBlock;
@@ -401,7 +404,7 @@ export type EntryCreditBlock = {
   __typename?: "EntryCreditBlock";
   /** The SHA256 hash of the serialized header. */
   headerHash: Scalars["Hash"];
-  /** The SHA256 checksum of the entire Entry Credit Block */
+  /** The SHA256 checksum of the entire entry credit block. */
   fullHash: Scalars["Hash"];
   /** The SHA256 hash of the serialized body. */
   bodyHash: Scalars["Hash"];
@@ -413,7 +416,7 @@ export type EntryCreditBlock = {
   previousBlock?: Maybe<EntryCreditBlock>;
   /** The next block. Will be null if current block is tip of chain. */
   nextBlock?: Maybe<EntryCreditBlock>;
-  /** Paginated commits contained within the entry credit block */
+  /** Paginated commits contained within the entry credit block. */
   commitPage: PaginatedCommits;
   /** Parent directory block. */
   directoryBlock: DirectoryBlock;
@@ -430,7 +433,7 @@ export type FactoidBlock = {
   __typename?: "FactoidBlock";
   /** The key merkle root of the current block. */
   keyMR: Scalars["Hash"];
-  /** The Merkle root of the Factoid transactions which accompany this block */
+  /** The Merkle root of the Factoid transactions contained in this block. */
   bodyMR: Scalars["Hash"];
   /** Data structure which allows proofs of only the value transfers. */
   ledgerKeyMR: Scalars["Hash"];
@@ -440,7 +443,7 @@ export type FactoidBlock = {
   nextBlock?: Maybe<FactoidBlock>;
   /** EC-FCT exchange rate. */
   entryCreditRate: Scalars["Int"];
-  /** Paginated transactions contained within the factoid block */
+  /** Paginated transactions contained within the factoid block. */
   transactionPage: PaginatedTransactions;
   /** Parent directory block. */
   directoryBlock: DirectoryBlock;
@@ -461,7 +464,7 @@ export type FactoidTransactionAck = {
   txTimestamp?: Maybe<Scalars["Float"]>;
   /** The timestamp of the containing block. Milliseconds since Unix epoch. */
   blockTimestamp?: Maybe<Scalars["Float"]>;
-  /** The status of the factoid transaction */
+  /** The status of the factoid transaction. */
   status: Ack;
 };
 
@@ -570,11 +573,11 @@ export type MutationSubmitTransactionArgs = {
 /** Paginated commits */
 export type PaginatedCommits = {
   __typename?: "PaginatedCommits";
-  /** Total number of nodes within pages. */
+  /** Total number items avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of item list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of commits. */
   commits: Array<EntryCommit>;
@@ -583,11 +586,11 @@ export type PaginatedCommits = {
 /** Paginated entries */
 export type PaginatedEntries = {
   __typename?: "PaginatedEntries";
-  /** Total number of nodes within pages. */
+  /** Total number items avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of item list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of entries. */
   entries: Array<Entry>;
@@ -596,11 +599,11 @@ export type PaginatedEntries = {
 /** Paginated entry blocks */
 export type PaginatedEntryBlocks = {
   __typename?: "PaginatedEntryBlocks";
-  /** Total number of nodes within pages. */
+  /** Total number entry blocks avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of entry block list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of entry blocks. */
   entryBlocks: Array<EntryBlock>;
@@ -609,11 +612,11 @@ export type PaginatedEntryBlocks = {
 /** Paginated pending entries */
 export type PaginatedPendingEntries = {
   __typename?: "PaginatedPendingEntries";
-  /** Total number of nodes within pages. */
+  /** Total number items avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of item list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of pending entries. */
   pendingEntries: Array<PendingEntry>;
@@ -622,11 +625,11 @@ export type PaginatedPendingEntries = {
 /** Paginated pending transactions */
 export type PaginatedPendingTransactions = {
   __typename?: "PaginatedPendingTransactions";
-  /** Total number of nodes within pages. */
+  /** Total number items avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of item list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of pending transactions. */
   pendingTransactions: Array<PendingTransaction>;
@@ -635,11 +638,11 @@ export type PaginatedPendingTransactions = {
 /** Paginated transactions */
 export type PaginatedTransactions = {
   __typename?: "PaginatedTransactions";
-  /** Total number of nodes within pages. */
+  /** Total number items avaiable for pagination. */
   totalCount: Scalars["Int"];
-  /** Position to offset from beginning of list */
+  /** Position to offset from beginning of item list. */
   offset: Scalars["Int"];
-  /** Get pageLength x in list following offset */
+  /** Length of the current page. */
   pageLength: Scalars["Int"];
   /** An array of transactions. */
   transactions: Array<Transaction>;
@@ -665,7 +668,7 @@ export type PendingTransaction = {
   status: Ack;
   /** An array of factoid inputs. */
   inputs: Array<Address>;
-  /** An array of factoid outputs */
+  /** An array of factoid outputs. */
   factoidOutputs: Array<Address>;
   /** An array of entry credit outputs. */
   entryCreditOutputs: Array<Address>;
@@ -684,7 +687,7 @@ export type PreviousDirectoryBlockSignature = {
   __typename?: "PreviousDirectoryBlockSignature";
   /** Ed25519 public key held in the authority identity chain. */
   publicKey: Scalars["String"];
-  /** signature of the previous directoty block header */
+  /** signature for the previous directory block header */
   signature: Scalars["String"];
 };
 
@@ -833,9 +836,9 @@ export type Receipt = {
   __typename?: "Receipt";
   /** The entry this receipt is for. */
   entry: Entry;
-  /** The hash of the bitcoin transaction that anchored this entry into Bitcoin. */
+  /** The hash of the bitcoin transaction that anchored this entry into Bitcoin. Null if not yet anchored. */
   bitcoinTransactionHash?: Maybe<Scalars["Hash"]>;
-  /** The bitcoin block where the anchored transaction was included. */
+  /** The bitcoin block where the anchored transaction was included. Null if not yet anchored. */
   bitcoinBlockHash?: Maybe<Scalars["Hash"]>;
   /** The merkle proof to connect the entry to the bitcoin transaction. */
   merkleBranch: Array<MerkleNode>;
@@ -877,7 +880,7 @@ export type Subscription = {
   newEntryCreditBlock: EntryCreditBlock;
   /** Subscribe to each new factoid block. */
   newFactoidBlock: FactoidBlock;
-  /** Subscribe to new Factoid transactions involving a given address */
+  /** Subscribe to new Factoid transactions involving a given address. */
   newFactoidTransaction: Transaction;
 };
 
@@ -1669,7 +1672,7 @@ export type PendingEntryResolvers<
 > = ResolversObject<{
   hash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Ack"], ParentType, ContextType>;
-  chain?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
+  chainId?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
 }>;
 
 export type PendingTransactionResolvers<
