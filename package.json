@@ -1,7 +1,7 @@
 {
     "name": "factom-graph",
     "version": "0.1.0",
-    "description": "GraphQL translation layer for the factomd RPC API.",
+    "description": "GraphQL wrapper for the factomd RPC API.",
     "main": "index.js",
     "scripts": {
         "start": "ts-node src",
