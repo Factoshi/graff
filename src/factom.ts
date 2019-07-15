@@ -5,7 +5,7 @@ import {
     FACTOMD_PATH,
     FACTOMD_USER,
     FACTOMD_PASSWD,
-    FACTOMD_PROTO
+    FACTOMD_PROTOCOL
 } from './contants';
 
 export const cli = new FactomCli({
@@ -14,7 +14,7 @@ export const cli = new FactomCli({
     path: FACTOMD_PATH || '/v2',
     user: FACTOMD_USER,
     password: FACTOMD_PASSWD,
-    protocol: FACTOMD_PROTO || 'http'
+    protocol: FACTOMD_PROTOCOL || 'http'
 });
 
 export const factomEmitter = new FactomEventEmitter(cli);
