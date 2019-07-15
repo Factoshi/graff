@@ -4,6 +4,7 @@ import {
     EntryCommit
 } from '../types/resolvers';
 import { testPaginationInput, handleBlockError } from './resolver-helpers';
+import { MAX_PAGE_LENGTH } from '../contants';
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
@@ -57,7 +58,11 @@ export const entryCreditBlockResolvers: EntryCreditBlockResolvers = {
             .catch(handleBlockError);
         return nextBlock && { headerHash: nextBlock.headerHash };
     },
-    commitPage: async ({ headerHash }, { offset = 0, first = Infinity }, { factomd }) => {
+    commitPage: async (
+        { headerHash },
+        { offset = 0, first = MAX_PAGE_LENGTH },
+        { factomd }
+    ) => {
         testPaginationInput(offset!, first!);
         const entryCreditBlock = await factomd.entryCreditBlock.load(headerHash!);
         const commits = entryCreditBlock.commits

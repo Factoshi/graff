@@ -10,11 +10,11 @@ import {
 
 export const cli = new FactomCli({
     host: FACTOMD_HOST,
-    port: FACTOMD_PORT ? parseInt(FACTOMD_PORT) : 8088,
-    path: FACTOMD_PATH || '/v2',
+    port: FACTOMD_PORT,
+    path: FACTOMD_PATH,
     user: FACTOMD_USER,
     password: FACTOMD_PASSWD,
-    protocol: FACTOMD_PROTOCOL || 'http'
+    protocol: FACTOMD_PROTOCOL
 });
 
 export const factomEmitter = new FactomEventEmitter(cli);

@@ -33,25 +33,25 @@ describe('Resolver Helpers', () => {
 
     it('Should throw if `offset` is negative', () => {
         expect(() => testPaginationInput(-5, 0)).toThrowError(
-            '`offset` must be a positive integer.'
+            'offset must be a positive integer.'
         );
     });
 
     it('Should throw if `offset` is not an int', () => {
         expect(() => testPaginationInput(5.5, 0)).toThrowError(
-            '`offset` must be a positive integer.'
+            'offset must be a positive integer.'
         );
     });
 
     it('Should throw if `first` is negative', () => {
         expect(() => testPaginationInput(10, -5)).toThrowError(
-            '`first` must be a positive integer.'
+            'first must be a positive integer.'
         );
     });
 
     it('Should throw if `first` is not an int', () => {
         expect(() => testPaginationInput(10, 5.5)).toThrowError(
-            '`first` must be a positive integer.'
+            'first must be a positive integer.'
         );
     });
 });

@@ -1,5 +1,6 @@
 import { QueryResolvers, FactoidBlockResolvers, Transaction } from '../types/resolvers';
 import { testPaginationInput, handleBlockError } from './resolver-helpers';
+import { MAX_PAGE_LENGTH } from '../contants';
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
@@ -46,7 +47,11 @@ export const factoidBlockResolvers: FactoidBlockResolvers = {
             .catch(handleBlockError);
         return nextBlock && { keyMR: nextBlock.keyMR };
     },
-    transactionPage: async ({ keyMR }, { offset = 0, first = Infinity }, { factomd }) => {
+    transactionPage: async (
+        { keyMR },
+        { offset = 0, first = MAX_PAGE_LENGTH },
+        { factomd }
+    ) => {
         testPaginationInput(offset!, first!);
         const factoidBlock = await factomd.factoidBlock.load(keyMR!);
         const transactions = factoidBlock.transactions

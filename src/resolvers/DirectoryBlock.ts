@@ -1,5 +1,6 @@
 import { DirectoryBlockResolvers, QueryResolvers, EntryBlock } from '../types/resolvers';
 import { testPaginationInput, handleBlockError } from './resolver-helpers';
+import { MAX_PAGE_LENGTH } from '../contants';
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
@@ -38,7 +39,11 @@ export const directoryBlockResolvers: DirectoryBlockResolvers = {
         const directoryBlock = await factomd.directoryBlock.load(keyMR!);
         return { headerHash: directoryBlock.entryCreditBlockRef };
     },
-    entryBlockPage: async ({ keyMR }, { offset = 0, first = Infinity }, { factomd }) => {
+    entryBlockPage: async (
+        { keyMR },
+        { offset = 0, first = MAX_PAGE_LENGTH },
+        { factomd }
+    ) => {
         testPaginationInput(offset!, first!);
         const directoryBlock = await factomd.directoryBlock.load(keyMR!);
         const entryBlocks = directoryBlock.entryBlockRefs.slice(

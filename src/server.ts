@@ -2,13 +2,21 @@ import { ApolloServer, gql, PubSub, AuthenticationError } from 'apollo-server';
 import { importSchema } from 'graphql-import';
 import { resolvers } from './resolvers';
 import { resolve } from 'path';
-import { FACTOMD_PASSWD, FACTOMD_USER } from './contants';
+import {
+    FACTOMD_PASSWD,
+    FACTOMD_USER,
+    MAX_QUERY_DEPTH,
+    MAX_COMPLEXITY
+} from './contants';
 import { Context } from './types/server';
 import auth from 'basic-auth';
 import { FactomdDataLoader } from './data_loader';
 import { cli } from './factom';
 import { compose } from 'ramda';
 import { Request } from 'express';
+import depthLimit from 'graphql-depth-limit';
+
+const { createComplexityLimitRule } = require('graphql-validation-complexity');
 
 // token should be a basic authorization string.
 const authorize = (token: string | undefined) => {
@@ -79,5 +87,11 @@ export const server = new ApolloServer({
     // If req is undefined then this is a subscription and thus auth will be handled
     // by the onConnect subscription lifecycle method.
     context: ({ req }) => (req !== undefined ? context(req) : createContextObject()),
-    subscriptions: { onConnect }
+    subscriptions: { onConnect },
+    tracing: false,
+    validationRules: [
+        depthLimit(MAX_QUERY_DEPTH),
+        // See https://github.com/4Catalyzer/graphql-validation-complexity for details on this rule.
+        createComplexityLimitRule(MAX_COMPLEXITY)
+    ]
 });

@@ -4,6 +4,7 @@ import {
     handleChainHeadError,
     handleBlockError
 } from './resolver-helpers';
+import { MAX_PAGE_LENGTH } from '../contants';
 
 /**
  * Root Query resolvers that return a partial EntryBlock type.
@@ -32,7 +33,11 @@ export const entryBlockResolvers: EntryBlockResolvers = {
             .catch(handleBlockError);
         return previousBlock && { keyMR: previousBlock.keyMR };
     },
-    entryPage: async ({ keyMR }, { offset = 0, first = Infinity }, { factomd }) => {
+    entryPage: async (
+        { keyMR },
+        { offset = 0, first = MAX_PAGE_LENGTH },
+        { factomd }
+    ) => {
         testPaginationInput(offset!, first!);
         const entryBlock = await factomd.entryBlock.load(keyMR!);
         const entries = entryBlock.entryRefs

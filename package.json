@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "ts-node src",
-        "start-watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.js' --exec 'ts-node' src",
+        "start-watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
         "build": "tsc",
         "test": "jest",
         "test-q": "jest --config='test/query/jest.config.js'",
@@ -51,14 +51,17 @@
         "@types/basic-auth": "^1.1.2",
         "@types/bluebird": "^3.5.27",
         "@types/graphql": "^14.2.2",
+        "@types/graphql-depth-limit": "^1.1.0",
         "@types/ramda": "^0.26.15",
         "apollo-server": "^2.6.9",
         "basic-auth": "^2.0.1",
         "bluebird": "^3.5.5",
         "dataloader": "^1.4.0",
-        "factom": "^1.2.4",
+        "factom": "^1.2.5",
         "graphql": "^14.4.2",
+        "graphql-depth-limit": "^1.1.0",
         "graphql-import": "^0.7.1",
+        "graphql-validation-complexity": "^0.2.5",
         "ramda": "^0.26.1"
     }
 }
