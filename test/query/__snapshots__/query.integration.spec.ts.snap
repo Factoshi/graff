@@ -21,7 +21,7 @@ exports[`Integration Test Queries Should query a directory block by hash. 1`] = 
 Object {
   "directoryBlock": Object {
     "adminBlock": Object {
-      "lookupHash": "fe16b62bdda11b1a7ba558373ba05560051e685ae904fd66743a974cd4a379e6",
+      "bodySize": 3354,
     },
     "entryBlockPage": Object {
       "entryBlocks": Array [
@@ -65,7 +65,7 @@ exports[`Integration Test Queries Should query a directory block by height. 1`] 
 Object {
   "directoryBlockByHeight": Object {
     "adminBlock": Object {
-      "lookupHash": "fe16b62bdda11b1a7ba558373ba05560051e685ae904fd66743a974cd4a379e6",
+      "bodySize": 3354,
     },
     "entryBlockPage": Object {
       "entryBlocks": Array [

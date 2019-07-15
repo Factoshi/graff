@@ -108,25 +108,6 @@ export const QUERY_ABLOCK_HEIGHT = gql`
     }
 `;
 
-export const QUERY_ABLOCK_HEAD = gql`
-    query GetAdminBlockHead {
-        adminBlockHead {
-            backReferenceHash
-            lookupHash
-            bodySize
-            previousBlock {
-                bodySize
-            }
-            nextBlock {
-                lookupHash
-            }
-            directoryBlock {
-                height
-            }
-        }
-    }
-`;
-
 export const QUERY_BALANCES = gql`
     query GetBalances($addresses: [PublicAddress!]!) {
         balances(addresses: $addresses) {
@@ -205,7 +186,7 @@ export const QUERY_DBLOCK = gql`
             height
             timestamp
             adminBlock {
-                lookupHash
+                bodySize
             }
             entryBlockPage(first: 5, offset: 0) {
                 entryBlocks {
@@ -235,7 +216,7 @@ export const QUERY_DBLOCK_HEIGHT = gql`
             height
             timestamp
             adminBlock {
-                lookupHash
+                bodySize
             }
             entryBlockPage(first: 5, offset: 0) {
                 entryBlocks {
@@ -265,7 +246,7 @@ export const QUERY_DBLOCK_HEAD = gql`
             height
             timestamp
             adminBlock {
-                lookupHash
+                bodySize
             }
             entryBlockPage(first: 5, offset: 0) {
                 entryBlocks {
@@ -415,43 +396,6 @@ export const QUERY_ECBLOCK_HEIGHT = gql`
     }
 `;
 
-export const QUERY_ECBLOCK_HEAD = gql`
-    query GetEntryCreditBlockHead {
-        entryCreditBlockHead {
-            headerHash
-            fullHash
-            bodyHash
-            bodySize
-            objectCount
-            previousBlock {
-                objectCount
-            }
-            nextBlock {
-                bodyHash
-            }
-            commitPage(first: 5, offset: 0) {
-                pageLength
-                totalCount
-                offset
-                commits {
-                    timestamp
-                    signature
-                    credits
-                    entry {
-                        content
-                    }
-                    entryCreditBlock {
-                        fullHash
-                    }
-                }
-            }
-            directoryBlock {
-                height
-            }
-        }
-    }
-`;
-
 export const QUERY_ECRATE = gql`
     query GetEntryCreditRate {
         entryCreditRate
@@ -554,15 +498,6 @@ export const QUERY_FBLOCK_HEIGHT = gql`
             directoryBlock {
                 height
             }
-        }
-    }
-`;
-
-export const QUERY_FBLOCK_HEAD = gql`
-    query GetFactoidBlockHead {
-        factoidBlockHead {
-            keyMR
-            bodyMR
         }
     }
 `;
