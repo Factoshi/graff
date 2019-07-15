@@ -1,6 +1,6 @@
 {
     "factomd": {
-        "blockTime": 8,
+        "blockTime": 10,
         "apiPort": 5088,
         "controlPanelPort": 5090
     },
