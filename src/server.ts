@@ -9,13 +9,12 @@ import {
     MAX_QUERY_DEPTH,
     MAX_COMPLEXITY
 } from './contants';
-import { Context } from './types/server';
 import auth from 'basic-auth';
 import { FactomdDataLoader } from './data_loader';
 import { cli } from './factom';
 import { compose } from 'ramda';
 import { Request } from 'express';
-import { FactomdDataSource } from './datasource';
+import { ProtocolBlockSource } from './datasource/ProtocolBlock';
 import depthLimit from 'graphql-depth-limit';
 
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
@@ -43,7 +42,7 @@ const authorize = (token: string | undefined) => {
 
 const pubsub = new PubSub();
 
-const createContextObject = (): Context => ({
+const createContextObject = () => ({
     // Caches factomd requests. New instance created per request to avoid memory leak.
     factomd: new FactomdDataLoader(cli),
     pubsub
@@ -89,15 +88,15 @@ export const server = new ApolloServer({
     // If req is undefined then this is a subscription and thus auth will be handled
     // by the onConnect subscription lifecycle method.
     context: ({ req }) => (req !== undefined ? context(req) : createContextObject()),
+    // Subscription lifecycle methods.
     subscriptions: { onConnect },
     tracing: false,
+    // mitigate malicious queries with validation rules. Can be configured with env vars.
     validationRules: [
         depthLimit(MAX_QUERY_DEPTH),
         // See https://github.com/4Catalyzer/graphql-validation-complexity for details on this rule.
         createComplexityLimitRule(MAX_COMPLEXITY)
     ],
-    cache: new RedisCache(),
-    dataSources: () => ({
-        factomd: new FactomdDataSource(cli)
-    })
+    // cache: new RedisCache(),
+    dataSources: () => ({ protocolBlock: new ProtocolBlockSource(cli) })
 });
