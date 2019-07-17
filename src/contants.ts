@@ -13,7 +13,7 @@ export const FACTOMD_PROTOCOL = env.FACTOMD_PROTOCOL || 'http';
 // DoS protection settings
 export const MAX_PAGE_LENGTH = env.MAX_PAGE_LENGTH ? parseInt(env.MAX_PAGE_LENGTH) : 150;
 export const MAX_QUERY_DEPTH = env.MAX_QUERY_DEPTH ? parseInt(env.MAX_QUERY_DEPTH) : 7;
-export const MAX_COMPLEXITY = env.MAX_COMPLEXITY ? parseInt(env.MAX_COMPLEXITY) : 1000;
+export const MAX_COMPLEXITY = env.MAX_COMPLEXITY ? parseInt(env.MAX_COMPLEXITY) : 1500;
 
 // Subscription channels
 export enum Channel {
