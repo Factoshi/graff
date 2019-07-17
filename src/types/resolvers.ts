@@ -390,7 +390,7 @@ export type EntryCommit = {
 export type EntryCommitAck = {
   __typename?: "EntryCommitAck";
   /** The hash of the commit. */
-  commitHash: Scalars["Hash"];
+  commitHash?: Maybe<Scalars["Hash"]>;
   /** The hash of the entry. May be null if the commit has not yet been revealed. */
   entryHash?: Maybe<Scalars["Hash"]>;
   /** The status of the commit. */
@@ -1391,7 +1391,7 @@ export type EntryCommitAckResolvers<
   ContextType = Context,
   ParentType = ResolversTypes["EntryCommitAck"]
 > = ResolversObject<{
-  commitHash?: Resolver<ResolversTypes["Hash"], ParentType, ContextType>;
+  commitHash?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
   entryHash?: Resolver<Maybe<ResolversTypes["Hash"]>, ParentType, ContextType>;
   commitStatus?: Resolver<ResolversTypes["AckStatus"], ParentType, ContextType>;
   entryStatus?: Resolver<

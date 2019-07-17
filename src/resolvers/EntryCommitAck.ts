@@ -7,7 +7,7 @@ export const formatAckStatus = (ackStatus: any) => ({
 });
 
 export const formatAckResponse = (ack: any) => ({
-    commitHash: ack.committxid,
+    commitHash: ack.committxid || null,
     entryHash: ack.entryhash || null,
     commitStatus: formatAckStatus(ack.commitdata),
     entryStatus: ack.entrydata.status ? formatAckStatus(ack.entrydata) : null

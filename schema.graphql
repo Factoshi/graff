@@ -253,7 +253,7 @@ type AckStatus {
 "State of an entry or commit."
 type EntryCommitAck {
     "The hash of the commit."
-    commitHash: Hash!
+    commitHash: Hash
     "The hash of the entry. May be null if the commit has not yet been revealed."
     entryHash: Hash
     "The status of the commit."
