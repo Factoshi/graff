@@ -16,5 +16,8 @@ jobs:
             FACTOMD_HOST=api.factomd.net
             FACTOMD_PORT=443
             FACTOMD_PROTOCOL=https
-        - stage: factom-dev-stack # used for subscription and mutation integration tests.
-          script: npm run test-ms
+        # factom dev stack used for remaining tests
+        - stage: fds-mutation 
+          script: npm run test-m
+        - stage: fds-subscription
+          script: npm run test-s
