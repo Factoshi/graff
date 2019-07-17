@@ -40,11 +40,15 @@ export const adminBlockResolvers: AdminBlockResolvers = {
     },
     entries: async ({ backReferenceHash }, _, { dataSources }) => {
         const adminBlock = await dataSources.factomd.getAdminBlock(backReferenceHash!);
-        // Return each entry with renamed adminId and adminCode
-        return adminBlock.entries.map((entry: any) => {
-            const { adminId: id, adminCode: code, ...rest } = entry;
-            return { id, code, ...rest };
-        });
+        const adminEntries = adminBlock.entries
+            // Pre-m2 admin blocks have an entry without an adminCode that needs to be filtered
+            .filter((entry: any) => entry.adminCode)
+            // Return each entry with renamed adminId and adminCode
+            .map((entry: any) => {
+                const { adminId: id, adminCode: code, ...rest } = entry;
+                return { id, code, ...rest };
+            });
+        return adminEntries;
     },
     directoryBlock: async ({ backReferenceHash }, _, { dataSources }) => {
         const adminBlock = await dataSources.factomd.getAdminBlock(backReferenceHash!);
