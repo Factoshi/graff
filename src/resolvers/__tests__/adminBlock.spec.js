@@ -1,5 +1,5 @@
 const { InMemoryLRUCache } = require('apollo-server-caching');
-const { FactomdDataSource } = require('../../datasource');
+const { FactomdDataSource } = require('../../dataSource');
 const { adminBlockResolvers, adminBlockQueries } = require('../AdminBlock');
 const { adminEntryResolvers } = require('../AdminEntry');
 const { cli } = require('../../factom');

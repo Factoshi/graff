@@ -1,6 +1,6 @@
 const { factoidBlockQueries, factoidBlockResolvers } = require('../FactoidBlock');
 const { InMemoryLRUCache } = require('apollo-server-caching');
-const { FactomdDataSource } = require('../../datasource');
+const { FactomdDataSource } = require('../../dataSource');
 const { cli } = require('../../factom');
 const { randomBytes } = require('crypto');
 

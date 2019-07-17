@@ -1,5 +1,5 @@
 const { InMemoryLRUCache } = require('apollo-server-caching');
-const { FactomdDataSource } = require('../../datasource');
+const { FactomdDataSource } = require('../../dataSource');
 const { cli } = require('../../factom');
 const { directoryBlockQueries, directoryBlockResolvers } = require('../DirectoryBlock');
 const { randomBytes } = require('crypto');

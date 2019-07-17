@@ -1,5 +1,5 @@
 const { InMemoryLRUCache } = require('apollo-server-caching');
-const { FactomdDataSource } = require('../../datasource');
+const { FactomdDataSource } = require('../../dataSource');
 const { ackQueries } = require('../EntryCommitAck');
 const { cli } = require('../../factom');
 const { Ack } = require('../../types/resolvers');
