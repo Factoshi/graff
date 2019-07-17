@@ -1,0 +1,45 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "INTERFACE",
+        "name": "AdminEntry",
+        "possibleTypes": [
+          {
+            "name": "DirectoryBlockSignature"
+          },
+          {
+            "name": "MatryoshkaHash"
+          },
+          {
+            "name": "IncreaseServerCount"
+          },
+          {
+            "name": "AddRemoveServer"
+          },
+          {
+            "name": "AddFederatedServerSigningKey"
+          },
+          {
+            "name": "AddFederatedServerBitcoinAnchorKey"
+          },
+          {
+            "name": "ServerFaultHandoff"
+          },
+          {
+            "name": "CoinbaseDescriptor"
+          },
+          {
+            "name": "CoinbaseDescriptorCancel"
+          },
+          {
+            "name": "AddAuthorityFactoidAddress"
+          },
+          {
+            "name": "AddAuthorityEfficiency"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 import { Entry, Chain } from 'factom';
 import gql from 'graphql-tag';
 import { randomBytes } from 'crypto';
-import { cli } from './factom';
+import { cli } from '../factom';
 
 export const createChains = (num = 1) => {
     const c = Array(num)

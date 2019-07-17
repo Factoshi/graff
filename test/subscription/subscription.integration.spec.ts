@@ -9,24 +9,16 @@ import {
     SUBSCRIBE_NEW_EBLOCK,
     SUBSCRIBE_NEW_TX
 } from './subscriptionHelpers';
-import { server } from '../../src/server';
-import { WebSocketLink } from 'apollo-link-ws';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { assert } from 'chai';
 import { AddResponse, generateRandomFctAddress } from 'factom';
-
-const link = new WebSocketLink({
-    uri: 'ws://localhost:4000/graphql',
-    options: { reconnect: true }
-});
-const apollo = new ApolloClient({ link, cache: new InMemoryCache() });
+import { apollo } from '../apolloClient';
+import { server } from '../../src/server';
 
 describe('Integration Test Subscriptions', () => {
     let observable: any;
+    afterEach(() => observable.unsubscribe());
     beforeAll(() => server.listen());
     afterAll(() => server.stop());
-    afterEach(() => observable.unsubscribe());
 
     it('Should be notified of a new directory block', async () => {
         await createChains();
