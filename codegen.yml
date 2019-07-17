@@ -15,3 +15,6 @@ generates:
             defaultMapper: Partial<{T}>
             useIndexSignature: true
             contextType: ./server#Context
+    ./test/fragments.json:
+        plugins:
+            - fragment-matcher
