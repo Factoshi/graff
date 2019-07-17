@@ -1,61 +1,38 @@
-import { QueryResolvers, TransactionResolvers } from '../types/resolvers';
 import { handleTransactionError } from './resolver-helpers';
+import { QueryResolvers, TransactionResolvers } from '../types/resolvers';
+
+const resolveField = (field: string) => {
+    return async ({ hash }: any, _: any, { dataSources }: any) => {
+        const transaction = await dataSources.factomd.getTransaction(hash!);
+        return transaction[field];
+    };
+};
 
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const transactionQueries: QueryResolvers = {
-    transaction: async (root, { hash }, { factomd }) => {
-        const transaction = await factomd.transaction
-            .load(hash)
+    transaction: async (root, { hash }, { dataSources }) => {
+        const transaction = await dataSources.factomd
+            .getTransaction(hash)
             .catch(handleTransactionError);
         return transaction && { hash: transaction.id };
     }
 };
 
 export const transactionResolvers: TransactionResolvers = {
-    timestamp: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
-        return transaction.timestamp;
-    },
-    inputs: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
-        return transaction.inputs;
-    },
-    factoidOutputs: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
-        return transaction.factoidOutputs;
-    },
-    entryCreditOutputs: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
-        return transaction.entryCreditOutputs;
-    },
-    totalInputs: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
-        return transaction.totalInputs;
-    },
-    totalFactoidOutputs: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
-        return transaction.totalFactoidOutputs;
-    },
-    totalEntryCreditOutputs: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
-        return transaction.totalEntryCreditOutputs;
-    },
-    fees: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
-        return transaction.feesPaid;
-    },
-    rcds: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
-        return transaction.rcds.map(rcd => rcd.toString('hex'));
-    },
-    signatures: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
-        return transaction.signatures.map(s => s.toString('hex'));
-    },
-    factoidBlock: async ({ hash }, args, { factomd }) => {
-        const transaction = await factomd.transaction.load(hash!);
+    timestamp: resolveField('timestamp'),
+    inputs: resolveField('inputs'),
+    factoidOutputs: resolveField('factoidOutputs'),
+    entryCreditOutputs: resolveField('entryCreditOutputs'),
+    totalInputs: resolveField('totalInputs'),
+    totalFactoidOutputs: resolveField('totalFactoidOutputs'),
+    totalEntryCreditOutputs: resolveField('totalEntryCreditOutputs'),
+    fees: resolveField('feesPaid'),
+    rcds: resolveField('rcds'),
+    signatures: resolveField('signatures'),
+    factoidBlock: async ({ hash }, args, { dataSources }) => {
+        const transaction = await dataSources.factomd.getTransaction(hash!);
         return { keyMR: transaction.blockContext.factoidBlockKeyMR };
     }
 };

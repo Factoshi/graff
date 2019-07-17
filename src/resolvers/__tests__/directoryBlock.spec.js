@@ -1,19 +1,26 @@
-const { assert } = require('chai');
-const { FactomdDataLoader } = require('../../data_loader');
+const { InMemoryLRUCache } = require('apollo-server-caching');
+const { FactomdDataSource } = require('../../datasource');
 const { cli } = require('../../factom');
 const { directoryBlockQueries, directoryBlockResolvers } = require('../DirectoryBlock');
 const { randomBytes } = require('crypto');
 
+const factomd = new FactomdDataSource(cli);
+const cache = new InMemoryLRUCache();
+factomd.initialize({
+    cache,
+    context: {}
+});
+const context = { dataSources: { factomd } };
+
 describe('DirectoryBlock Resolvers', () => {
-    let factomd;
-    beforeEach(() => (factomd = new FactomdDataLoader(cli)));
+    afterEach(() => cache.flush());
 
     it('Should resolve the keyMR from the directoryBlock query', async () => {
         const hash = '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5';
         const directoryBlock = await directoryBlockQueries.directoryBlock(
             undefined,
             { hash },
-            { factomd }
+            context
         );
         expect(directoryBlock).toEqual({ keyMR: hash });
     });
@@ -22,7 +29,7 @@ describe('DirectoryBlock Resolvers', () => {
         const directoryBlock = await directoryBlockQueries.directoryBlock(
             undefined,
             { hash: randomBytes(32).toString('hex') },
-            { factomd }
+            context
         );
         expect(directoryBlock).toBeNull();
     });
@@ -32,7 +39,7 @@ describe('DirectoryBlock Resolvers', () => {
         const directoryBlock = await directoryBlockQueries.directoryBlockByHeight(
             undefined,
             { height },
-            { factomd }
+            context
         );
         expect(directoryBlock).toEqual({
             keyMR: '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5'
@@ -43,7 +50,7 @@ describe('DirectoryBlock Resolvers', () => {
         const directoryBlock = await directoryBlockQueries.directoryBlockByHeight(
             undefined,
             { height: Number.MAX_SAFE_INTEGER },
-            { factomd }
+            context
         );
         expect(directoryBlock).toBeNull();
     });
@@ -52,7 +59,7 @@ describe('DirectoryBlock Resolvers', () => {
         const directoryBlock = await directoryBlockQueries.directoryBlockHead(
             undefined,
             undefined,
-            { factomd }
+            context
         );
         expect(typeof directoryBlock.keyMR).toBe('string');
     });
@@ -62,7 +69,7 @@ describe('DirectoryBlock Resolvers', () => {
         const adminBlock = await directoryBlockResolvers.adminBlock(
             { keyMR },
             undefined,
-            { factomd }
+            context
         );
         expect(adminBlock).toEqual({
             backReferenceHash:
@@ -75,7 +82,7 @@ describe('DirectoryBlock Resolvers', () => {
         const entryCreditBlock = await directoryBlockResolvers.entryCreditBlock(
             { keyMR },
             undefined,
-            { factomd }
+            context
         );
         expect(entryCreditBlock).toEqual({
             headerHash: '9bf8ee63aeb634949e27c20097e29179e37f07f8ff8ce5ddb194d7198fa443d4'
@@ -87,7 +94,7 @@ describe('DirectoryBlock Resolvers', () => {
         const factoidBlock = await directoryBlockResolvers.factoidBlock(
             { keyMR },
             undefined,
-            { factomd }
+            context
         );
         expect(factoidBlock).toEqual({
             keyMR: '4ae637502a17d76cb54857eea2df46d8d2b3d7da4ecc7dcddb139dcc2534003e'
@@ -96,9 +103,11 @@ describe('DirectoryBlock Resolvers', () => {
 
     it('Should resolve the height', async () => {
         const keyMR = '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5';
-        const height = await directoryBlockResolvers.height({ keyMR }, undefined, {
-            factomd
-        });
+        const height = await directoryBlockResolvers.height(
+            { keyMR },
+            undefined,
+            context
+        );
         expect(height).toBe(196398);
     });
 
@@ -107,7 +116,7 @@ describe('DirectoryBlock Resolvers', () => {
         const directoryBlock = await directoryBlockResolvers.nextBlock(
             { keyMR },
             undefined,
-            { factomd }
+            context
         );
         expect(directoryBlock).toEqual({
             keyMR: 'ce9f38482ef869d3bfdb8c87418c04b4d709bb4a8054c8859b1098d48ecbca2e'
@@ -116,9 +125,11 @@ describe('DirectoryBlock Resolvers', () => {
 
     it('Should resolve the timestamp', async () => {
         const keyMR = '02ce63ba6c77b475444e0c4cb20f9e7701ca2406a3a7dc1c6ecf54e16bef85e5';
-        const timestamp = await directoryBlockResolvers.timestamp({ keyMR }, undefined, {
-            factomd
-        });
+        const timestamp = await directoryBlockResolvers.timestamp(
+            { keyMR },
+            undefined,
+            context
+        );
         expect(timestamp).toBe(1560187680000);
     });
 
@@ -127,7 +138,7 @@ describe('DirectoryBlock Resolvers', () => {
         const directoryBlock = await directoryBlockResolvers.previousBlock(
             { keyMR },
             undefined,
-            { factomd }
+            context
         );
         expect(directoryBlock).toEqual({
             keyMR: 'ccd969f2617d0a08853a4a0d9ad4635e220b27a56dbd7aea8d0282b7128a9bde'
@@ -139,7 +150,7 @@ describe('DirectoryBlock Resolvers', () => {
         const allEntryBlocks = await directoryBlockResolvers.entryBlockPage(
             { keyMR },
             {},
-            { factomd }
+            context
         );
         expect(allEntryBlocks.totalCount).toBe(93);
         expect(allEntryBlocks.entryBlocks).toHaveLength(93);
@@ -156,7 +167,7 @@ describe('DirectoryBlock Resolvers', () => {
         const first20 = await directoryBlockResolvers.entryBlockPage(
             { keyMR },
             { first: 20, offset: 0 },
-            { factomd }
+            context
         );
         expect(first20.totalCount).toBe(93);
         expect(first20.entryBlocks).toHaveLength(20);
@@ -175,7 +186,7 @@ describe('DirectoryBlock Resolvers', () => {
         const last20 = await directoryBlockResolvers.entryBlockPage(
             { keyMR },
             { first: 20, offset: 73 },
-            { factomd }
+            context
         );
         expect(last20.totalCount).toBe(93);
         expect(last20.entryBlocks).toHaveLength(20);
@@ -195,7 +206,7 @@ describe('DirectoryBlock Resolvers', () => {
             { keyMR },
             // This goes over the total number of entries available in the block.
             { first: 30, offset: 70 },
-            { factomd }
+            context
         );
         expect(entryBlocks.totalCount).toBe(93);
         expect(entryBlocks.entryBlocks).toHaveLength(23);

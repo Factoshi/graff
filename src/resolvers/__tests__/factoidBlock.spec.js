@@ -1,18 +1,26 @@
 const { factoidBlockQueries, factoidBlockResolvers } = require('../FactoidBlock');
-const { FactomdDataLoader } = require('../../data_loader');
+const { InMemoryLRUCache } = require('apollo-server-caching');
+const { FactomdDataSource } = require('../../datasource');
 const { cli } = require('../../factom');
 const { randomBytes } = require('crypto');
 
+const factomd = new FactomdDataSource(cli);
+const cache = new InMemoryLRUCache();
+factomd.initialize({
+    cache,
+    context: {}
+});
+const context = { dataSources: { factomd } };
+
 describe('FactoidBlock resolvers', () => {
-    let factomd;
-    beforeEach(() => (factomd = new FactomdDataLoader(cli)));
+    afterEach(() => cache.flush());
 
     it('Should resolve the keyMR from the factoidBlock query', async () => {
         const hash = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
         const factoidBlock = await factoidBlockQueries.factoidBlock(
             undefined,
             { hash },
-            { factomd }
+            context
         );
         expect(factoidBlock).toEqual({ keyMR: hash });
     });
@@ -21,7 +29,7 @@ describe('FactoidBlock resolvers', () => {
         const factoidBlock = await factoidBlockQueries.factoidBlock(
             undefined,
             { hash: randomBytes(32).toString('hex') },
-            { factomd }
+            context
         );
         expect(factoidBlock).toBeNull();
     });
@@ -31,7 +39,7 @@ describe('FactoidBlock resolvers', () => {
         const factoidBlock = await factoidBlockQueries.factoidBlockByHeight(
             undefined,
             { height: 10 },
-            { factomd }
+            context
         );
         expect(factoidBlock).toEqual({ keyMR: hash });
     });
@@ -40,14 +48,14 @@ describe('FactoidBlock resolvers', () => {
         const factoidBlock = await factoidBlockQueries.factoidBlockByHeight(
             undefined,
             { height: Number.MAX_SAFE_INTEGER },
-            { factomd }
+            context
         );
         expect(factoidBlock).toBeNull();
     });
 
     it('Should resolve the bodyMR field', async () => {
         const keyMR = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
-        const bodyMR = await factoidBlockResolvers.bodyMR({ keyMR }, {}, { factomd });
+        const bodyMR = await factoidBlockResolvers.bodyMR({ keyMR }, {}, context);
         expect(bodyMR).toBe(
             'bd99abfabe12023b57c933bbb8a54dce5e3fe03ec048c9d47279615dc6ab7853'
         );
@@ -58,7 +66,7 @@ describe('FactoidBlock resolvers', () => {
         const ledgerKeyMR = await factoidBlockResolvers.ledgerKeyMR(
             { keyMR },
             {},
-            { factomd }
+            context
         );
         expect(ledgerKeyMR).toBe(
             '27f86c84c7793465cb18f93a844c981e6d977e3f57d913e9180e2a54383a1875'
@@ -70,7 +78,7 @@ describe('FactoidBlock resolvers', () => {
         const previousBlock = await factoidBlockResolvers.previousBlock(
             { keyMR },
             {},
-            { factomd }
+            context
         );
         expect(previousBlock).toEqual({
             keyMR: '12bfddc1e888a144352db3e50366ae3f022e5a7abe9d3ad911d66fddbbdfd241'
@@ -82,18 +90,14 @@ describe('FactoidBlock resolvers', () => {
         const previousBlock = await factoidBlockResolvers.previousBlock(
             { keyMR },
             undefined,
-            { factomd }
+            context
         );
         expect(previousBlock).toBeNull();
     });
 
     it('Should resolve the keyMR for the nextBlock field', async () => {
         const keyMR = '05c7a500db98dfe393b296998b7d9b74e8f2d2cfeacd1d44c05cfb50bd2cbaf3';
-        const nextBlock = await factoidBlockResolvers.nextBlock(
-            { keyMR },
-            {},
-            { factomd }
-        );
+        const nextBlock = await factoidBlockResolvers.nextBlock({ keyMR }, {}, context);
         expect(nextBlock).toEqual({
             keyMR: '1ce2a6114650bc6695f6714526c5170e7f93def316a3ea21ab6e3fa75007b770'
         });
@@ -104,7 +108,7 @@ describe('FactoidBlock resolvers', () => {
         const nextBlock = await factoidBlockResolvers.nextBlock(
             { keyMR: directoryBlockHead.factoidBlockRef },
             undefined,
-            { factomd }
+            context
         );
         expect(nextBlock).toBeNull();
     });
@@ -114,7 +118,7 @@ describe('FactoidBlock resolvers', () => {
         const entryCrediRate = await factoidBlockResolvers.entryCreditRate(
             { keyMR },
             {},
-            { factomd }
+            context
         );
         expect(entryCrediRate).toBe(666600);
     });
@@ -124,7 +128,7 @@ describe('FactoidBlock resolvers', () => {
         const allTransactions = await factoidBlockResolvers.transactionPage(
             { keyMR },
             {},
-            { factomd }
+            context
         );
         expect(allTransactions.totalCount).toBe(106);
         expect(allTransactions.transactions).toHaveLength(106);
@@ -154,7 +158,7 @@ describe('FactoidBlock resolvers', () => {
         const first20 = await factoidBlockResolvers.transactionPage(
             { keyMR },
             { offset: 0, first: 20 },
-            { factomd }
+            context
         );
         expect(first20.totalCount).toBe(106);
         expect(first20.transactions).toHaveLength(20);
@@ -173,7 +177,7 @@ describe('FactoidBlock resolvers', () => {
         const last20 = await factoidBlockResolvers.transactionPage(
             { keyMR },
             { offset: 86, first: 20 },
-            { factomd }
+            context
         );
 
         expect(last20.totalCount).toBe(106);
@@ -193,7 +197,7 @@ describe('FactoidBlock resolvers', () => {
         const directoryBlock = await factoidBlockResolvers.directoryBlock(
             { keyMR },
             {},
-            { factomd }
+            context
         );
         expect(directoryBlock).toEqual({
             keyMR: '9a09d516bdc6838345c0ca76213e2d3ab2460495e458f1c120acfc5e07df54db'

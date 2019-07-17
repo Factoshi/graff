@@ -6,54 +6,54 @@ import { MAX_PAGE_LENGTH } from '../contants';
  * Root Query resolvers that return a partial AdminBlock type.
  */
 export const factoidBlockQueries: QueryResolvers = {
-    factoidBlock: async (_, { hash }, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock
-            .load(hash)
+    factoidBlock: async (_, { hash }, { dataSources }) => {
+        const factoidBlock = await dataSources.factomd
+            .getFactoidBlock(hash)
             .catch(handleBlockError);
         return factoidBlock && { keyMR: factoidBlock.keyMR };
     },
-    factoidBlockByHeight: async (_, { height }, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock
-            .load(height)
+    factoidBlockByHeight: async (_, { height }, { dataSources }) => {
+        const factoidBlock = await dataSources.factomd
+            .getFactoidBlock(height)
             .catch(handleBlockError);
         return factoidBlock && { keyMR: factoidBlock.keyMR };
     }
 };
 
 export const factoidBlockResolvers: FactoidBlockResolvers = {
-    bodyMR: async ({ keyMR }, _, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
+    bodyMR: async ({ keyMR }, _, { dataSources }) => {
+        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
         return factoidBlock.bodyMR;
     },
-    ledgerKeyMR: async ({ keyMR }, _, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
+    ledgerKeyMR: async ({ keyMR }, _, { dataSources }) => {
+        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
         return factoidBlock.ledgerKeyMR;
     },
-    entryCreditRate: async ({ keyMR }, _, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
+    entryCreditRate: async ({ keyMR }, _, { dataSources }) => {
+        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
         return factoidBlock.entryCreditRate;
     },
-    previousBlock: async ({ keyMR }, _, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
-        const previousBlock = await factomd.factoidBlock
-            .load(factoidBlock.previousBlockKeyMR)
+    previousBlock: async ({ keyMR }, _, { dataSources }) => {
+        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
+        const previousBlock = await dataSources.factomd
+            .getFactoidBlock(factoidBlock.previousBlockKeyMR)
             .catch(handleBlockError);
         return previousBlock && { keyMR: previousBlock.keyMR };
     },
-    nextBlock: async ({ keyMR }, _, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
-        const nextBlock = await factomd.factoidBlock
-            .load(factoidBlock.directoryBlockHeight + 1)
+    nextBlock: async ({ keyMR }, _, { dataSources }) => {
+        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
+        const nextBlock = await dataSources.factomd
+            .getFactoidBlock(factoidBlock.directoryBlockHeight + 1)
             .catch(handleBlockError);
         return nextBlock && { keyMR: nextBlock.keyMR };
     },
     transactionPage: async (
         { keyMR },
         { offset = 0, first = MAX_PAGE_LENGTH },
-        { factomd }
+        { dataSources }
     ) => {
         testPaginationInput(offset!, first!);
-        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
+        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
         const transactions = factoidBlock.transactions
             .slice(offset!, offset! + first!)
             .map(tx => ({
@@ -77,9 +77,9 @@ export const factoidBlockResolvers: FactoidBlockResolvers = {
             pageLength: transactions.length
         };
     },
-    directoryBlock: async ({ keyMR }, _, { factomd }) => {
-        const factoidBlock = await factomd.factoidBlock.load(keyMR!);
-        const directoryBlock = await factomd.directoryBlock.load(
+    directoryBlock: async ({ keyMR }, _, { dataSources }) => {
+        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
+        const directoryBlock = await dataSources.factomd.getDirectoryBlock(
             factoidBlock.directoryBlockHeight
         );
         return { keyMR: directoryBlock.keyMR };

@@ -24,3 +24,12 @@ export enum Channel {
     NewFactoidBlock = 'NEW_FACTOID_BLOCK',
     newEntryBlock = 'NEW_ENTRY_BLOCK'
 }
+
+// Mutation methods
+export enum MutationMethod {
+    CommitChain = 'commit-chain',
+    RevealChain = 'reveal-chain',
+    CommitEntry = 'commit-entry',
+    RevealEntry = 'reveal-entry',
+    SubmitTx = 'factoid-submit'
+}

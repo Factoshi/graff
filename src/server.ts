@@ -1,4 +1,4 @@
-import { ApolloServer, gql, PubSub, AuthenticationError } from 'apollo-server';
+import { ApolloServer, gql, AuthenticationError } from 'apollo-server';
 import { RedisCache } from 'apollo-server-cache-redis';
 import { importSchema } from 'graphql-import';
 import { resolvers } from './resolvers';
@@ -10,16 +10,20 @@ import {
     MAX_COMPLEXITY
 } from './contants';
 import auth from 'basic-auth';
-import { FactomdDataLoader } from './data_loader';
 import { cli } from './factom';
 import { compose } from 'ramda';
 import { Request } from 'express';
-import { ProtocolBlockSource } from './datasource/ProtocolBlock';
+import { FactomdDataSource } from './dataSource';
 import depthLimit from 'graphql-depth-limit';
+import { ConnectionContext, ExecutionParams } from 'subscriptions-transport-ws';
+import { InMemoryLRUCache } from 'apollo-server-caching';
+
+const cache = new InMemoryLRUCache();
 
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
 
-// token should be a basic authorization string.
+// Token should be a basic authorization string. This authorization function is used by both websocket
+// connections and standard http connection.
 const authorize = (token: string | undefined) => {
     if (FACTOMD_PASSWD && FACTOMD_USER) {
         if (token === undefined) {
@@ -40,21 +44,26 @@ const authorize = (token: string | undefined) => {
  *  Create context   *
  ********************/
 
-const pubsub = new PubSub();
-
-const createContextObject = () => ({
-    // Caches factomd requests. New instance created per request to avoid memory leak.
-    factomd: new FactomdDataLoader(cli),
-    pubsub
-});
-
 const extractAuthHeader = (req: Request) => req.headers.authorization;
 
-const context = compose(
-    createContextObject,
+const createContext = compose(
+    // This is the context, but there is not currently anything to add to it manually, so return an empty object
+    () => ({}),
     authorize,
     extractAuthHeader
 );
+
+// As of ApolloServer 2.6.9, datasources and the cache are not automatically added to the context of
+// subscriptions. It is necessary to manually construct and add them here. See issue for recent status.
+// https://github.com/apollographql/apollo-server/issues/1526
+const constructContextForSubscriptions = (connection: ExecutionParams) => ({
+    dataSources: {
+        factomd: new FactomdDataSource<ConnectionContext>(cli).initialize({
+            cache,
+            context: connection.context
+        })
+    }
+});
 
 /********************************************
  *  Create Subscription Lifecycle Methods   *
@@ -85,18 +94,22 @@ const typeDefs = gql`
 export const server = new ApolloServer({
     typeDefs,
     resolvers,
-    // If req is undefined then this is a subscription and thus auth will be handled
-    // by the onConnect subscription lifecycle method.
-    context: ({ req }) => (req !== undefined ? context(req) : createContextObject()),
+    // Cache may either be Redis or InMemoryLRU. See top of file for definition.
+    cache,
+    dataSources: () => ({ factomd: new FactomdDataSource(cli) }),
+    // If connection is not a subscription and thus auth will be handled by the onConnect subscription lifecycle method.
+    // Explicit any because Apollo typings are currently wrong and do not specify the connection key on the argument object.
+    // Will remove when fixed: https://github.com/apollographql/apollo-server/pull/2959
+    context: ({ req, connection }: any) =>
+        connection !== undefined
+            ? constructContextForSubscriptions(connection)
+            : createContext(req),
     // Subscription lifecycle methods.
     subscriptions: { onConnect },
-    tracing: false,
     // mitigate malicious queries with validation rules. Can be configured with env vars.
     validationRules: [
         depthLimit(MAX_QUERY_DEPTH),
         // See https://github.com/4Catalyzer/graphql-validation-complexity for details on this rule.
         createComplexityLimitRule(MAX_COMPLEXITY)
-    ],
-    // cache: new RedisCache(),
-    dataSources: () => ({ protocolBlock: new ProtocolBlockSource(cli) })
+    ]
 });

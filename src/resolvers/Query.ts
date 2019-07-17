@@ -18,15 +18,15 @@ export const query: QueryResolvers = {
     ...entryCreditBlockQueries,
     ...factoidBlockQueries,
     ...transactionQueries,
-    balances: async (root, { addresses }, { factomd }) => {
-        const balances = await factomd.balance.loadMany(addresses);
+    balances: async (root, { addresses }, { dataSources }) => {
+        const balances = await dataSources.factomd.getBalances(addresses);
         return balances.map((balance, i) => ({
             amount: balance,
             address: addresses[i]
         }));
     },
-    currentMinute: async (root, args, { factomd }) => {
-        const currentMinute = await factomd.currentMinute.load();
+    currentMinute: async (root, args, { dataSources }) => {
+        const currentMinute = await dataSources.factomd.getCurrentMinute();
         return {
             leaderHeight: currentMinute.leaderheight,
             directoryBlockHeight: currentMinute.directoryblockheight,
@@ -40,12 +40,14 @@ export const query: QueryResolvers = {
             roundTimeout: currentMinute.roundtimeout
         };
     },
-    entryCreditRate: async (root, args, { factomd }) => {
-        const { rate } = await factomd.entryCreditRate.load();
-        return rate;
+    entryCreditRate: (root, args, { dataSources }) => {
+        return dataSources.factomd.getEntryCreditRate();
     },
-    factoidTransactionAck: async (root, { hash }, { factomd }) => {
-        const factoidTransactionAck = await factomd.ack.load({ hash, chainid: 'f' });
+    factoidTransactionAck: async (root, { hash }, { dataSources }) => {
+        const factoidTransactionAck = await dataSources.factomd.getAck({
+            hash,
+            chainid: 'f'
+        });
         return {
             hash: factoidTransactionAck.txid,
             txTimestamp: factoidTransactionAck.transactiondate,
@@ -53,17 +55,11 @@ export const query: QueryResolvers = {
             status: factoidTransactionAck.status
         };
     },
-    heights: async (root, args, { factomd }) => {
-        const heights = await factomd.heights.load();
-        return {
-            leaderHeight: heights.leaderheight,
-            directoryBlockHeight: heights.directoryblockheight,
-            entryBlockHeight: heights.entryblockheight,
-            entryHeight: heights.entryheight
-        };
+    heights: (root, args, { dataSources }) => {
+        return dataSources.factomd.getHeights();
     },
-    pendingEntries: async (root, { offset = 0, first = Infinity }, { factomd }) => {
-        const pendingEntries = (await factomd.pendingEntries.load()) as any[];
+    pendingEntries: async (root, { offset = 0, first = Infinity }, { dataSources }) => {
+        const pendingEntries = await dataSources.factomd.getPendingEntries();
         const paginatedPendingEntries = pendingEntries
             .slice(offset!, offset! + first!)
             .map(({ entryhash, chainid, status }) => ({
@@ -78,8 +74,12 @@ export const query: QueryResolvers = {
             pendingEntries: paginatedPendingEntries
         };
     },
-    pendingTransactions: async (root, { offset = 0, first = Infinity }, { factomd }) => {
-        const pendingTransactions = (await factomd.pendingTransactions.load()) as any[];
+    pendingTransactions: async (
+        root,
+        { offset = 0, first = Infinity },
+        { dataSources }
+    ) => {
+        const pendingTransactions = await dataSources.factomd.getPendingTransactions();
         const mapIO = (io: any) => ({ amount: io.amount, address: io.useraddress });
         const sumAmount = (acc: number, cur: any) => acc + cur.amount;
         const paginatedPendingTransactions = pendingTransactions
@@ -105,15 +105,17 @@ export const query: QueryResolvers = {
             pendingTransactions: paginatedPendingTransactions
         };
     },
-    properties: async (root, args, { factomd }) => {
-        const properties = await factomd.properties.load();
+    properties: async (root, args, { dataSources }) => {
+        const properties = await dataSources.factomd.getProperties();
         return {
             factomdAPIVersion: properties.factomdapiversion,
             factomdVersion: properties.factomdversion
         };
     },
-    receipt: async (root, { hash }, { factomd }) => {
-        const receipt = await factomd.receipt.load(hash).catch(handleEntryError);
+    receipt: async (root, { hash }, { dataSources }) => {
+        const receipt = await dataSources.factomd
+            .getReceipt(hash)
+            .catch(handleEntryError);
         return (
             receipt && {
                 entry: { hash },

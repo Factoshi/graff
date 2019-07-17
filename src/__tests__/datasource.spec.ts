@@ -1,16 +1,18 @@
-import { cli } from '../../factom';
-import { ProtocolBlockSource } from '../ProtocolBlock';
+import { cli } from '../factom';
+import { FactomdDataSource } from '../dataSource';
 import { InMemoryLRUCache } from 'apollo-server-caching';
 import { randomBytes } from 'crypto';
+import { generateRandomEcAddress, generateRandomFctAddress } from 'factom';
+import { handleBlockError } from '../resolvers/resolver-helpers';
 
-const datasource = new ProtocolBlockSource(cli);
+const datasource = new FactomdDataSource(cli);
 const cache = new InMemoryLRUCache();
 datasource.initialize({
     cache,
     context: {} as any
 });
 
-describe('Test Directory Block Datasource', () => {
+describe('Test Protocol Block Datasources', () => {
     const cliSpy = jest.spyOn(cli, 'getDirectoryBlock');
     const setCacheSpy = jest.spyOn(cache, 'set');
     const getCacheSpy = jest.spyOn(cache, 'get');
@@ -130,9 +132,28 @@ describe('Test Directory Block Datasource', () => {
         expect(setCacheSpy).toHaveBeenCalledTimes(4);
     });
 
+    it('Should fetch directory block head and set the response on the cache', async () => {
+        const headSpy = jest.spyOn(cli, 'getDirectoryBlockHead');
+
+        const fromBlockchain = await datasource.getDirectoryBlockHead();
+        expect(fromBlockchain!.keyMR).toBeDefined();
+        expect(getCacheSpy).toHaveBeenCalledTimes(0);
+        expect(headSpy).toHaveBeenCalledTimes(1);
+        expect(setCacheSpy).toHaveBeenCalledTimes(2);
+
+        // Get that block from the cache
+        const fromCache = await datasource.getDirectoryBlock(fromBlockchain!.keyMR);
+        expect(fromCache!.keyMR).toBe(fromBlockchain!.keyMR);
+        expect(getCacheSpy).toHaveBeenCalledTimes(1);
+        expect(cliSpy).toHaveBeenCalledTimes(0);
+        expect(setCacheSpy).toHaveBeenCalledTimes(2);
+    });
+
     it('Should return null for missing HASH and  NOT save that to the cache', async () => {
         const fakeBlock = randomBytes(32).toString('hex');
-        const fromBlockchain = await datasource.getDirectoryBlock(fakeBlock);
+        const fromBlockchain = await datasource
+            .getDirectoryBlock(fakeBlock)
+            .catch(handleBlockError);
         expect(fromBlockchain).toBeNull();
         // Called once to see if the block is present in the cache
         expect(getCacheSpy).toHaveBeenCalledTimes(1);
@@ -144,22 +165,13 @@ describe('Test Directory Block Datasource', () => {
 
     it('Should return null for missing HEIGHT and NOT save that to the cache', async () => {
         const fakeBlock = Number.MAX_SAFE_INTEGER;
-        const fromBlockchain = await datasource.getDirectoryBlock(fakeBlock);
+        const fromBlockchain = await datasource
+            .getDirectoryBlock(fakeBlock)
+            .catch(handleBlockError);
         expect(fromBlockchain).toBeNull();
         expect(getCacheSpy).toHaveBeenCalledTimes(1);
         expect(cliSpy).toHaveBeenCalledTimes(1);
         expect(setCacheSpy).toHaveBeenCalledTimes(0);
-    });
-});
-
-describe('Test Non-Directory Block Protocol Block Datasource', () => {
-    const cliSpy = jest.spyOn(cli, 'getDirectoryBlock');
-    const setCacheSpy = jest.spyOn(cache, 'set');
-    const getCacheSpy = jest.spyOn(cache, 'get');
-
-    afterEach(() => {
-        jest.clearAllMocks();
-        return cache.flush();
     });
 
     it('Should query an admin block by lookupHash then get it from the cache with backReferenceHash', async () => {
@@ -204,5 +216,38 @@ describe('Test Non-Directory Block Protocol Block Datasource', () => {
         expect(getCacheSpy).toHaveBeenCalledTimes(3);
         expect(cliSpy).toHaveBeenCalledTimes(1);
         expect(setCacheSpy).toHaveBeenCalledTimes(3);
+    });
+});
+
+describe('Test Non-Protocol Block Datasource', () => {
+    const setCacheSpy = jest.spyOn(cache, 'set');
+    const getCacheSpy = jest.spyOn(cache, 'get');
+
+    afterEach(() => {
+        jest.clearAllMocks();
+        return cache.flush();
+    });
+
+    it('Should get several balances and set them on the cache', async () => {
+        const cliBalanceSpy = jest.spyOn(cli, 'getBalance');
+        const addresses = [
+            'FA2tUk6LNzNsdzCbxmac1Kx9wpU9wS7GSoME5BTosK4zAUBM1gEC',
+            'EC1zANmWuEMYoH6VizJg6uFaEdi8Excn1VbLN99KRuxh3GSvB7YQ',
+            generateRandomEcAddress().public,
+            generateRandomFctAddress().public
+        ];
+        const fromBlockchain = await datasource.getBalances(addresses);
+        expect(Array.isArray(fromBlockchain)).toBe(true);
+        expect(fromBlockchain).toHaveLength(4);
+        expect(getCacheSpy).toHaveBeenCalledTimes(4);
+        expect(cliBalanceSpy).toHaveBeenCalledTimes(4);
+        expect(setCacheSpy).toHaveBeenCalledTimes(4);
+
+        const fromCache = await datasource.getBalances(addresses);
+        expect(Array.isArray(fromCache)).toBe(true);
+        expect(fromCache).toHaveLength(4);
+        expect(getCacheSpy).toHaveBeenCalledTimes(8);
+        expect(cliBalanceSpy).toHaveBeenCalledTimes(4);
+        expect(setCacheSpy).toHaveBeenCalledTimes(4);
     });
 });

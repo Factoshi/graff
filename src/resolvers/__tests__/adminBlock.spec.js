@@ -1,17 +1,25 @@
+const { InMemoryLRUCache } = require('apollo-server-caching');
+const { FactomdDataSource } = require('../../datasource');
 const { adminBlockResolvers, adminBlockQueries } = require('../AdminBlock');
 const { adminEntryResolvers } = require('../AdminEntry');
-const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { AdminCode } = require('../../types/resolvers');
 const { randomBytes } = require('crypto');
 
+const factomd = new FactomdDataSource(cli);
+const cache = new InMemoryLRUCache();
+factomd.initialize({
+    cache,
+    context: {}
+});
+const context = { dataSources: { factomd } };
+
 describe('AdminBlock Resolvers', () => {
-    let factomd;
-    beforeEach(() => (factomd = new FactomdDataLoader(cli)));
+    afterEach(() => cache.flush());
 
     it('Should resolve the backReferenceHash field from the adminBlock query.', async () => {
         const hash = 'f7198774997518d9c8fed1925e8a4e19277d721ff0dbe21dc40242ef6e9a96b2';
-        const adminBlock = await adminBlockQueries.adminBlock({}, { hash }, { factomd });
+        const adminBlock = await adminBlockQueries.adminBlock({}, { hash }, context);
         expect(adminBlock).toEqual({ backReferenceHash: hash });
     });
 
@@ -19,7 +27,7 @@ describe('AdminBlock Resolvers', () => {
         const adminBlock = await adminBlockQueries.adminBlock(
             undefined,
             { hash: randomBytes(32).toString('hex') },
-            { factomd }
+            context
         );
         expect(adminBlock).toBeNull();
     });
@@ -30,7 +38,7 @@ describe('AdminBlock Resolvers', () => {
         const adminBlock = await adminBlockQueries.adminBlockByHeight(
             undefined,
             { height: 10 },
-            { factomd }
+            context
         );
         expect(adminBlock).toEqual({ backReferenceHash });
     });
@@ -39,7 +47,7 @@ describe('AdminBlock Resolvers', () => {
         const adminBlock = await adminBlockQueries.adminBlockByHeight(
             undefined,
             { height: Number.MAX_SAFE_INTEGER },
-            { factomd }
+            context
         );
         expect(adminBlock).toBeNull();
     });
@@ -50,7 +58,7 @@ describe('AdminBlock Resolvers', () => {
         const previousBlock = await adminBlockResolvers.previousBlock(
             { backReferenceHash },
             undefined,
-            { factomd }
+            context
         );
         expect(previousBlock).toEqual({
             backReferenceHash:
@@ -64,7 +72,7 @@ describe('AdminBlock Resolvers', () => {
         const nextBlock = await adminBlockResolvers.nextBlock(
             { backReferenceHash },
             undefined,
-            { factomd }
+            context
         );
         expect(nextBlock).toEqual({
             backReferenceHash:
@@ -79,7 +87,7 @@ describe('AdminBlock Resolvers', () => {
         const entries = await adminBlockResolvers.entries(
             { backReferenceHash },
             undefined,
-            { factomd }
+            context
         );
         expect(entries).toBeInstanceOf(Array);
         expect(entries).toHaveLength(32);
@@ -96,7 +104,7 @@ describe('AdminBlock Resolvers', () => {
         const directoryBlock = await adminBlockResolvers.directoryBlock(
             { backReferenceHash },
             undefined,
-            { factomd }
+            context
         );
         expect(directoryBlock).toEqual({
             keyMR: '3a5ec711a1dc1c6e463b0c0344560f830eb0b56e42def141cb423b0d8487a1dc'
@@ -109,7 +117,7 @@ describe('AdminBlock Resolvers', () => {
         const lookupHash = await adminBlockResolvers.lookupHash(
             { backReferenceHash },
             undefined,
-            { factomd }
+            context
         );
         expect(lookupHash).toBe(
             '60d6c075925bbd2ddaf3b8c6737225d9df1963d0d098e10b67605d557857fc52'
@@ -122,7 +130,7 @@ describe('AdminBlock Resolvers', () => {
         const bodySize = await adminBlockResolvers.bodySize(
             { backReferenceHash },
             undefined,
-            { factomd }
+            context
         );
         expect(bodySize).toBe(131);
     });

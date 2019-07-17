@@ -29,6 +29,8 @@ export const handleTransactionError = (error: Error) => {
 export const handleEntryError = (error: Error) => {
     if (error.message.endsWith('Receipt creation error (code: -32010)')) {
         return null;
+    } else if (error.message.endsWith('Entry not found (code: -32008)')) {
+        return null;
     }
     throw error;
 };

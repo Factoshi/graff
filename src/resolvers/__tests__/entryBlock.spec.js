@@ -1,11 +1,19 @@
+const { InMemoryLRUCache } = require('apollo-server-caching');
+const { FactomdDataSource } = require('../../datasource');
 const { entryBlockResolvers, entryBlockQueries } = require('../EntryBlock');
-const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { randomBytes } = require('crypto');
 
+const factomd = new FactomdDataSource(cli);
+const cache = new InMemoryLRUCache();
+factomd.initialize({
+    cache,
+    context: {}
+});
+const context = { dataSources: { factomd } };
+
 describe('EntryBlock Resolvers', () => {
-    let factomd;
-    beforeEach(() => (factomd = new FactomdDataLoader(cli)));
+    afterEach(() => cache.flush());
 
     it('Should resolve an entry block keyMR from the chainHead query', async () => {
         const chainId =
@@ -13,7 +21,7 @@ describe('EntryBlock Resolvers', () => {
         const chainHead = await entryBlockQueries.chainHead(
             undefined,
             { chainId },
-            { factomd }
+            context
         );
         expect(typeof chainHead.keyMR).toBe('string');
     });
@@ -22,7 +30,7 @@ describe('EntryBlock Resolvers', () => {
         const chainHead = await entryBlockQueries.chainHead(
             undefined,
             { chainId: randomBytes(32).toString('hex') },
-            { factomd }
+            context
         );
         expect(chainHead).toBeNull();
     });
@@ -32,7 +40,7 @@ describe('EntryBlock Resolvers', () => {
         const entryBlock = await entryBlockQueries.entryBlock(
             undefined,
             { hash },
-            { factomd }
+            context
         );
         expect(entryBlock.keyMR).toBe(hash);
     });
@@ -41,7 +49,7 @@ describe('EntryBlock Resolvers', () => {
         const entryBlock = await entryBlockQueries.entryBlock(
             undefined,
             { hash: randomBytes(32).toString('hex') },
-            { factomd }
+            context
         );
         expect(entryBlock).toBe(null);
     });
@@ -51,7 +59,7 @@ describe('EntryBlock Resolvers', () => {
         const previousBlock = await entryBlockResolvers.previousBlock(
             { keyMR },
             undefined,
-            { factomd }
+            context
         );
         expect(previousBlock).toEqual({
             keyMR: '82a609d7df91501b5669d1a9df34a6a3b7077aff8ee4308d4d00e03749e5a106'
@@ -63,18 +71,14 @@ describe('EntryBlock Resolvers', () => {
         const previousBlock = await entryBlockResolvers.previousBlock(
             { keyMR },
             undefined,
-            { factomd }
+            context
         );
         expect(previousBlock).toBeNull();
     });
 
     it('should resolve all the entries in an entry block', async () => {
         const keyMR = 'fc056babef747ad84cce087c2bd446f0e93e0e848eff069dce08f623e4b3434f';
-        const allEntries = await entryBlockResolvers.entryPage(
-            { keyMR },
-            {},
-            { factomd }
-        );
+        const allEntries = await entryBlockResolvers.entryPage({ keyMR }, {}, context);
         expect(allEntries.entries).toHaveLength(41);
         expect(allEntries.pageLength).toBe(41);
         expect(allEntries.totalCount).toBe(41);
@@ -93,7 +97,7 @@ describe('EntryBlock Resolvers', () => {
         const first20 = await entryBlockResolvers.entryPage(
             { keyMR },
             { offset: 0, first: 20 },
-            { factomd }
+            context
         );
         expect(first20.entries).toHaveLength(20);
         expect(first20.pageLength).toBe(20);
@@ -112,7 +116,7 @@ describe('EntryBlock Resolvers', () => {
         const last20 = await entryBlockResolvers.entryPage(
             { keyMR },
             { offset: 21, first: 20 },
-            { factomd }
+            context
         );
         expect(last20.entries).toHaveLength(20);
         expect(last20.pageLength).toBe(20);
@@ -132,7 +136,7 @@ describe('EntryBlock Resolvers', () => {
             { keyMR },
             // This goes over the total number of entries available in the block.
             { offset: 30, first: 20 },
-            { factomd }
+            context
         );
         expect(entryPage.entries).toHaveLength(11);
         expect(entryPage.pageLength).toBe(11);
@@ -151,7 +155,7 @@ describe('EntryBlock Resolvers', () => {
         const directoryBlock = await entryBlockResolvers.directoryBlock(
             { keyMR },
             {},
-            { factomd }
+            context
         );
         expect(directoryBlock).toEqual({
             keyMR: '20009134067fdac455c30b12548ab74bc4ffb6917d4936b73a55a42e66092111'

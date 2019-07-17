@@ -12,7 +12,6 @@ import Factom from 'factom';
 import bluebird from 'bluebird';
 import { PublishParams } from '../types/server';
 import { compose } from 'ramda';
-import { withFilter } from 'apollo-server';
 
 const pubsub = new PubSub();
 const publish = ({ channel, payload }: PublishParams) => pubsub.publish(channel, payload);

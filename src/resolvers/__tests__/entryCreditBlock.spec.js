@@ -2,20 +2,28 @@ const {
     entryCreditBlockQueries,
     entryCreditBlockResolvers
 } = require('../EntryCreditBlock');
-const { FactomdDataLoader } = require('../../data_loader');
+const { InMemoryLRUCache } = require('apollo-server-caching');
+const { FactomdDataSource } = require('../../datasource');
 const { cli } = require('../../factom');
 const { randomBytes } = require('crypto');
 
+const factomd = new FactomdDataSource(cli);
+const cache = new InMemoryLRUCache();
+factomd.initialize({
+    cache,
+    context: {}
+});
+const context = { dataSources: { factomd } };
+
 describe('EntryCreditBlock resolvers', () => {
-    let factomd;
-    beforeEach(() => (factomd = new FactomdDataLoader(cli)));
+    afterEach(() => cache.flush());
 
     it('Should resolve the headerHash from the entryCreditBlock query', async () => {
         const hash = '96131286eb49d4eb587a7dbce7a6af968b52fa0b0a9f31be9c4ff6ce5096ce68';
         const entryCreditBlock = await entryCreditBlockQueries.entryCreditBlock(
             undefined,
             { hash },
-            { factomd }
+            context
         );
         expect(entryCreditBlock).toEqual({ headerHash: hash });
     });
@@ -24,7 +32,7 @@ describe('EntryCreditBlock resolvers', () => {
         const entryCreditBlock = await entryCreditBlockQueries.entryCreditBlock(
             undefined,
             { hash: randomBytes(32).toString('hex') },
-            { factomd }
+            context
         );
         expect(entryCreditBlock).toBeNull();
     });
@@ -34,7 +42,7 @@ describe('EntryCreditBlock resolvers', () => {
         const entryCreditBlock = await entryCreditBlockQueries.entryCreditBlockByHeight(
             undefined,
             { height: 10 },
-            { factomd }
+            context
         );
         expect(entryCreditBlock).toEqual({ headerHash: hash });
     });
@@ -43,7 +51,7 @@ describe('EntryCreditBlock resolvers', () => {
         const entryCreditBlock = await entryCreditBlockQueries.entryCreditBlockByHeight(
             undefined,
             { height: Number.MAX_SAFE_INTEGER },
-            { factomd }
+            context
         );
         expect(entryCreditBlock).toBeNull();
     });
@@ -54,7 +62,7 @@ describe('EntryCreditBlock resolvers', () => {
         const fullHash = await entryCreditBlockResolvers.fullHash(
             { headerHash },
             undefined,
-            { factomd }
+            context
         );
         expect(fullHash).toBe(
             '298121b6bd1aa048b4b7fc3a48488a1f3de7681e94fd40608dc4b2b13f4595c0'
@@ -67,7 +75,7 @@ describe('EntryCreditBlock resolvers', () => {
         const bodyHash = await entryCreditBlockResolvers.bodyHash(
             { headerHash },
             undefined,
-            { factomd }
+            context
         );
         expect(bodyHash).toBe(
             '898b0672bb93057a2dec036ee99ef1a2cae3fcea76733b0f3272e2f5c69bd0e8'
@@ -80,7 +88,7 @@ describe('EntryCreditBlock resolvers', () => {
         const bodySize = await entryCreditBlockResolvers.bodySize(
             { headerHash },
             undefined,
-            { factomd }
+            context
         );
         expect(bodySize).toBe(433);
     });
@@ -91,7 +99,7 @@ describe('EntryCreditBlock resolvers', () => {
         const objectCount = await entryCreditBlockResolvers.objectCount(
             { headerHash },
             undefined,
-            { factomd }
+            context
         );
         expect(objectCount).toBe(14);
     });
@@ -102,7 +110,7 @@ describe('EntryCreditBlock resolvers', () => {
         const previousBlock = await entryCreditBlockResolvers.previousBlock(
             { headerHash },
             undefined,
-            { factomd }
+            context
         );
         expect(previousBlock).toEqual({
             headerHash: 'b88eb7b3fc0c1899e1e4603b04ce0820f2a14b754df75587164d6dfb577b0d19'
@@ -116,7 +124,7 @@ describe('EntryCreditBlock resolvers', () => {
         const previousBlock = await entryCreditBlockResolvers.previousBlock(
             { headerHash },
             undefined,
-            { factomd }
+            context
         );
         expect(previousBlock).toBeNull();
     });
@@ -127,7 +135,7 @@ describe('EntryCreditBlock resolvers', () => {
         const nextBlock = await entryCreditBlockResolvers.nextBlock(
             { headerHash },
             undefined,
-            { factomd }
+            context
         );
         expect(nextBlock).toEqual({
             headerHash: 'f294cd012b3c088740aa90b1fa8feead006c5a35176f57dd0bc7aac19c88f409'
@@ -139,7 +147,7 @@ describe('EntryCreditBlock resolvers', () => {
         const nextBlock = await entryCreditBlockResolvers.nextBlock(
             { headerHash: directoryBlockHead.entryCreditBlockRef },
             undefined,
-            { factomd }
+            context
         );
         expect(nextBlock).toBeNull();
     });
@@ -150,7 +158,7 @@ describe('EntryCreditBlock resolvers', () => {
         const allCommits = await entryCreditBlockResolvers.commitPage(
             { headerHash },
             {},
-            { factomd }
+            context
         );
 
         expect(allCommits.commits).toHaveLength(70);
@@ -175,7 +183,7 @@ describe('EntryCreditBlock resolvers', () => {
         const first20 = await entryCreditBlockResolvers.commitPage(
             { headerHash },
             { offset: 0, first: 20 },
-            { factomd }
+            context
         );
         expect(first20.commits).toHaveLength(20);
         expect(first20.pageLength).toBe(20);
@@ -195,7 +203,7 @@ describe('EntryCreditBlock resolvers', () => {
         const last20 = await entryCreditBlockResolvers.commitPage(
             { headerHash },
             { offset: 50, first: 30 },
-            { factomd }
+            context
         );
         expect(last20.commits).toHaveLength(20);
         expect(last20.pageLength).toBe(20);
@@ -215,7 +223,7 @@ describe('EntryCreditBlock resolvers', () => {
         const directoryBlock = await entryCreditBlockResolvers.directoryBlock(
             { headerHash },
             {},
-            { factomd }
+            context
         );
         expect(directoryBlock).toEqual({
             keyMR: '857b10ef53a83d9b29d93ce1e8e72e65ea3ce3a39273565ac01727963ee49636'

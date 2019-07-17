@@ -10,14 +10,16 @@ import { MAX_PAGE_LENGTH } from '../contants';
  * Root Query resolvers that return a partial EntryBlock type.
  */
 export const entryBlockQueries: QueryResolvers = {
-    chainHead: async (_, { chainId }, { factomd }) => {
-        const chainHead = await factomd.chainHead
-            .load(chainId)
+    chainHead: async (_, { chainId }, { dataSources }) => {
+        const chainHead = await dataSources.factomd
+            .getChainHead(chainId)
             .catch(handleChainHeadError);
         return chainHead && { keyMR: chainHead.keyMR };
     },
-    entryBlock: async (_, { hash }, { factomd }) => {
-        const entryBlock = await factomd.entryBlock.load(hash).catch(handleBlockError);
+    entryBlock: async (_, { hash }, { dataSources }) => {
+        const entryBlock = await dataSources.factomd
+            .getEntryBlock(hash)
+            .catch(handleBlockError);
         return entryBlock && { keyMR: entryBlock.keyMR };
     }
 };
@@ -26,20 +28,20 @@ export const entryBlockQueries: QueryResolvers = {
  * EntryBlock type resolvers.
  */
 export const entryBlockResolvers: EntryBlockResolvers = {
-    previousBlock: async ({ keyMR }, _, { factomd }) => {
-        const entryBlock = await factomd.entryBlock.load(keyMR!);
-        const previousBlock = await factomd.entryBlock
-            .load(entryBlock.previousBlockKeyMR)
+    previousBlock: async ({ keyMR }, _, { dataSources }) => {
+        const entryBlock = await dataSources.factomd.getEntryBlock(keyMR!);
+        const previousBlock = await dataSources.factomd
+            .getEntryBlock(entryBlock.previousBlockKeyMR)
             .catch(handleBlockError);
         return previousBlock && { keyMR: previousBlock.keyMR };
     },
     entryPage: async (
         { keyMR },
         { offset = 0, first = MAX_PAGE_LENGTH },
-        { factomd }
+        { dataSources }
     ) => {
         testPaginationInput(offset!, first!);
-        const entryBlock = await factomd.entryBlock.load(keyMR!);
+        const entryBlock = await dataSources.factomd.getEntryBlock(keyMR!);
         const entries = entryBlock.entryRefs
             .slice(offset!, offset! + first!)
             .map(({ entryHash, timestamp }) => ({
@@ -55,23 +57,23 @@ export const entryBlockResolvers: EntryBlockResolvers = {
             pageLength: entries.length
         };
     },
-    directoryBlock: async ({ keyMR }, _, { factomd }) => {
-        const entryBlock = await factomd.entryBlock.load(keyMR!);
-        const directoryBlock = await factomd.directoryBlock.load(
+    directoryBlock: async ({ keyMR }, _, { dataSources }) => {
+        const entryBlock = await dataSources.factomd.getEntryBlock(keyMR!);
+        const directoryBlock = await dataSources.factomd.getDirectoryBlock(
             entryBlock.directoryBlockHeight
         );
         return { keyMR: directoryBlock.keyMR };
     },
-    chainId: async ({ keyMR }, _, { factomd }) => {
-        const entryBlock = await factomd.entryBlock.load(keyMR!);
+    chainId: async ({ keyMR }, _, { dataSources }) => {
+        const entryBlock = await dataSources.factomd.getEntryBlock(keyMR!);
         return entryBlock.chainId;
     },
-    timestamp: async ({ keyMR }, _, { factomd }) => {
-        const entryBlock = await factomd.entryBlock.load(keyMR!);
+    timestamp: async ({ keyMR }, _, { dataSources }) => {
+        const entryBlock = await dataSources.factomd.getEntryBlock(keyMR!);
         return entryBlock.timestamp;
     },
-    sequenceNumber: async ({ keyMR }, _, { factomd }) => {
-        const entryBlock = await factomd.entryBlock.load(keyMR!);
+    sequenceNumber: async ({ keyMR }, _, { dataSources }) => {
+        const entryBlock = await dataSources.factomd.getEntryBlock(keyMR!);
         return entryBlock.sequenceNumber;
     }
 };

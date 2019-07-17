@@ -14,12 +14,12 @@ export const formatAckResponse = (ack: any) => ({
 });
 
 export const ackQueries: QueryResolvers = {
-    commitAck: async (root, { hash }, { factomd }) => {
-        const ack = await factomd.ack.load({ hash, chainid: 'c' });
+    commitAck: async (root, { hash }, { dataSources }) => {
+        const ack = await dataSources.factomd.getAck({ hash, chainid: 'c' });
         return formatAckResponse(ack);
     },
-    entryAck: async (root, { hash, chainId }, { factomd }) => {
-        const ack = await factomd.ack.load({ hash, chainid: chainId });
+    entryAck: async (root, { hash, chainId }, { dataSources }) => {
+        const ack = await dataSources.factomd.getAck({ hash, chainid: chainId });
         return formatAckResponse(ack);
     }
 };

@@ -1,12 +1,13 @@
+const { InMemoryLRUCache } = require('apollo-server-caching');
+const { FactomdDataSource } = require('../../datasource');
 const { query } = require('../Query');
-const { FactomdDataLoader } = require('../../data_loader');
 const { cli } = require('../../factom');
 const { randomBytes } = require('crypto');
 
 const generateMockPendingEntriesMethod = length => ({
-    factomd: {
-        pendingEntries: {
-            load: async () =>
+    dataSources: {
+        factomd: {
+            getPendingEntries: async () =>
                 Array(length)
                     .fill(0)
                     .map(() => ({
@@ -19,9 +20,9 @@ const generateMockPendingEntriesMethod = length => ({
 });
 
 const generateMockPendingTransactionsMethod = length => ({
-    factomd: {
-        pendingTransactions: {
-            load: async () =>
+    dataSources: {
+        factomd: {
+            getPendingTransactions: async () =>
                 Array(length)
                     .fill(0)
                     .map(() => ({
@@ -39,9 +40,16 @@ const generateMockPendingTransactionsMethod = length => ({
     }
 });
 
+const factomd = new FactomdDataSource(cli);
+const cache = new InMemoryLRUCache();
+factomd.initialize({
+    cache,
+    context: {}
+});
+const context = { dataSources: { factomd } };
+
 describe('Query Resolvers', () => {
-    let factomd;
-    beforeEach(() => (factomd = new FactomdDataLoader(cli)));
+    afterEach(() => cache.flush());
 
     it('Should get an array of the leaves of Address from the balances resolver', async () => {
         ecAddress = 'EC3QVDcZ88chcKxHnatyigwq4nSZbsY56B6Q7HuyL9yUEFSoSf6Q';
@@ -49,7 +57,7 @@ describe('Query Resolvers', () => {
         const balances = await query.balances(
             undefined,
             { addresses: [ecAddress, fctAddress] },
-            { factomd }
+            context
         );
         expect(Array.isArray(balances)).toBe(true);
         balances.forEach(balance => {
@@ -59,9 +67,7 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get the leaves of CurrentMinute from the currentMinute resolver', async () => {
-        const currentMinute = await query.currentMinute(undefined, undefined, {
-            factomd
-        });
+        const currentMinute = await query.currentMinute(undefined, undefined, context);
         expect(typeof currentMinute.leaderHeight).toBe('number');
         expect(typeof currentMinute.directoryBlockHeight).toBe('number');
         expect(typeof currentMinute.minute).toBe('number');
@@ -75,13 +81,13 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get the entry credit rate', async () => {
-        const ecRate = await query.entryCreditRate(undefined, undefined, { factomd });
+        const ecRate = await query.entryCreditRate(undefined, undefined, context);
         expect(typeof ecRate).toBe('number');
     });
 
     it('Should get the leaves of FactoidTransactionAck from the factoidTransactionAck resolver', async () => {
         const hash = 'b853f921bb6598b20c5054fa422a83a6a128ccd3c0fed2aaf03f0060d6805744';
-        const ack = await query.factoidTransactionAck(undefined, { hash }, { factomd });
+        const ack = await query.factoidTransactionAck(undefined, { hash }, context);
         expect(ack).toEqual({
             hash,
             txTimestamp: 1560361379165,
@@ -91,7 +97,7 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get the leaves of Heights from the heights resolver', async () => {
-        const heights = await query.heights(undefined, undefined, { factomd });
+        const heights = await query.heights(undefined, undefined, context);
         expect(typeof heights.leaderHeight).toBe('number');
         expect(typeof heights.directoryBlockHeight).toBe('number');
         expect(typeof heights.entryBlockHeight).toBe('number');
@@ -99,7 +105,7 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get paginated pending entries', async () => {
-        const pendingEntries = await query.pendingEntries(undefined, {}, { factomd });
+        const pendingEntries = await query.pendingEntries(undefined, {}, context);
         expect(typeof pendingEntries.totalCount).toBe('number');
         expect(typeof pendingEntries.offset).toBe('number');
         expect(typeof pendingEntries.pageLength).toBe('number');
@@ -149,7 +155,7 @@ describe('Query Resolvers', () => {
         const pendingTransactions = await query.pendingTransactions(
             undefined,
             {},
-            { factomd }
+            context
         );
         expect(typeof pendingTransactions.totalCount).toBe('number');
         expect(typeof pendingTransactions.offset).toBe('number');
@@ -197,14 +203,14 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get the leaves of Properties from the properties resolver', async () => {
-        const properties = await query.properties(undefined, undefined, { factomd });
+        const properties = await query.properties(undefined, undefined, context);
         expect(typeof properties.factomdVersion).toBe('string');
         expect(typeof properties.factomdAPIVersion).toBe('string');
     });
 
     it('Should get an entry receipt', async () => {
         const hash = 'f15aa73fbe29c9e5a6a53b4fbac16f8917bc7fb5441b32cd32453195c808fb5d';
-        const receipt = await query.receipt(undefined, { hash }, { factomd });
+        const receipt = await query.receipt(undefined, { hash }, context);
         expect(receipt.entry).toEqual({ hash });
         expect(receipt.bitcoinBlockHash).toBe(
             '0000000000000000001cc4b4bbb96148080072ab215a61bd050825fcdeca4980'
