@@ -26,9 +26,9 @@ jobs:
                 FACTOMD_PROTOCOL=https
         - script: npm run test
           name: 'unit tests'
-        - script: npm run test-q
+        - script: npm run test-q -- --forceExit # forceExit makes closes jest which is kept open due to redis.
           name: 'query integreation tests'
         - stage: fds-mutation
-          script: npm run test-m
+          script: npm run test-m -- --forceExit
         - stage: fds-subscription
-          script: npm run test-s
+          script: npm run test-s -- --forceExit
