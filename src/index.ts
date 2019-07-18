@@ -1,6 +1,13 @@
 import { server } from './server';
 import { testFactomd, waitForCache } from './connect';
 
+const exit = () => {
+    console.log('Bye!');
+    process.exit(0);
+};
+process.on('SIGTERM', exit);
+process.on('SIGINT', exit);
+
 const launch = async () => {
     try {
         // Ensure that factomd and the cache are ready.
