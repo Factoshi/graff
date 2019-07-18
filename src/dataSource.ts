@@ -271,7 +271,7 @@ export class FactomdDataSource<C = Context> extends DataSource<C> {
         const cacheKey = 'receipt' + hash;
         const fromCache = await this.cache.get(cacheKey);
         if (fromCache !== undefined) {
-            return fromCache;
+            return this.tryParse(fromCache);
         }
         const receipt = await this.cli.factomdApi('receipt', { hash });
         if (receipt.receipt && receipt.receipt.bitcoinblockhash) {
