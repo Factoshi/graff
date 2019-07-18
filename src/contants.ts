@@ -3,7 +3,7 @@
  */
 const env = process.env;
 // factomd
-export const FACTOMD_HOST = env.FACTOMD_HOST;
+export const FACTOMD_HOST = env.FACTOMD_HOST || 'localhost';
 export const FACTOMD_PORT = env.FACTOMD_PORT ? parseInt(env.FACTOMD_PORT) : 8088;
 export const FACTOMD_PATH = env.FACTOMD_PATH || '/v2';
 export const FACTOMD_USER = env.FACTOMD_USER;
@@ -17,7 +17,7 @@ export const MAX_COMPLEXITY = env.MAX_COMPLEXITY ? parseInt(env.MAX_COMPLEXITY) 
 
 // Redis config
 export const REDIS_PORT = env.REDIS_PORT ? parseInt(env.REDIS_PORT) : 6379;
-export const REDIS_HOST = env.REDIS_HOST;
+export const REDIS_HOST = env.REDIS_HOST || 'localhost';
 export const REDIS_PASSWD = env.REDIS_PASSWD;
 export const REDIS_FAMILY = env.REDIS_FAMILY === '6' ? 6 : 4; // IP version
 export const REDIS_DB = env.REDIS_DB ? parseInt(env.REDIS_DB) : 0;
