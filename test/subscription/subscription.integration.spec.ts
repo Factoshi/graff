@@ -12,13 +12,19 @@ import {
 import { assert } from 'chai';
 import { AddResponse, generateRandomFctAddress } from 'factom';
 import { apollo } from '../apolloClient';
-import { server } from '../../src/server';
+import { server, cache } from '../../src/server';
+import { RedisCache } from 'apollo-server-cache-redis';
 
 describe('Integration Test Subscriptions', () => {
     let observable: any;
     afterEach(() => observable.unsubscribe());
     beforeAll(() => server.listen());
-    afterAll(() => server.stop());
+    afterAll(async () => {
+        if (cache instanceof RedisCache) {
+            cache.close();
+        }
+        return server.stop();
+    });
 
     it('Should be notified of a new directory block', async () => {
         await createChains();

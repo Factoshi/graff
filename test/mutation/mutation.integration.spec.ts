@@ -19,13 +19,19 @@ import {
 import { randomBytes } from 'crypto';
 import { cli } from '../factom';
 import { apollo } from '../apolloClient';
-import { server } from '../../src/server';
+import { server, cache } from '../../src/server';
+import { RedisCache } from 'apollo-server-cache-redis';
 
 const EC_ADDRESS = 'Es4D1XXGBBJcWea54xDLMVYgobHzciXKfPSxoZNdsbdjxJftPM6Y';
 
 describe('Integration Test Mutations', () => {
     beforeAll(() => server.listen());
-    afterAll(() => server.stop());
+    afterAll(async () => {
+        if (cache instanceof RedisCache) {
+            cache.close();
+        }
+        return server.stop();
+    });
 
     it('Should commit a chain', async () => {
         const chain = createChain();

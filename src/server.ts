@@ -46,8 +46,8 @@ const authorize = (token: string | undefined) => {
 /*******************
  *  Create Cache   *
  ******************/
-
-const cache = REDIS_HOST
+// Exported so thqt it can be used with integration testing.
+export const cache = REDIS_HOST
     ? new RedisCache({
           port: REDIS_PORT,
           host: REDIS_HOST,

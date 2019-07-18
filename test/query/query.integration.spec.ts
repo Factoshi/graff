@@ -27,11 +27,17 @@ import {
 import { cli } from '../../src/factom';
 import { randomBytes } from 'crypto';
 import { apollo } from '../apolloClient';
-import { server } from '../../src/server';
+import { server, cache } from '../../src/server';
+import { RedisCache } from 'apollo-server-cache-redis';
 
 describe('Integration Test Queries', () => {
     beforeAll(() => server.listen());
-    afterAll(() => server.stop());
+    afterAll(async () => {
+        if (cache instanceof RedisCache) {
+            cache.close();
+        }
+        return server.stop();
+    });
 
     it('Should query an admin block by hash.', async () => {
         const res = await apollo.query({
