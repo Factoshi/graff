@@ -25,7 +25,7 @@ jobs:
     include:
         - stage: mainnet
           script: npm run test
-          name: 'unit tests'
+          name: 'Unit tests'
           env:
               - *mainnet
         - script: npm run test-q
