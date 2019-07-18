@@ -49,8 +49,7 @@
         "node-fetch": "^2.6.0",
         "nodemon": "^1.19.1",
         "ts-jest": "^24.0.2",
-        "ts-node": "^8.3.0",
-        "typescript": "^3.5.3"
+        "ts-node": "^8.3.0"
     },
     "dependencies": {
         "@types/basic-auth": "^1.1.2",
@@ -70,6 +69,7 @@
         "graphql-depth-limit": "^1.1.0",
         "graphql-import": "^0.7.1",
         "graphql-validation-complexity": "^0.2.5",
-        "ramda": "^0.26.1"
+        "ramda": "^0.26.1",
+        "typescript": "^3.5.3"
     }
 }
