@@ -11,24 +11,43 @@ install: npm install
 
 script: npm run test
 
-env:
-    matrix:
-        - REDIS_HOST=localhost
-          REDIS_DB=1
-          REDIS_PORT=6379
+aliases:
+    - &mainnet:
+      - FACTOMD_HOST=api.factomd.net
+        FACTOMD_PORT=443
+        FACTOMD_PROTOCOL=https
+    - &redis:
+      - REDIS_HOST=localhost
+        REDIS_DB=1
+        REDIS_PORT=6379
 
 jobs:
     include:
         - stage: mainnet
-          script: npm run test --forceExit # Redis connection forces jest to remain open. --forceExit closes it.
+          script: npm run test 
           name: 'unit tests'
-          env:
-              - FACTOMD_HOST=api.factomd.net
-                FACTOMD_PORT=443
-                FACTOMD_PROTOCOL=https
-        - script: npm run test-q -- --forceExit
+          env: 
+            - *mainnet
+        - script: npm run test-q
           name: 'Query integreation tests'
+          env: 
+            - *mainnet
+        - script: npm run test-q -- --forceExit # Redis connection forces jest to remain open. --forceExit closes it.
+          name: 'Query integreation tests with Redis'
+          env: 
+            - *mainnet
+            - *redis
         - stage: fds-mutation
-          script: npm run test-m -- --forceExit
+          script: npm run test-m
+          name: 'Mutation integreation tests'
+        - script: npm run test-m -- --forceExit
+          name: 'Mutation integreation tests with redis'
+          env: 
+            - *redis
         - stage: fds-subscription
           script: npm run test-s -- --forceExit
+          name: 'Subscription integreation tests'
+        - script: npm run test-s -- --forceExit
+          name: 'Subscription integreation tests with redis'
+          env: 
+            - *redis
