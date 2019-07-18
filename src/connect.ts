@@ -28,7 +28,7 @@ export const factomCli = new FactomCli({
 
 export const factomEmitter = new FactomEventEmitter(factomCli);
 
-// Redis cache
+// Cache
 
 export const cache = REDIS_HOST
     ? new RedisCache({
@@ -45,6 +45,7 @@ export const cache = REDIS_HOST
 export const waitForCache = () => {
     return new Promise((resolve, reject) => {
         if (cache instanceof RedisCache) {
+            console.log(`Connecting to Redis at ${REDIS_HOST}:${REDIS_PORT}...`);
             cache.client.on('error', reject);
             cache.client.on('connect', resolve);
         } else {
@@ -54,6 +55,7 @@ export const waitForCache = () => {
 };
 
 export const testFactomd = async () => {
+    console.log(`Connecting to Factomd at ${FACTOMD_HOST}:${FACTOMD_PORT}...`);
     const heights = await factomCli.getHeights();
     if (heights.leaderHeight > heights.directoryBlockHeight + 1) {
         throw new Error('Factomd is not fully synced.');
