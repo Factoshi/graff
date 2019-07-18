@@ -1,7 +1,7 @@
 FROM node:12.4-alpine
 WORKDIR /server
 COPY package.json .
-RUN npm install
+RUN npm install --production
 COPY . .
 RUN npm run build
-CMD ['npm', 'run', 'start']
+CMD ["node", "build/index.js"]
