@@ -1,10 +1,8 @@
 import { DataSource, DataSourceConfig } from 'apollo-datasource';
-import { FactomCli, DirectoryBlock, Entry } from 'factom';
+import { FactomCli, DirectoryBlock } from 'factom';
 import { Context } from './types/server';
 import { KeyValueCache } from 'apollo-server-core';
-import { handleEntryError } from './resolvers/resolver-helpers';
 import promise from 'bluebird';
-import { tsCallSignatureDeclaration } from '@babel/types';
 import { MutationMethod } from './contants';
 
 enum HeightPrefix {
