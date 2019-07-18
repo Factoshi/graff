@@ -1,10 +1,10 @@
 const { InMemoryLRUCache } = require('apollo-server-caching');
 const { FactomdDataSource } = require('../../dataSource');
 const { ackQueries } = require('../EntryCommitAck');
-const { cli } = require('../../factom');
+const { factomCli } = require('../../connect');
 const { Ack } = require('../../types/resolvers');
 
-const factomd = new FactomdDataSource(cli);
+const factomd = new FactomdDataSource(factomCli);
 const cache = new InMemoryLRUCache();
 factomd.initialize({
     cache,

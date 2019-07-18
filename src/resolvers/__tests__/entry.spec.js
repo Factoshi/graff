@@ -1,10 +1,10 @@
 const { InMemoryLRUCache } = require('apollo-server-caching');
 const { FactomdDataSource } = require('../../dataSource');
-const { cli } = require('../../factom');
+const { factomCli } = require('../../connect');
 const { entryResolvers, entryQueries } = require('../Entry');
 const { randomBytes } = require('crypto');
 
-const factomd = new FactomdDataSource(cli);
+const factomd = new FactomdDataSource(factomCli);
 const cache = new InMemoryLRUCache();
 factomd.initialize({
     cache,
@@ -46,7 +46,7 @@ describe('Entry Resolvers', () => {
 
     it('Should resolve the external IDs of an entry', async () => {
         const hash = '135e3dc2c365cb1cf8d2343181cb2cd1fffe244d05c821ebb75774b4af637260';
-        const expected = await cli
+        const expected = await factomCli
             .getEntry(hash)
             .then(({ extIds }) => extIds.map(id => id.toString('base64')));
         const extIds = await entryResolvers.externalIds({ hash }, undefined, context);
@@ -55,7 +55,7 @@ describe('Entry Resolvers', () => {
 
     it('Should resolve the content of an entry', async () => {
         const hash = '135e3dc2c365cb1cf8d2343181cb2cd1fffe244d05c821ebb75774b4af637260';
-        const expected = await cli
+        const expected = await factomCli
             .getEntry(hash)
             .then(({ content }) => content.toString('base64'));
         const content = await entryResolvers.content({ hash }, undefined, context);

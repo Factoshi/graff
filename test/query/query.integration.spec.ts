@@ -24,10 +24,10 @@ import {
     QUERY_RECEIPT,
     QUERY_TX
 } from './queryHelpers';
-import { cli } from '../../src/factom';
+import { factomCli, cache } from '../../src/connect';
 import { randomBytes } from 'crypto';
 import { apollo } from '../apolloClient';
-import { server, cache } from '../../src/server';
+import { server } from '../../src/server';
 import { RedisCache } from 'apollo-server-cache-redis';
 
 describe('Integration Test Queries', () => {
@@ -62,8 +62,8 @@ describe('Integration Test Queries', () => {
         const fctAddress = 'FA3RqGvKruW9BPTPHqRGAop76HgJm4fHoit7wW4aqmPyHtrjCy1M';
         const ecAddress = 'EC2XugtJ3PqJdAqVGeKnUZLKs2XhZM3kkXJor7DiYkN9uSKqKWB9';
         const [fctBalance, ecBalance, queryResult] = await Promise.all([
-            cli.getBalance(fctAddress),
-            cli.getBalance(ecAddress),
+            factomCli.getBalance(fctAddress),
+            factomCli.getBalance(ecAddress),
             apollo.query({
                 query: QUERY_BALANCES,
                 variables: { addresses: [fctAddress, ecAddress] }
@@ -87,7 +87,7 @@ describe('Integration Test Queries', () => {
         const chainId =
             'df3ade9eec4b08d5379cc64270c30ea7315d8a8a1a69efe2b98a60ecdd69e604';
         const [actual, queryResult] = await Promise.all([
-            cli.getChainHead(chainId),
+            factomCli.getChainHead(chainId),
             apollo.query({ query: QUERY_CHAIN_HEAD, variables: { chainId } })
         ]);
         expect(queryResult.data!.chainHead.keyMR).toBe(actual.keyMR);
@@ -136,7 +136,7 @@ describe('Integration Test Queries', () => {
 
     it('Should query a directory block head.', async () => {
         const [expected, res] = await Promise.all([
-            cli.getDirectoryBlockHead(),
+            factomCli.getDirectoryBlockHead(),
             apollo.query({ query: QUERY_DBLOCK_HEAD }) as any
         ]);
         const dBlock = res.data.directoryBlockHead;
@@ -244,7 +244,7 @@ describe('Integration Test Queries', () => {
 
     it('Should query the entry credit rate', async () => {
         const [expectedRate, actualRate] = await Promise.all([
-            cli.factomdApi('entry-credit-rate'),
+            factomCli.factomdApi('entry-credit-rate'),
             apollo.query({ query: QUERY_ECRATE })
         ]);
         expect(actualRate.data!.entryCreditRate).toBe(expectedRate.rate);

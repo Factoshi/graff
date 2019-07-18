@@ -4,10 +4,10 @@ const {
 } = require('../EntryCreditBlock');
 const { InMemoryLRUCache } = require('apollo-server-caching');
 const { FactomdDataSource } = require('../../dataSource');
-const { cli } = require('../../factom');
+const { factomCli } = require('../../connect');
 const { randomBytes } = require('crypto');
 
-const factomd = new FactomdDataSource(cli);
+const factomd = new FactomdDataSource(factomCli);
 const cache = new InMemoryLRUCache();
 factomd.initialize({
     cache,
@@ -143,7 +143,7 @@ describe('EntryCreditBlock resolvers', () => {
     });
 
     it('Should return null for a nextBlock that does not exist', async () => {
-        const directoryBlockHead = await cli.getDirectoryBlockHead();
+        const directoryBlockHead = await factomCli.getDirectoryBlockHead();
         const nextBlock = await entryCreditBlockResolvers.nextBlock(
             { headerHash: directoryBlockHead.entryCreditBlockRef },
             undefined,

@@ -1,10 +1,10 @@
 const { InMemoryLRUCache } = require('apollo-server-caching');
 const { FactomdDataSource } = require('../../dataSource');
-const { cli } = require('../../factom');
+const { factomCli } = require('../../connect');
 const { directoryBlockQueries, directoryBlockResolvers } = require('../DirectoryBlock');
 const { randomBytes } = require('crypto');
 
-const factomd = new FactomdDataSource(cli);
+const factomd = new FactomdDataSource(factomCli);
 const cache = new InMemoryLRUCache();
 factomd.initialize({
     cache,

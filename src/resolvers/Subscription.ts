@@ -5,7 +5,7 @@ import {
     EntryBlock,
     DirectoryBlock
 } from '../types/resolvers';
-import { factomEmitter, cli } from '../factom';
+import { factomEmitter, factomCli } from '../connect';
 import { PubSub } from 'apollo-server';
 import { Channel } from '../contants';
 import Factom from 'factom';
@@ -36,7 +36,7 @@ const factoidBlockParams = ({ factoidBlockRef }: Factom.DirectoryBlock) => ({
 });
 
 const adminBlockParams = async ({ adminBlockRef }: Factom.DirectoryBlock) => {
-    const adminBlock = await cli.getAdminBlock(adminBlockRef);
+    const adminBlock = await factomCli.getAdminBlock(adminBlockRef);
     return {
         channel: Channel.NewAdminBlock,
         payload: { newAdminBlock: { backReferenceHash: adminBlock.backReferenceHash } }
@@ -102,9 +102,13 @@ factomEmitter.on('newDirectoryBlock', publishNewEntryBlocks);
 
 export const publishNewChains = async (directoryBlock: Factom.DirectoryBlock) => {
     const newChains: Partial<EntryBlock>[] = await bluebird
-        .map(directoryBlock.entryBlockRefs, ({ keyMR }) => cli.getEntryBlock(keyMR), {
-            concurrency: 10
-        })
+        .map(
+            directoryBlock.entryBlockRefs,
+            ({ keyMR }) => factomCli.getEntryBlock(keyMR),
+            {
+                concurrency: 10
+            }
+        )
         .filter(entryBlock => entryBlock.sequenceNumber === 0)
         .map(entryBlock => ({
             keyMR: entryBlock.keyMR,
@@ -146,3 +150,11 @@ export const subscription: SubscriptionResolvers = {
         subscribe: (_, { address }) => pubsub.asyncIterator(address)
     }
 };
+
+/****************************
+ *  Handle emitter errors   *
+ ****************************/
+
+factomEmitter.on('error', (err: Error) => {
+    console.error(err);
+});

@@ -4,23 +4,17 @@ import { importSchema } from 'graphql-import';
 import { resolvers } from './resolvers';
 import { resolve } from 'path';
 import auth from 'basic-auth';
-import { cli } from './factom';
+import { factomCli, cache } from './connect';
 import { compose } from 'ramda';
 import { Request } from 'express';
 import { FactomdDataSource } from './dataSource';
 import depthLimit from 'graphql-depth-limit';
 import { ConnectionContext, ExecutionParams } from 'subscriptions-transport-ws';
-import { InMemoryLRUCache } from 'apollo-server-caching';
 import {
     FACTOMD_PASSWD,
     FACTOMD_USER,
     MAX_QUERY_DEPTH,
-    MAX_COMPLEXITY,
-    REDIS_HOST,
-    REDIS_PORT,
-    REDIS_FAMILY,
-    REDIS_PASSWD,
-    REDIS_DB
+    MAX_COMPLEXITY
 } from './contants';
 
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
@@ -43,20 +37,6 @@ const authorize = (token: string | undefined) => {
     }
 };
 
-/*******************
- *  Create Cache   *
- ******************/
-// Exported so thqt it can be used with integration testing.
-export const cache = REDIS_HOST
-    ? new RedisCache({
-          port: REDIS_PORT,
-          host: REDIS_HOST,
-          family: REDIS_FAMILY,
-          password: REDIS_PASSWD,
-          db: REDIS_DB
-      })
-    : new InMemoryLRUCache();
-
 /*********************
  *  Create context   *
  ********************/
@@ -75,7 +55,7 @@ const createContext = compose(
 // https://github.com/apollographql/apollo-server/issues/1526
 const constructContextForSubscriptions = (connection: ExecutionParams) => ({
     dataSources: {
-        factomd: new FactomdDataSource<ConnectionContext>(cli).initialize({
+        factomd: new FactomdDataSource<ConnectionContext>(factomCli).initialize({
             cache,
             context: connection.context
         })
@@ -113,7 +93,7 @@ export const server = new ApolloServer({
     resolvers,
     // Cache may either be Redis or InMemoryLRU. See top of file for definition.
     cache,
-    dataSources: () => ({ factomd: new FactomdDataSource(cli) }),
+    dataSources: () => ({ factomd: new FactomdDataSource(factomCli) }),
     // If connection is not a subscription and thus auth will be handled by the onConnect subscription lifecycle method.
     // Explicit any because Apollo typings are currently wrong and do not specify the connection key on the argument object.
     // Will remove when fixed: https://github.com/apollographql/apollo-server/pull/2959

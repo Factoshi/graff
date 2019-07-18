@@ -19,8 +19,9 @@ import {
 import { randomBytes } from 'crypto';
 import { cli } from '../factom';
 import { apollo } from '../apolloClient';
-import { server, cache } from '../../src/server';
+import { server } from '../../src/server';
 import { RedisCache } from 'apollo-server-cache-redis';
+import { cache } from '../../src/connect';
 
 const EC_ADDRESS = 'Es4D1XXGBBJcWea54xDLMVYgobHzciXKfPSxoZNdsbdjxJftPM6Y';
 

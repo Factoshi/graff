@@ -1,11 +1,11 @@
-import { cli } from '../factom';
+import { factomCli } from '../connect';
 import { FactomdDataSource } from '../dataSource';
 import { InMemoryLRUCache } from 'apollo-server-caching';
 import { randomBytes } from 'crypto';
 import { generateRandomEcAddress, generateRandomFctAddress } from 'factom';
 import { handleBlockError } from '../resolvers/resolver-helpers';
 
-const datasource = new FactomdDataSource(cli);
+const datasource = new FactomdDataSource(factomCli);
 const cache = new InMemoryLRUCache();
 datasource.initialize({
     cache,
@@ -13,7 +13,7 @@ datasource.initialize({
 });
 
 describe('Test Protocol Block Datasources', () => {
-    const cliSpy = jest.spyOn(cli, 'getDirectoryBlock');
+    const cliSpy = jest.spyOn(factomCli, 'getDirectoryBlock');
     const setCacheSpy = jest.spyOn(cache, 'set');
     const getCacheSpy = jest.spyOn(cache, 'get');
     const HASH = '363a31b2b50980ef7098a3538b729b4cf54fc7d408a2084226187bd0e217bec8';
@@ -133,7 +133,7 @@ describe('Test Protocol Block Datasources', () => {
     });
 
     it('Should fetch directory block head and set the response on the cache', async () => {
-        const headSpy = jest.spyOn(cli, 'getDirectoryBlockHead');
+        const headSpy = jest.spyOn(factomCli, 'getDirectoryBlockHead');
 
         const fromBlockchain = await datasource.getDirectoryBlockHead();
         expect(fromBlockchain!.keyMR).toBeDefined();
@@ -175,7 +175,7 @@ describe('Test Protocol Block Datasources', () => {
     });
 
     it('Should query an admin block by lookupHash then get it from the cache with backReferenceHash', async () => {
-        const cliSpy = jest.spyOn(cli, 'getAdminBlock');
+        const cliSpy = jest.spyOn(factomCli, 'getAdminBlock');
         const backReferenceHash =
             'f0ea0eeb90e669842ddbcf892d1b139b50a663541455fdc88630c00bf267fe6e';
         const lookupHash =
@@ -197,7 +197,7 @@ describe('Test Protocol Block Datasources', () => {
     });
 
     it('Should query an admin block by backReferenceHash then get it from the cache with lookupHash', async () => {
-        const cliSpy = jest.spyOn(cli, 'getAdminBlock');
+        const cliSpy = jest.spyOn(factomCli, 'getAdminBlock');
         const backReferenceHash =
             'f0ea0eeb90e669842ddbcf892d1b139b50a663541455fdc88630c00bf267fe6e';
         const lookupHash =
@@ -229,7 +229,7 @@ describe('Test Non-Protocol Block Datasource', () => {
     });
 
     it('Should get several balances and set them on the cache', async () => {
-        const cliBalanceSpy = jest.spyOn(cli, 'getBalance');
+        const cliBalanceSpy = jest.spyOn(factomCli, 'getBalance');
         const addresses = [
             'FA2tUk6LNzNsdzCbxmac1Kx9wpU9wS7GSoME5BTosK4zAUBM1gEC',
             'EC1zANmWuEMYoH6VizJg6uFaEdi8Excn1VbLN99KRuxh3GSvB7YQ',

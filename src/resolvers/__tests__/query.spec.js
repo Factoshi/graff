@@ -1,7 +1,7 @@
 const { InMemoryLRUCache } = require('apollo-server-caching');
 const { FactomdDataSource } = require('../../dataSource');
 const { query } = require('../Query');
-const { cli } = require('../../factom');
+const { factomCli } = require('../../connect');
 const { randomBytes } = require('crypto');
 
 const generateMockPendingEntriesMethod = length => ({
@@ -40,7 +40,7 @@ const generateMockPendingTransactionsMethod = length => ({
     }
 });
 
-const factomd = new FactomdDataSource(cli);
+const factomd = new FactomdDataSource(factomCli);
 const cache = new InMemoryLRUCache();
 factomd.initialize({
     cache,

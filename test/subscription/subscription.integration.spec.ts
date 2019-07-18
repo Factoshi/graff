@@ -12,8 +12,9 @@ import {
 import { assert } from 'chai';
 import { AddResponse, generateRandomFctAddress } from 'factom';
 import { apollo } from '../apolloClient';
-import { server, cache } from '../../src/server';
+import { server } from '../../src/server';
 import { RedisCache } from 'apollo-server-cache-redis';
+import { cache } from '../../src/connect';
 
 describe('Integration Test Subscriptions', () => {
     let observable: any;
