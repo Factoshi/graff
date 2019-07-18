@@ -27,27 +27,27 @@ jobs:
           script: npm run test
           name: 'unit tests'
           env:
-              *mainnet
+              - *mainnet
         - script: npm run test-q
           name: 'Query integreation tests'
           env:
-              *mainnet
+              - *mainnet
         - script: npm run test-q -- --forceExit # Redis connection forces jest to remain open. --forceExit closes it.
           name: 'Query integreation tests with Redis'
           env:
-              *redis
-              *mainnet
+              - *redis
+              - *mainnet
         - stage: fds-mutation
           script: npm run test-m
           name: 'Mutation integreation tests'
         - script: npm run test-m -- --forceExit
           name: 'Mutation integreation tests with redis'
           env:
-              *redis
+              - *redis
         - stage: fds-subscription
           script: npm run test-s -- --forceExit
           name: 'Subscription integreation tests'
         - script: npm run test-s -- --forceExit
           name: 'Subscription integreation tests with redis'
           env:
-              *redis
+              - *redis
