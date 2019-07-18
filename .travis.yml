@@ -20,14 +20,14 @@ env:
 jobs:
     include:
         - stage: mainnet
+          script: npm run test --forceExit # Redis connection forces jest to remain open. --forceExit closes it.
+          name: 'unit tests'
           env:
               - FACTOMD_HOST=api.factomd.net
                 FACTOMD_PORT=443
                 FACTOMD_PROTOCOL=https
-        - script: npm run test
-          name: 'unit tests'
-        - script: npm run test-q -- --forceExit # forceExit makes closes jest which is kept open due to redis.
-          name: 'query integreation tests'
+        - script: npm run test-q -- --forceExit
+          name: 'Query integreation tests'
         - stage: fds-mutation
           script: npm run test-m -- --forceExit
         - stage: fds-subscription
