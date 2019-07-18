@@ -13,11 +13,11 @@ script: npm run test
 
 aliases:
     - &mainnet:
-      - FACTOMD_HOST=api.factomd.net
+        FACTOMD_HOST=api.factomd.net
         FACTOMD_PORT=443
         FACTOMD_PROTOCOL=https
     - &redis:
-      - REDIS_HOST=localhost
+        REDIS_HOST=localhost
         REDIS_DB=1
         REDIS_PORT=6379
 
