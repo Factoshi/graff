@@ -3,12 +3,6 @@ import { RedisCache } from 'apollo-server-cache-redis';
 import { importSchema } from 'graphql-import';
 import { resolvers } from './resolvers';
 import { resolve } from 'path';
-import {
-    FACTOMD_PASSWD,
-    FACTOMD_USER,
-    MAX_QUERY_DEPTH,
-    MAX_COMPLEXITY
-} from './contants';
 import auth from 'basic-auth';
 import { cli } from './factom';
 import { compose } from 'ramda';
@@ -17,8 +11,17 @@ import { FactomdDataSource } from './dataSource';
 import depthLimit from 'graphql-depth-limit';
 import { ConnectionContext, ExecutionParams } from 'subscriptions-transport-ws';
 import { InMemoryLRUCache } from 'apollo-server-caching';
-
-const cache = new InMemoryLRUCache();
+import {
+    FACTOMD_PASSWD,
+    FACTOMD_USER,
+    MAX_QUERY_DEPTH,
+    MAX_COMPLEXITY,
+    REDIS_HOST,
+    REDIS_PORT,
+    REDIS_FAMILY,
+    REDIS_PASSWD,
+    REDIS_DB
+} from './contants';
 
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
 
@@ -39,6 +42,20 @@ const authorize = (token: string | undefined) => {
         }
     }
 };
+
+/*******************
+ *  Create Cache   *
+ ******************/
+
+const cache = REDIS_HOST
+    ? new RedisCache({
+          port: REDIS_PORT,
+          host: REDIS_HOST,
+          family: REDIS_FAMILY,
+          password: REDIS_PASSWD,
+          db: REDIS_DB
+      })
+    : new InMemoryLRUCache();
 
 /*********************
  *  Create context   *
@@ -100,10 +117,11 @@ export const server = new ApolloServer({
     // If connection is not a subscription and thus auth will be handled by the onConnect subscription lifecycle method.
     // Explicit any because Apollo typings are currently wrong and do not specify the connection key on the argument object.
     // Will remove when fixed: https://github.com/apollographql/apollo-server/pull/2959
-    context: ({ req, connection }: any) =>
-        connection !== undefined
+    context: ({ req, connection }: any) => {
+        return connection !== undefined
             ? constructContextForSubscriptions(connection)
-            : createContext(req),
+            : createContext(req);
+    },
     // Subscription lifecycle methods.
     subscriptions: { onConnect },
     // mitigate malicious queries with validation rules. Can be configured with env vars.

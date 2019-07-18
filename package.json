@@ -57,6 +57,7 @@
         "@types/bluebird": "^3.5.27",
         "@types/graphql": "^14.2.2",
         "@types/graphql-depth-limit": "^1.1.0",
+        "@types/ioredis": "^4.0.13",
         "@types/ramda": "^0.26.16",
         "apollo-server": "^2.7.0",
         "apollo-server-cache-redis": "^1.1.0",

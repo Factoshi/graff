@@ -1,6 +1,8 @@
 sudo: required
 services:
     - docker
+    - redis-server
+
 language: node_js
 node_js:
     - '12.4'
@@ -12,12 +14,25 @@ jobs:
         - stage: mainnet # used for unit tests and query integration tests.
           script: npm run test
           script: npm run test-q
-          env:
-            FACTOMD_HOST=api.factomd.net
-            FACTOMD_PORT=443
-            FACTOMD_PROTOCOL=https
-        # factom dev stack used for remaining tests
-        - stage: fds-mutation 
+          env: # Matrix test with redis cache and with default cache
+            - FACTOMD_HOST=api.factomd.net
+              FACTOMD_PORT=443
+              FACTOMD_PROTOCOL=https
+            - FACTOMD_HOST=api.factomd.net
+              FACTOMD_PORT=443
+              FACTOMD_PROTOCOL=https
+              REDIS_HOST=localhost
+              REDIS_DB=1
+              REDIS_PORT=6379
+        - stage: fds-mutation # factom dev stack used for remaining tests
           script: npm run test-m
+          env:
+            - REDIS_HOST=localhost
+              REDIS_DB=1
+              REDIS_PORT=6379
         - stage: fds-subscription
           script: npm run test-s
+          env:
+            - REDIS_HOST=localhost
+              REDIS_DB=1
+              REDIS_PORT=6379

@@ -15,6 +15,13 @@ export const MAX_PAGE_LENGTH = env.MAX_PAGE_LENGTH ? parseInt(env.MAX_PAGE_LENGT
 export const MAX_QUERY_DEPTH = env.MAX_QUERY_DEPTH ? parseInt(env.MAX_QUERY_DEPTH) : 7;
 export const MAX_COMPLEXITY = env.MAX_COMPLEXITY ? parseInt(env.MAX_COMPLEXITY) : 1500;
 
+// Redis config
+export const REDIS_PORT = env.REDIS_PORT ? parseInt(env.REDIS_PORT) : 6379;
+export const REDIS_HOST = env.REDIS_HOST;
+export const REDIS_PASSWD = env.REDIS_PASSWD;
+export const REDIS_FAMILY = env.REDIS_FAMILY === '6' ? 6 : 4; // IP version
+export const REDIS_DB = env.REDIS_DB ? parseInt(env.REDIS_DB) : 0;
+
 // Subscription channels
 export enum Channel {
     NewAdminBlock = 'NEW_ADMIN_BLOCK',
