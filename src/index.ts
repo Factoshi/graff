@@ -1,5 +1,5 @@
-import { server } from './server';
 import { testFactomd, waitForCache } from './connect';
+import { server } from './server';
 
 const exit = () => {
     console.log('Bye!');
@@ -8,7 +8,7 @@ const exit = () => {
 process.on('SIGTERM', exit);
 process.on('SIGINT', exit);
 
-const launch = async () => {
+(async () => {
     try {
         // Ensure that factomd and the cache are ready.
         await Promise.all([testFactomd(), waitForCache()]);
@@ -21,6 +21,4 @@ const launch = async () => {
         console.error(e);
         process.exit(1);
     }
-};
-
-launch();
+})();
