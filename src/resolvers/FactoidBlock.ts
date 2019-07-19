@@ -2,6 +2,13 @@ import { QueryResolvers, FactoidBlockResolvers, Transaction } from '../types/res
 import { testPaginationInput, handleBlockError } from './resolver-helpers';
 import { MAX_PAGE_LENGTH } from '../contants';
 
+const resolveField = (field: string) => {
+    return async ({ keyMR }: any, _: any, { dataSources }: any) => {
+        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
+        return factoidBlock[field];
+    };
+};
+
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
@@ -21,18 +28,9 @@ export const factoidBlockQueries: QueryResolvers = {
 };
 
 export const factoidBlockResolvers: FactoidBlockResolvers = {
-    bodyMR: async ({ keyMR }, _, { dataSources }) => {
-        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
-        return factoidBlock.bodyMR;
-    },
-    ledgerKeyMR: async ({ keyMR }, _, { dataSources }) => {
-        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
-        return factoidBlock.ledgerKeyMR;
-    },
-    entryCreditRate: async ({ keyMR }, _, { dataSources }) => {
-        const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
-        return factoidBlock.entryCreditRate;
-    },
+    bodyMR: resolveField('bodyMR'),
+    ledgerKeyMR: resolveField('ledgerKeyMR'),
+    entryCreditRate: resolveField('entryCreditRate'),
     previousBlock: async ({ keyMR }, _, { dataSources }) => {
         const factoidBlock = await dataSources.factomd.getFactoidBlock(keyMR!);
         const previousBlock = await dataSources.factomd

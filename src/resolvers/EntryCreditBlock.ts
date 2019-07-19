@@ -6,6 +6,15 @@ import {
 import { testPaginationInput, handleBlockError } from './resolver-helpers';
 import { MAX_PAGE_LENGTH } from '../contants';
 
+const resolveField = (field: string) => {
+    return async ({ headerHash }: any, _: any, { dataSources }: any) => {
+        const entryCreditBlock = await dataSources.factomd.getEntryCreditBlock(
+            headerHash!
+        );
+        return entryCreditBlock[field];
+    };
+};
+
 /**
  * Root Query resolvers that return a partial AdminBlock type.
  */
@@ -28,30 +37,10 @@ export const entryCreditBlockQueries: QueryResolvers = {
  * AdminBlock type resolvers. All resolvers expect the parent to provide the headerHash.
  */
 export const entryCreditBlockResolvers: EntryCreditBlockResolvers = {
-    fullHash: async ({ headerHash }, _, { dataSources }) => {
-        const entryCreditBlock = await dataSources.factomd.getEntryCreditBlock(
-            headerHash!
-        );
-        return entryCreditBlock.fullHash;
-    },
-    bodyHash: async ({ headerHash }, _, { dataSources }) => {
-        const entryCreditBlock = await dataSources.factomd.getEntryCreditBlock(
-            headerHash!
-        );
-        return entryCreditBlock.bodyHash;
-    },
-    bodySize: async ({ headerHash }, _, { dataSources }) => {
-        const entryCreditBlock = await dataSources.factomd.getEntryCreditBlock(
-            headerHash!
-        );
-        return entryCreditBlock.bodySize;
-    },
-    objectCount: async ({ headerHash }, _, { dataSources }) => {
-        const entryCreditBlock = await dataSources.factomd.getEntryCreditBlock(
-            headerHash!
-        );
-        return entryCreditBlock.objectCount;
-    },
+    fullHash: resolveField('fullHash'),
+    bodyHash: resolveField('bodyHash'),
+    bodySize: resolveField('bodySize'),
+    objectCount: resolveField('objectCount'),
     previousBlock: async ({ headerHash }, _, { dataSources }) => {
         const entryCreditBlock = await dataSources.factomd.getEntryCreditBlock(
             headerHash!
