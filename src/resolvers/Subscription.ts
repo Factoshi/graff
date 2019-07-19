@@ -105,9 +105,7 @@ export const publishNewChains = async (directoryBlock: Factom.DirectoryBlock) =>
         .map(
             directoryBlock.entryBlockRefs,
             ({ keyMR }) => factomCli.getEntryBlock(keyMR),
-            {
-                concurrency: 10
-            }
+            { concurrency: 5 }
         )
         .filter(entryBlock => entryBlock.sequenceNumber === 0)
         .map(entryBlock => ({
