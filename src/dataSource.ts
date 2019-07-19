@@ -70,18 +70,18 @@ export class FactomdDataSource<C = Context> extends DataSource<C> {
             cacheData = await this.cache.get(key);
         }
         if (cacheData !== undefined) {
-            // determine whether the cacheData is a pointer or a block.
+            // Determine whether the cacheData is a pointer or a block.
             if (/^[A-Fa-f0-9]{64}$/g.test(cacheData)) {
                 // cacheData is a pointer, so now we can use that to get the block.
                 const blockFromCache = await this.cache.get(cacheData);
                 // If the pointer didn't lead to anything, this block is skipped and the function
                 // finished by fetching the data from factomd below.
                 if (blockFromCache !== undefined) {
-                    let block = this.tryParse(blockFromCache) as T;
+                    let block: T = this.tryParse(blockFromCache);
                     return { block, fromCache: true };
                 }
             } else {
-                const block = this.tryParse(cacheData) as T;
+                const block: T = this.tryParse(cacheData);
                 return { block, fromCache: true };
             }
         }
@@ -175,10 +175,10 @@ export class FactomdDataSource<C = Context> extends DataSource<C> {
         key: string,
         factomGet: () => Promise<T>,
         options?: { ttl: number }
-    ) {
+    ): Promise<T> {
         const fromCache = await this.cache.get(key);
         if (fromCache !== undefined) {
-            return this.tryParse(fromCache) as T;
+            return this.tryParse(fromCache);
         }
         const fromBlockchain = await factomGet();
         if (fromBlockchain !== null) {
@@ -238,7 +238,7 @@ export class FactomdDataSource<C = Context> extends DataSource<C> {
 
     async getEntryCreditRate() {
         const cacheKey = 'eCRate';
-        const cachedRate = await this.cache.get('eCRate');
+        const cachedRate = await this.cache.get(cacheKey);
         if (cachedRate !== undefined) {
             return parseInt(cachedRate);
         }
