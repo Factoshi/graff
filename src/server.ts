@@ -53,7 +53,7 @@ const createContext = compose(
 // As of ApolloServer 2.6.9, datasources and the cache are not automatically added to the context of
 // subscriptions. It is necessary to manually construct and add them here. See issue for recent status.
 // https://github.com/apollographql/apollo-server/issues/1526
-const constructContextForSubscriptions = (connection: ExecutionParams) => ({
+const createContextForSubscriptions = (connection: ExecutionParams) => ({
     dataSources: {
         factomd: new FactomdDataSource<ConnectionContext>(factomCli).initialize({
             cache,
@@ -75,36 +75,24 @@ const onConnect = compose(
     extractAuthParam
 );
 
-/*********************
- *  Create typeDefs  *
- ********************/
-// import schema and parse
-const schema = importSchema(resolve(__dirname, '../schema.graphql'));
-const typeDefs = gql`
-    ${schema}
-`;
-
 /*******************
  *  Create server  *
  ******************/
 // bring it all together
 export const server = new ApolloServer({
-    typeDefs,
+    typeDefs: gql(importSchema(resolve(__dirname, '../schema.graphql'))),
     resolvers,
-    // Cache may either be Redis or InMemoryLRU. See top of file for definition.
     cache,
     dataSources: () => ({ factomd: new FactomdDataSource(factomCli) }),
-    // If connection is not a subscription and thus auth will be handled by the onConnect subscription lifecycle method.
+    // If connection defined then this is a subscription. Authentication is handled by the subscription lifecycle methods below.
     // Explicit any because Apollo typings are currently wrong and do not specify the connection key on the argument object.
     // Will remove when fixed: https://github.com/apollographql/apollo-server/pull/2959
     context: ({ req, connection }: any) => {
         return connection !== undefined
-            ? constructContextForSubscriptions(connection)
+            ? createContextForSubscriptions(connection)
             : createContext(req);
     },
-    // Subscription lifecycle methods.
     subscriptions: { onConnect },
-    // mitigate malicious queries with validation rules. Can be configured with env vars.
     validationRules: [
         depthLimit(MAX_QUERY_DEPTH),
         // See https://github.com/4Catalyzer/graphql-validation-complexity for details on this rule.
