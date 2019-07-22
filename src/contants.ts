@@ -22,6 +22,11 @@ export const REDIS_PASSWD = env.REDIS_PASSWD;
 export const REDIS_FAMILY = env.REDIS_FAMILY === '6' ? 6 : 4; // IP version
 export const REDIS_DB = env.REDIS_DB ? parseInt(env.REDIS_DB) : 0;
 
+// GraphQL config
+export const GQL_PLAYGROUND = env.GQL_PLAYGROUND
+    ? env.GQL_PLAYGROUND === 'true'
+    : env.NODE_ENV !== 'production';
+
 // Subscription channels
 export enum Channel {
     NewAdminBlock = 'NEW_ADMIN_BLOCK',

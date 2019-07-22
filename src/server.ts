@@ -1,5 +1,4 @@
 import { ApolloServer, gql, AuthenticationError } from 'apollo-server';
-import { RedisCache } from 'apollo-server-cache-redis';
 import { importSchema } from 'graphql-import';
 import { resolvers } from './resolvers';
 import { resolve } from 'path';
@@ -14,7 +13,8 @@ import {
     FACTOMD_PASSWD,
     FACTOMD_USER,
     MAX_QUERY_DEPTH,
-    MAX_COMPLEXITY
+    MAX_COMPLEXITY,
+    GQL_PLAYGROUND
 } from './contants';
 
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
@@ -97,5 +97,6 @@ export const server = new ApolloServer({
         depthLimit(MAX_QUERY_DEPTH),
         // See https://github.com/4Catalyzer/graphql-validation-complexity for details on this rule.
         createComplexityLimitRule(MAX_COMPLEXITY)
-    ]
+    ],
+    playground: GQL_PLAYGROUND
 });
