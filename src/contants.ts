@@ -31,6 +31,9 @@ export const GQL_PORT = env.GQL_PORT
     : env.NODE_ENV !== 'production'
     ? 4000
     : 8032;
+export const GQL_INTROSPEC = env.GQL_INTROSPEC
+    ? env.GQL_INTROSPEC === 'true'
+    : env.NODE_ENV !== 'production';
 
 // Subscription channels
 export enum Channel {

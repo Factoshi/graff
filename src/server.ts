@@ -14,7 +14,8 @@ import {
     FACTOMD_USER,
     MAX_QUERY_DEPTH,
     MAX_COMPLEXITY,
-    GQL_PLAYGROUND
+    GQL_PLAYGROUND,
+    GQL_INTROSPEC
 } from './contants';
 
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
@@ -98,5 +99,6 @@ export const server = new ApolloServer({
         // See https://github.com/4Catalyzer/graphql-validation-complexity for details on this rule.
         createComplexityLimitRule(MAX_COMPLEXITY)
     ],
-    playground: GQL_PLAYGROUND
+    playground: GQL_PLAYGROUND,
+    introspection: GQL_INTROSPEC
 });
