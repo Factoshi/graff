@@ -2,7 +2,7 @@
 
 Graff is a GraphQL wrapper for the factomd RPC API - it allows a client to query factomd using GraphQL.
 
-Note: this is an early beta. Fields and types may be deprecated and then removed in the future.
+Note: this is an early beta. Fields or types may be deprecated or removed at short notice.
 
 ## Requirements
 
