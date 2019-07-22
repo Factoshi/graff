@@ -1,5 +1,6 @@
 import { testFactomd, waitForCache } from './connect';
 import { server } from './server';
+import { GQL_PORT } from './contants';
 
 const exit = () => {
     console.log('Bye!');
@@ -14,7 +15,7 @@ process.on('SIGINT', exit);
         await Promise.all([testFactomd(), waitForCache()]);
 
         // Launch the server
-        const serverInfo = await server.listen();
+        const serverInfo = await server.listen({ port: GQL_PORT });
         console.log(`Server ready at ${serverInfo.url} 🚀`);
     } catch (e) {
         console.error('Launch failed. Please see error output.');

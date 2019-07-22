@@ -22,10 +22,15 @@ export const REDIS_PASSWD = env.REDIS_PASSWD;
 export const REDIS_FAMILY = env.REDIS_FAMILY === '6' ? 6 : 4; // IP version
 export const REDIS_DB = env.REDIS_DB ? parseInt(env.REDIS_DB) : 0;
 
-// GraphQL config
+// Server config
 export const GQL_PLAYGROUND = env.GQL_PLAYGROUND
     ? env.GQL_PLAYGROUND === 'true'
     : env.NODE_ENV !== 'production';
+export const GQL_PORT = env.GQL_PORT
+    ? parseInt(env.GQL_PORT)
+    : env.NODE_ENV !== 'production'
+    ? 4000
+    : 8032;
 
 // Subscription channels
 export enum Channel {
