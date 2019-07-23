@@ -1,0 +1,48 @@
+# example run command
+# docker-compose -f scaled.yaml up -d --scale graff=3
+
+version: '3'
+services:
+    factomd:
+        # Check https://hub.docker.com/r/bedrocksolutions/factomd/tags for the more recent stable release.
+        image: 'bedrocksolutions/factomd:v6.3.2'
+        volumes:
+            # Factomd volume should have been created beforehand.
+            - mainnet:/app/database
+            # See https://github.com/BedrockSolutions/factomd-docker configuration information.
+            - /path/to/bedrock/config:/app/config
+        ports:
+            - 8088:8088
+            - 8090:8090
+            - 8080:8080
+        container_name: factomd
+    redis:
+        image: redis
+        container_name: redis
+    graff:
+        image: 'factoshi/graff:latest'
+        depends_on:
+            - factomd
+            - redis
+        expose:
+            - 8032
+        environment:
+            # See https://github.com/Factoshi/graff/blob/master/README.md for all environment variables
+            - FACTOMD_HOST=factomd
+            - REDIS_HOST=redis
+            - GQL_PLAYGROUND=true
+            - GQL_INTROSPEC=true
+    nginx:
+        image: nginx:latest
+        volumes:
+            # See nginx.conf in the recipes directory
+            - ./nginx.conf:/etc/nginx/nginx.conf:ro
+        depends_on:
+            - graff
+        ports:
+            - '8032:4000'
+        container_name: nginx
+
+volumes:
+    mainnet:
+        external: true

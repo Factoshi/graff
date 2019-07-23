@@ -1,0 +1,29 @@
+# Wait for factomd to finish syncing before using the API.
+version: '3'
+services:
+    factomd:
+        image: 'bedrocksolutions/factomd:v6.3.2'
+        volumes:
+            - mainnet:/app/database
+            # See https://github.com/BedrockSolutions/factomd-docker for configuration docs.
+            - /path/to/bedrock/config:/app/config
+        ports:
+            - 8088:8088
+            - 8090:8090
+            - 8080:8080
+        container_name: factomd
+    graff:
+        image: 'factoshi/graff:latest'
+        depends_on:
+            - factomd
+        ports:
+            - 8032:8032
+        container_name: graff
+        environment:
+            - FACTOMD_HOST=factomd
+            - GQL_PLAYGROUND=true
+            - GQL_INTROSPEC=true
+
+volumes:
+    mainnet:
+        external: true
