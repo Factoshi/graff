@@ -1,6 +1,6 @@
-import { testFactomd, waitForCache } from './connect';
-import { server } from './server';
+import { connectToCache, connectToFactomd } from './connect';
 import { GQL_PORT } from './contants';
+import { ApolloServer } from 'apollo-server';
 
 const exit = () => {
     console.log('Bye!');
@@ -12,9 +12,15 @@ process.on('SIGINT', exit);
 (async () => {
     try {
         // Ensure that factomd and the cache are ready.
-        await Promise.all([testFactomd(), waitForCache()]);
+        await connectToCache();
+        await connectToFactomd();
 
-        // Launch the server
+        // If those two items do not throw, we can import the rest of the application.
+        // Module is imported this way to prevent subscription listeners starting before
+        // we're certain that factomd is ready for us.
+        const { server }: { server: ApolloServer } = require('./server');
+
+        // Launch the server.
         const serverInfo = await server.listen({ port: GQL_PORT });
         console.log(`Server ready at ${serverInfo.url} 🚀`);
     } catch (e) {

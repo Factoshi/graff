@@ -43,14 +43,6 @@ const adminBlockParams = async ({ adminBlockRef }: Factom.DirectoryBlock) => {
     };
 };
 
-// prettier-ignore
-{
-    factomEmitter.on('newDirectoryBlock', compose(publish, directoryBlockParams));
-    factomEmitter.on('newDirectoryBlock', compose(publish, entryCreditBlockParams));
-    factomEmitter.on('newDirectoryBlock', compose(publish, factoidBlockParams));
-    factomEmitter.on('newDirectoryBlock', (d) => adminBlockParams(d).then(publish));
-}
-
 /**************************
  *  Publish Tranactions   *
  **************************/
@@ -82,8 +74,6 @@ export const publishNewTransactions = (factoidBlock: Factom.FactoidBlock) => {
     }
 };
 
-factomEmitter.on('newFactoidBlock', publishNewTransactions);
-
 /*******************************
  *  Publish New Entry Blocks   *
  *******************************/
@@ -93,8 +83,6 @@ export const publishNewEntryBlocks = (directoryBlock: Factom.DirectoryBlock) => 
         publish({ channel: ref.chainId, payload: { newEntryBlock: ref } })
     );
 };
-
-factomEmitter.on('newDirectoryBlock', publishNewEntryBlocks);
 
 /*************************
  *  Publish New Chains   *
@@ -118,8 +106,6 @@ export const publishNewChains = async (directoryBlock: Factom.DirectoryBlock) =>
         }));
     publish({ channel: Channel.NewChains, payload: { newChains } });
 };
-
-factomEmitter.on('newDirectoryBlock', publishNewChains);
 
 /*****************************
  *  Subscription Resolvers   *
@@ -149,10 +135,15 @@ export const subscription: SubscriptionResolvers = {
     }
 };
 
-/****************************
- *  Handle emitter errors   *
- ****************************/
-
-factomEmitter.on('error', (err: Error) => {
-    console.error(err);
-});
+// start listeners
+// prettier-ignore
+{
+    factomEmitter.on('error', console.error);
+    factomEmitter.on('newDirectoryBlock', publishNewChains);
+    factomEmitter.on('newDirectoryBlock', publishNewEntryBlocks);
+    factomEmitter.on('newFactoidBlock', publishNewTransactions);
+    factomEmitter.on('newDirectoryBlock', compose(publish, directoryBlockParams));
+    factomEmitter.on('newDirectoryBlock', compose(publish, entryCreditBlockParams));
+    factomEmitter.on('newDirectoryBlock', compose(publish, factoidBlockParams));
+    factomEmitter.on('newDirectoryBlock', (d) => adminBlockParams(d).then(publish));
+}

@@ -10,11 +10,6 @@ export const FACTOMD_USER = env.FACTOMD_USER;
 export const FACTOMD_PASSWD = env.FACTOMD_PASSWD;
 export const FACTOMD_PROTOCOL = env.FACTOMD_PROTOCOL || 'http';
 
-// DoS protection settings
-export const MAX_PAGE_LENGTH = env.MAX_PAGE_LENGTH ? parseInt(env.MAX_PAGE_LENGTH) : 150;
-export const MAX_QUERY_DEPTH = env.MAX_QUERY_DEPTH ? parseInt(env.MAX_QUERY_DEPTH) : 7;
-export const MAX_COMPLEXITY = env.MAX_COMPLEXITY ? parseInt(env.MAX_COMPLEXITY) : 1500;
-
 // Redis config
 export const REDIS_PORT = env.REDIS_PORT ? parseInt(env.REDIS_PORT) : 6379;
 export const REDIS_HOST = env.REDIS_HOST;
@@ -34,6 +29,9 @@ export const GQL_PORT = env.GQL_PORT
 export const GQL_INTROSPEC = env.GQL_INTROSPEC
     ? env.GQL_INTROSPEC === 'true'
     : env.NODE_ENV !== 'production';
+export const MAX_PAGE_LENGTH = env.MAX_PAGE_LENGTH ? parseInt(env.MAX_PAGE_LENGTH) : 150;
+export const MAX_QUERY_DEPTH = env.MAX_QUERY_DEPTH ? parseInt(env.MAX_QUERY_DEPTH) : 7;
+export const MAX_COMPLEXITY = env.MAX_COMPLEXITY ? parseInt(env.MAX_COMPLEXITY) : 1500;
 
 // Subscription channels
 export enum Channel {
