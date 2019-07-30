@@ -2,6 +2,12 @@
 
 ## [0.1.2]
 
+### Removed
+
+-   Websocket keep alive option.
+
+## [0.1.2]
+
 ### Added
 
 -   Changelog.
