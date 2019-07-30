@@ -18,7 +18,6 @@ export const REDIS_FAMILY = env.REDIS_FAMILY === '6' ? 6 : 4; // IP version
 export const REDIS_DB = env.REDIS_DB ? parseInt(env.REDIS_DB) : 0;
 
 // Server config
-export const KEEP_ALIVE = env.MAX_COMPLEXITY ? parseInt(env.MAX_COMPLEXITY) : 30000;
 export const GQL_PLAYGROUND = env.GQL_PLAYGROUND
     ? env.GQL_PLAYGROUND === 'true'
     : env.NODE_ENV !== 'production';

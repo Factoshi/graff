@@ -15,8 +15,7 @@ import {
     MAX_QUERY_DEPTH,
     MAX_COMPLEXITY,
     GQL_PLAYGROUND,
-    GQL_INTROSPEC,
-    KEEP_ALIVE
+    GQL_INTROSPEC
 } from './contants';
 
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
@@ -94,10 +93,7 @@ export const server = new ApolloServer({
             ? createContextForSubscriptions(connection)
             : createContext(req);
     },
-    subscriptions: {
-        onConnect,
-        keepAlive: KEEP_ALIVE
-    },
+    subscriptions: { onConnect },
     validationRules: [
         depthLimit(MAX_QUERY_DEPTH),
         // See https://github.com/4Catalyzer/graphql-validation-complexity for details on this rule.
