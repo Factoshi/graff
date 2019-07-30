@@ -19,7 +19,9 @@ Simple installation (can be configured with environment variables, see below). R
 docker run -d --name graff -p 8032:8032 -e FACTOMD_HOST=factomd factoshi/graff:latest
 ```
 
-And that's it!
+And that's it! 
+
+If you want some docker-compose recipe ideas, check out the [recipes directory](recipes). Pull requests for more are appeciated! 
 
 ### Node
 
