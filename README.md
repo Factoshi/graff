@@ -81,7 +81,6 @@ Graff uses an in-memory LRU cache to speed up requests and reduce load on factom
 | GQL_PLAYGROUND | Boolean to enable GQL playground.    | false   |
 | GQL_INTROSPEC  | Boolean to enable introspection.     | false   |
 | GQL_PORT       | Port where the server should listen. | 8032    |
-| KEEP_ALIVE     | Frequency of websocket pings (ms).   | 30000   |
 
 ### DoS protection
 
