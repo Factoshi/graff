@@ -321,7 +321,9 @@ describe('Integration Test Queries', () => {
     it('Should query entry receipt', async () => {
         const hash = 'cb2c8c3403f758e5288656e82c965dd45e41d573efe3fb8ee58d50649a4ba2b3';
         const receipt = await apollo.query({ query: QUERY_RECEIPT, variables: { hash } });
-        expect(receipt.data).toMatchSnapshot();
+        expect(receipt.data.receipt.entry.chainId).toBe(
+            'b75164b4193455657b72764fca03c573b7fbff9b2278e9d123e7b08cad7af3e7'
+        );
     });
 
     it('Should return null for receipt of missing entry', async () => {
