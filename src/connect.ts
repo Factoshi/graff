@@ -11,7 +11,7 @@ import {
     REDIS_FAMILY,
     REDIS_PASSWD,
     REDIS_DB
-} from './contants';
+} from './constants';
 import { RedisCache } from 'apollo-server-cache-redis';
 import { InMemoryLRUCache } from 'apollo-server-caching';
 import retry from 'promise-retry';

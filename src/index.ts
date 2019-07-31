@@ -1,5 +1,5 @@
 import { connectToCache, connectToFactomd } from './connect';
-import { GQL_PORT } from './contants';
+import { GQL_PORT } from './constants';
 import { ApolloServer } from 'apollo-server';
 
 const exit = () => {

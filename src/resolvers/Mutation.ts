@@ -1,5 +1,5 @@
 import { MutationResolvers } from '../types/resolvers';
-import { MutationMethod } from '../contants';
+import { MutationMethod } from '../constants';
 
 export const mutation: MutationResolvers = {
     commitChain: (_, { commit }, { dataSources }) => {

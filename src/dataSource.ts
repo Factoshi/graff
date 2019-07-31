@@ -3,7 +3,7 @@ import { FactomCli, DirectoryBlock } from 'factom';
 import { Context } from './types/server';
 import { KeyValueCache } from 'apollo-server-core';
 import promise from 'bluebird';
-import { MutationMethod } from './contants';
+import { MutationMethod } from './constants';
 
 enum HeightPrefix {
     ABlock = 'ABlock',

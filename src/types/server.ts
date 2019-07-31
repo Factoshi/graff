@@ -1,5 +1,5 @@
 import { PubSub } from 'apollo-server';
-import { Channel } from '../contants';
+import { Channel } from '../constants';
 import { KeyValueCache } from 'apollo-server-core';
 import { FactomdDataSource } from '../dataSource';
 

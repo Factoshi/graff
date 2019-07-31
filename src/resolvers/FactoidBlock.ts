@@ -1,6 +1,6 @@
 import { QueryResolvers, FactoidBlockResolvers, Transaction } from '../types/resolvers';
 import { testPaginationInput, handleBlockError } from './resolver-helpers';
-import { MAX_PAGE_LENGTH } from '../contants';
+import { MAX_PAGE_LENGTH } from '../constants';
 
 const resolveField = (field: string) => {
     return async ({ keyMR }: any, _: any, { dataSources }: any) => {

@@ -7,7 +7,7 @@ import {
 } from '../types/resolvers';
 import { factomEmitter, factomCli } from '../connect';
 import { PubSub } from 'apollo-server';
-import { Channel } from '../contants';
+import { Channel } from '../constants';
 import Factom from 'factom';
 import bluebird from 'bluebird';
 import { PublishParams } from '../types/server';

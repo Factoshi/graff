@@ -16,7 +16,7 @@ import {
     MAX_COMPLEXITY,
     GQL_PLAYGROUND,
     GQL_INTROSPEC
-} from './contants';
+} from './constants';
 
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
 

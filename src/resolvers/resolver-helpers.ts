@@ -1,4 +1,4 @@
-import { MAX_PAGE_LENGTH } from '../contants';
+import { MAX_PAGE_LENGTH } from '../constants';
 
 export const testPaginationInput = (offset: number, first: number) => {
     if (offset! < 0 || !Number.isInteger(offset!)) {

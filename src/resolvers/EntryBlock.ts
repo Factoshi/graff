@@ -4,7 +4,7 @@ import {
     handleChainHeadError,
     handleBlockError
 } from './resolver-helpers';
-import { MAX_PAGE_LENGTH } from '../contants';
+import { MAX_PAGE_LENGTH } from '../constants';
 
 /**
  * Root Query resolvers that return a partial EntryBlock type.
