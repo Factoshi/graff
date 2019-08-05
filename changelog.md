@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0]
+
+### Changed
+
+-   Remove artifical millisecond timestamps for directory block and entry block.
+
 ## [0.1.2]
 
 ### Removed
