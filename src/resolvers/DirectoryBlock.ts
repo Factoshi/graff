@@ -83,7 +83,6 @@ export const directoryBlockResolvers: DirectoryBlockResolvers = {
     },
     timestamp: async ({ keyMR }, _, { dataSources }) => {
         const directoryBlock = await dataSources.factomd.getDirectoryBlock(keyMR!);
-        // convert to ms
-        return directoryBlock!.timestamp * 1000;
+        return directoryBlock!.timestamp;
     }
 };

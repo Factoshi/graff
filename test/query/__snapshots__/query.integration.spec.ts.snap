@@ -14,7 +14,7 @@ Object {
     "entryStatus": Object {
       "__typename": "AckStatus",
       "status": "DBlockConfirmed",
-      "timestamp": 1563022560000,
+      "timestamp": 1563022560,
     },
   },
 }
@@ -71,7 +71,7 @@ Object {
       "__typename": "DirectoryBlock",
       "height": 200360,
     },
-    "timestamp": 1562569320000,
+    "timestamp": 1562569320,
   },
 }
 `;
@@ -127,7 +127,7 @@ Object {
       "__typename": "DirectoryBlock",
       "height": 200360,
     },
-    "timestamp": 1562569320000,
+    "timestamp": 1562569320,
   },
 }
 `;
@@ -1465,7 +1465,7 @@ Object {
     "commitStatus": Object {
       "__typename": "AckStatus",
       "status": "DBlockConfirmed",
-      "timestamp": 1563022560000,
+      "timestamp": 1563022560,
     },
     "entryHash": null,
     "entryStatus": null,

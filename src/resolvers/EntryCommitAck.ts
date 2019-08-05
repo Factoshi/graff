@@ -3,8 +3,7 @@ import { FactomdDataSource } from '../dataSource';
 
 export const formatAckStatus = (ackStatus: any) => ({
     status: ackStatus.status as Ack,
-    // convert to miliseconds for API consistency
-    timestamp: ackStatus.blockdate ? ackStatus.blockdate * 1000 : null
+    timestamp: ackStatus.blockdate || null
 });
 
 export const formatAckResponse = (ack: any) => ({

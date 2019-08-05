@@ -22,11 +22,11 @@ describe('EntryAck Resolvers', () => {
             entryHash: '6501bcfb818c5d24130c9ecd520071163a8692942f7fc11d48ea44e340c14904',
             commitHash: hash,
             commitStatus: {
-                timestamp: 1560269280000,
+                timestamp: 1560269280,
                 status: Ack.DBlockConfirmed
             },
             entryStatus: {
-                timestamp: 1560269280000,
+                timestamp: 1560269280,
                 status: Ack.DBlockConfirmed
             }
         });
@@ -46,7 +46,7 @@ describe('EntryAck Resolvers', () => {
                 status: Ack.DBlockConfirmed
             },
             entryStatus: {
-                timestamp: 1560269280000,
+                timestamp: 1560269280,
                 status: Ack.DBlockConfirmed
             }
         });

@@ -47,7 +47,7 @@ export const entryBlockResolvers: EntryBlockResolvers = {
             .map(({ entryHash, timestamp }) => ({
                 hash: entryHash,
                 chainId: entryBlock.chainId,
-                timestamp: timestamp * 1000, // convert to milliseconds for consistency
+                timestamp: timestamp,
                 entryBlock: { keyMR: entryBlock.keyMR }
             })) as Entry[];
         return {

@@ -130,7 +130,7 @@ describe('DirectoryBlock Resolvers', () => {
             undefined,
             context
         );
-        expect(timestamp).toBe(1560187680000);
+        expect(timestamp).toBe(1560187680);
     });
 
     it('should resolve the previousBlock keyMR', async () => {
