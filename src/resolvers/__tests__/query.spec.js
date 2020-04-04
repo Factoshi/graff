@@ -4,7 +4,7 @@ const { query } = require('../Query');
 const { factomCli } = require('../../connect');
 const { randomBytes } = require('crypto');
 
-const generateMockPendingEntriesMethod = length => ({
+const generateMockPendingEntriesMethod = (length) => ({
     dataSources: {
         factomd: {
             getPendingEntries: async () =>
@@ -13,13 +13,13 @@ const generateMockPendingEntriesMethod = length => ({
                     .map(() => ({
                         entryhash: randomBytes(32).toString('hex'),
                         chainid: randomBytes(32).toString('hex'),
-                        status: 'TransactionAck'
-                    }))
-        }
-    }
+                        status: 'TransactionAck',
+                    })),
+        },
+    },
 });
 
-const generateMockPendingTransactionsMethod = length => ({
+const generateMockPendingTransactionsMethod = (length) => ({
     dataSources: {
         factomd: {
             getPendingTransactions: async () =>
@@ -34,17 +34,17 @@ const generateMockPendingTransactionsMethod = length => ({
                         totalInputs: Math.floor(Math.random() * 10),
                         totalFactoidOutputs: Math.floor(Math.random() * 10),
                         totalEntryCreditOutputs: Math.floor(Math.random() * 10),
-                        fees: Math.floor(Math.random() * 10)
-                    }))
-        }
-    }
+                        fees: Math.floor(Math.random() * 10),
+                    })),
+        },
+    },
 });
 
 const factomd = new FactomdDataSource(factomCli);
 const cache = new InMemoryLRUCache();
 factomd.initialize({
     cache,
-    context: {}
+    context: {},
 });
 const context = { dataSources: { factomd } };
 
@@ -60,7 +60,7 @@ describe('Query Resolvers', () => {
             context
         );
         expect(Array.isArray(balances)).toBe(true);
-        balances.forEach(balance => {
+        balances.forEach((balance) => {
             expect(typeof balance.address).toBe('string');
             expect(typeof balance.amount).toBe('number');
         });
@@ -92,7 +92,7 @@ describe('Query Resolvers', () => {
             hash,
             txTimestamp: 1560361379165,
             blockTimestamp: 1560361080000,
-            status: 'DBlockConfirmed'
+            status: 'DBlockConfirmed',
         });
     });
 
@@ -114,11 +114,7 @@ describe('Query Resolvers', () => {
 
     it('Should get first 20 paginated pending entries', async () => {
         const mock = generateMockPendingEntriesMethod(40);
-        const first20 = await query.pendingEntries(
-            undefined,
-            { offset: 0, first: 20 },
-            mock
-        );
+        const first20 = await query.pendingEntries(undefined, { offset: 0, first: 20 }, mock);
         expect(first20.totalCount).toBe(40);
         expect(first20.pendingEntries).toHaveLength(20);
         expect(first20.offset).toBe(0);
@@ -127,11 +123,7 @@ describe('Query Resolvers', () => {
 
     it('Should return 0 for paginated entry values', async () => {
         const mock = generateMockPendingEntriesMethod(0);
-        const emptyPage = await query.pendingEntries(
-            undefined,
-            { offset: 0, first: 20 },
-            mock
-        );
+        const emptyPage = await query.pendingEntries(undefined, { offset: 0, first: 20 }, mock);
         expect(emptyPage.totalCount).toBe(0);
         expect(emptyPage.pendingEntries).toHaveLength(0);
         expect(emptyPage.offset).toBe(0);
@@ -140,11 +132,7 @@ describe('Query Resolvers', () => {
 
     it('Should return 0 for paginated entry values when offset is grester than 0', async () => {
         const mock = generateMockPendingEntriesMethod(0);
-        const emptyPage = await query.pendingEntries(
-            undefined,
-            { offset: 20, first: 20 },
-            mock
-        );
+        const emptyPage = await query.pendingEntries(undefined, { offset: 20, first: 20 }, mock);
         expect(emptyPage.totalCount).toBe(0);
         expect(emptyPage.pendingEntries).toHaveLength(0);
         expect(emptyPage.offset).toBe(20);
@@ -152,11 +140,7 @@ describe('Query Resolvers', () => {
     });
 
     it('Should get paginated pending transactions', async () => {
-        const pendingTransactions = await query.pendingTransactions(
-            undefined,
-            {},
-            context
-        );
+        const pendingTransactions = await query.pendingTransactions(undefined, {}, context);
         expect(typeof pendingTransactions.totalCount).toBe('number');
         expect(typeof pendingTransactions.offset).toBe('number');
         expect(typeof pendingTransactions.pageLength).toBe('number');
@@ -165,11 +149,7 @@ describe('Query Resolvers', () => {
 
     it('Should get the first 20 paginated pending transactions', async () => {
         const mock = generateMockPendingTransactionsMethod(40);
-        const first20 = await query.pendingTransactions(
-            undefined,
-            { offset: 0, first: 20 },
-            mock
-        );
+        const first20 = await query.pendingTransactions(undefined, { offset: 0, first: 20 }, mock);
         expect(first20.totalCount).toBe(40);
         expect(first20.offset).toBe(0);
         expect(first20.pageLength).toBe(20);
@@ -178,11 +158,7 @@ describe('Query Resolvers', () => {
 
     it('Should get the last 20 paginated pending transactions', async () => {
         const mock = generateMockPendingTransactionsMethod(40);
-        const last20 = await query.pendingTransactions(
-            undefined,
-            { offset: 20, first: 20 },
-            mock
-        );
+        const last20 = await query.pendingTransactions(undefined, { offset: 20, first: 20 }, mock);
         expect(last20.totalCount).toBe(40);
         expect(last20.offset).toBe(20);
         expect(last20.pageLength).toBe(20);
@@ -212,13 +188,7 @@ describe('Query Resolvers', () => {
         const hash = 'f15aa73fbe29c9e5a6a53b4fbac16f8917bc7fb5441b32cd32453195c808fb5d';
         const receipt = await query.receipt(undefined, { hash }, context);
         expect(receipt.entry).toEqual({ hash });
-        expect(receipt.bitcoinBlockHash).toBe(
-            '0000000000000000001cc4b4bbb96148080072ab215a61bd050825fcdeca4980'
-        );
-        expect(receipt.bitcoinTransactionHash).toBe(
-            'e55bd0093be4a30d988532ac27a4544b95d6fc4e638c9a626c2ede5c87a75eae'
-        );
-        receipt.merkleBranch.forEach(branch => {
+        receipt.merkleBranch.forEach((branch) => {
             expect(typeof branch.left).toBe('string');
             expect(typeof branch.right).toBe('string');
             expect(typeof branch.top).toBe('string');
