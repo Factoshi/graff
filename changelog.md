@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1]
+
+### Upgrade
+
+-   Fix vulnerable dependencies.
+-   Fix query receipt test to remove bitcoin assertions.
+
 ## [0.2.0]
 
 ### Changed

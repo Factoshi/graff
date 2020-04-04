@@ -1,6 +1,6 @@
 {
     "name": "factom-graph",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "GraphQL wrapper for the factomd RPC API.",
     "main": "index.js",
     "scripts": {
@@ -30,7 +30,7 @@
     },
     "homepage": "https://github.com/Factoshi/factom-graph#readme",
     "devDependencies": {
-        "@graphql-codegen/cli": "^1.4.0",
+        "@graphql-codegen/cli": "^1.13.1",
         "@graphql-codegen/fragment-matcher": "^1.4.0",
         "@graphql-codegen/typescript": "1.2.0",
         "@graphql-codegen/typescript-resolvers": "1.2.0",
