@@ -1,6 +1,6 @@
 {
     "name": "factom-graph",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": "GraphQL wrapper for the factomd RPC API.",
     "main": "index.js",
     "scripts": {
